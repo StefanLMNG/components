@@ -10,14 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.components.api;
+package org.talend.components.api.component;
 
-public class Constants {
-
-    public static final String COMPONENT_BEAN_PREFIX = "components#";
-
-    public static final String COMPONENT_WIZARD_BEAN_PREFIX = "components#wizards#";
-
-    public static final String DATASTORE_BEAN_PREFIX = "datastores#";
-
+public enum DatastoreImageType {
+                                PALLETE_ICON_32X32
 }

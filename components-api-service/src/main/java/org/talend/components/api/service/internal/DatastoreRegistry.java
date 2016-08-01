@@ -10,14 +10,20 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.components.api;
+package org.talend.components.api.service.internal;
 
-public class Constants {
+import java.util.Map;
 
-    public static final String COMPONENT_BEAN_PREFIX = "components#";
+import org.talend.components.api.component.DatastoreDefinition;
 
-    public static final String COMPONENT_WIZARD_BEAN_PREFIX = "components#wizards#";
+/**
+ * Interface for the internal datastore registry that will have a specific implementation for OSGi and Spring
+ */
+public interface DatastoreRegistry {
 
-    public static final String DATASTORE_BEAN_PREFIX = "datastores#";
+    /**
+     * @return a map of datastores using their name as a key, never null.
+     */
+    Map<String, DatastoreDefinition> getDatastores();
 
 }
