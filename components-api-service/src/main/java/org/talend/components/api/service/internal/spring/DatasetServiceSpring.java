@@ -33,14 +33,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.DatasetDefinition;
-import org.talend.components.api.component.DatastoreDefinition;
-import org.talend.components.api.component.DatastoreImageType;
-import org.talend.components.api.exception.DatastoreException;
+import org.talend.components.api.component.DatasetImageType;
+import org.talend.components.api.exception.DatasetException;
 import org.talend.components.api.properties.ComponentProperties;
-import org.talend.components.api.service.DatastoreService;
-import org.talend.components.api.service.internal.DatastoreRegistry;
-import org.talend.components.api.service.internal.DatastoreServiceImpl;
+import org.talend.components.api.service.DatasetService;
+import org.talend.components.api.service.internal.DatasetRegistry;
+import org.talend.components.api.service.internal.DatasetServiceImpl;
 import org.talend.daikon.exception.error.CommonErrorCodes;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.service.Repository;
@@ -51,28 +51,28 @@ import com.wordnik.swagger.annotations.ApiParam;
 
 /**
  * This is a spring only class that is instantiated by the spring framework. It delegates all its calls to the
- * DatastoreServiceImpl delegate create in it's constructor. This delegate uses a Datastore registry implementation
- * specific to spring.
+ * DatasetServiceImpl delegate create in it's constructor. This delegate uses a Dataset registry implementation specific
+ * to spring.
  */
 
 @RestController
-@Api(value = "datastore", basePath = DatastoreServiceSpring.BASE_PATH, description = "Datastore services")
+@Api(value = "dataset", basePath = DatasetServiceSpring.BASE_PATH, description = "Dataset services")
 @Service
-public class DatastoreServiceSpring implements DatastoreService {
+public class DatasetServiceSpring implements DatasetService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatastoreServiceSpring.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatasetServiceSpring.class);
 
-    public static final String BASE_PATH = "/datastore"; //$NON-NLS-1$
+    public static final String BASE_PATH = "/dataset"; //$NON-NLS-1$
 
-    private DatastoreService datastoreServiceDelegate;
+    private DatasetService datasetServiceDelegate;
 
     @Autowired
-    public DatastoreServiceSpring(final ApplicationContext context) {
-        this.datastoreServiceDelegate = new DatastoreServiceImpl(new DatastoreRegistry() {
+    public DatasetServiceSpring(final ApplicationContext context) {
+        this.datasetServiceDelegate = new DatasetServiceImpl(new DatasetRegistry() {
 
             @Override
-            public Map<String, DatastoreDefinition> getDatastores() {
-                Map<String, DatastoreDefinition> compDefs = context.getBeansOfType(DatastoreDefinition.class);
+            public Map<String, DatasetDefinition> getDatasets() {
+                Map<String, DatasetDefinition> compDefs = context.getBeansOfType(DatasetDefinition.class);
                 return compDefs;
             }
 
@@ -82,51 +82,50 @@ public class DatastoreServiceSpring implements DatastoreService {
     @Override
     @RequestMapping(value = BASE_PATH + "/properties/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ComponentProperties getComponentProperties(
-            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name) {
-        return datastoreServiceDelegate.getComponentProperties(name);
+            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
+        return datasetServiceDelegate.getComponentProperties(name);
     }
 
     @Override
-    @RequestMapping(value = BASE_PATH + "/datasets/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public DatasetDefinition[] getDatasets(
-            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name) {
-        return datastoreServiceDelegate.getDatasets(name);
+    @RequestMapping(value = BASE_PATH + "/components/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ComponentDefinition[] getComponents(
+            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
+        return datasetServiceDelegate.getComponents(name);
     }
 
     @Override
     @RequestMapping(value = BASE_PATH + "/validate/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Object> validate(
-            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name) {
-        return datastoreServiceDelegate.validate(name);
+    public List<Object> validate(@PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
+        return datasetServiceDelegate.validate(name);
     }
 
     @Override
     @RequestMapping(value = BASE_PATH + "/jsonSchema/{name}", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public @ResponseBody String getJSONSchema(
-            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name) {
-        return datastoreServiceDelegate.getJSONSchema(name);
+            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
+        return datasetServiceDelegate.getJSONSchema(name);
     }
 
     @Override
     @RequestMapping(value = BASE_PATH + "/definition/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody DatastoreDefinition getDatastoreDefinition(
-            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name) {
-        return datastoreServiceDelegate.getDatastoreDefinition(name);
+    public @ResponseBody DatasetDefinition getDatasetDefinition(
+            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
+        return datasetServiceDelegate.getDatasetDefinition(name);
     }
 
     @Override
     @RequestMapping(value = BASE_PATH + "/dependencies/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Set<String> getMavenUriDependencies(
-            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name) {
-        return datastoreServiceDelegate.getMavenUriDependencies(name);
+            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
+        return datasetServiceDelegate.getMavenUriDependencies(name);
     }
 
     @Override
-    @RequestMapping(value = BASE_PATH + "/possibleDatastores", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<DatastoreDefinition> getPossibleDatastores(
-            @ApiParam(name = "properties", value = "Datastore properties") @RequestBody ComponentProperties... properties)
+    @RequestMapping(value = BASE_PATH + "/possibleDatasets", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<DatasetDefinition> getPossibleDatasets(
+            @ApiParam(name = "properties", value = "Dataset properties") @RequestBody ComponentProperties... properties)
             throws Throwable {
-        return datastoreServiceDelegate.getPossibleDatastores(properties);
+        return datasetServiceDelegate.getPossibleDatasets(properties);
     }
 
     @Override
@@ -134,7 +133,7 @@ public class DatastoreServiceSpring implements DatastoreService {
     public Properties makeFormCancelable(
             @ApiParam(name = "properties", value = "Properties related to the form") @RequestBody Properties properties,
             @ApiParam(name = "formName", value = "Name of the form") String formName) {
-        return datastoreServiceDelegate.makeFormCancelable(properties, formName);
+        return datasetServiceDelegate.makeFormCancelable(properties, formName);
     }
 
     @Override
@@ -142,7 +141,7 @@ public class DatastoreServiceSpring implements DatastoreService {
     public Properties cancelFormValues(
             @ApiParam(name = "properties", value = "Properties related to the form.") @RequestBody Properties properties,
             @ApiParam(name = "formName", value = "Name of the form") String formName) {
-        return datastoreServiceDelegate.cancelFormValues(properties, formName);
+        return datasetServiceDelegate.cancelFormValues(properties, formName);
     }
 
     @Override
@@ -151,7 +150,7 @@ public class DatastoreServiceSpring implements DatastoreService {
             @PathVariable(value = "propName") @ApiParam(name = "propName", value = "Name of property") String propName,
             @ApiParam(name = "properties", value = "Properties holding the property to validate") @RequestBody Properties properties)
             throws Throwable {
-        datastoreServiceDelegate.validateProperty(propName, properties);
+        datasetServiceDelegate.validateProperty(propName, properties);
         return properties;
     }
 
@@ -161,7 +160,7 @@ public class DatastoreServiceSpring implements DatastoreService {
             @PathVariable(value = "propName") @ApiParam(name = "propName", value = "Name of property") String propName,
             @ApiParam(name = "properties", value = "Properties holding the property to activate") @RequestBody Properties properties)
             throws Throwable {
-        datastoreServiceDelegate.beforePropertyActivate(propName, properties);
+        datasetServiceDelegate.beforePropertyActivate(propName, properties);
         return properties;
     }
 
@@ -171,7 +170,7 @@ public class DatastoreServiceSpring implements DatastoreService {
             @PathVariable(value = "propName") @ApiParam(name = "propName", value = "Name of property") String propName,
             @ApiParam(name = "properties", value = "Properties holding the property that is going to be presented") @RequestBody Properties properties)
             throws Throwable {
-        datastoreServiceDelegate.beforePropertyPresent(propName, properties);
+        datasetServiceDelegate.beforePropertyPresent(propName, properties);
         return properties;
     }
 
@@ -181,7 +180,7 @@ public class DatastoreServiceSpring implements DatastoreService {
             @PathVariable(value = "propName") @ApiParam(name = "propName", value = "Name of property") String propName,
             @ApiParam(name = "properties", value = "Properties holding the value that just has been set") @RequestBody Properties properties)
             throws Throwable {
-        datastoreServiceDelegate.afterProperty(propName, properties);
+        datasetServiceDelegate.afterProperty(propName, properties);
         return properties;
     }
 
@@ -191,7 +190,7 @@ public class DatastoreServiceSpring implements DatastoreService {
             @PathVariable(value = "formName") @ApiParam(name = "formName", value = "Name of form") String formName,
             @ApiParam(name = "properties", value = "Properties holding the form to be presented") @RequestBody Properties properties)
             throws Throwable {
-        datastoreServiceDelegate.beforeFormPresent(formName, properties);
+        datasetServiceDelegate.beforeFormPresent(formName, properties);
         return properties;
     }
 
@@ -201,7 +200,7 @@ public class DatastoreServiceSpring implements DatastoreService {
             @PathVariable(value = "formName") @ApiParam(name = "formName", value = "Name of form") String formName,
             @ApiParam(name = "properties", value = "Properties related to the current wizard form") @RequestBody Properties properties)
             throws Throwable {
-        datastoreServiceDelegate.afterFormNext(formName, properties);
+        datasetServiceDelegate.afterFormNext(formName, properties);
         return properties;
     }
 
@@ -211,7 +210,7 @@ public class DatastoreServiceSpring implements DatastoreService {
             @PathVariable(value = "formName") @ApiParam(name = "formName", value = "Name of form") String formName,
             @ApiParam(name = "properties", value = "Properties related to the current form") @RequestBody Properties properties)
             throws Throwable {
-        datastoreServiceDelegate.afterFormBack(formName, properties);
+        datasetServiceDelegate.afterFormBack(formName, properties);
         return properties;
     }
 
@@ -221,20 +220,20 @@ public class DatastoreServiceSpring implements DatastoreService {
             @PathVariable(value = "formName") @ApiParam(name = "formName", value = "Name of form") String formName,
             @ApiParam(name = "properties", value = "Properties holding the current form to be closed.") @RequestBody Properties properties)
             throws Throwable {
-        datastoreServiceDelegate.afterFormFinish(formName, properties);
+        datasetServiceDelegate.afterFormFinish(formName, properties);
         return properties;
     }
 
     @Override
     @RequestMapping(value = BASE_PATH + "/names", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Set<String> getAllDatastoreNames() {
-        return datastoreServiceDelegate.getAllDatastoreNames();
+    public @ResponseBody Set<String> getAllDatasetNames() {
+        return datasetServiceDelegate.getAllDatasetNames();
     }
 
     @Override
     @RequestMapping(value = BASE_PATH + "/definitions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Set<DatastoreDefinition> getAllDatastores() {
-        return datastoreServiceDelegate.getAllDatastores();
+    public @ResponseBody Set<DatasetDefinition> getAllDatasets() {
+        return datasetServiceDelegate.getAllDatasets();
     }
 
     private void sendStreamBack(final HttpServletResponse response, InputStream inputStream) {
@@ -243,7 +242,7 @@ public class DatastoreServiceSpring implements DatastoreService {
                 try {
                     IOUtils.copy(inputStream, response.getOutputStream());
                 } catch (IOException e) {
-                    throw new DatastoreException(CommonErrorCodes.UNEXPECTED_EXCEPTION, e);
+                    throw new DatasetException(CommonErrorCodes.UNEXPECTED_EXCEPTION, e);
                 } finally {
                     inputStream.close();
                 }
@@ -252,40 +251,40 @@ public class DatastoreServiceSpring implements DatastoreService {
             }
         } catch (IOException e) {// is sendError fails or inputstream fails when closing
             LOGGER.error("sendError failed or inputstream failed when closing.", e); //$NON-NLS-1$
-            throw new DatastoreException(CommonErrorCodes.UNEXPECTED_EXCEPTION, e);
+            throw new DatasetException(CommonErrorCodes.UNEXPECTED_EXCEPTION, e);
         }
     }
 
     @Override
     // this cannot be used as is as a rest api so see getWizardPngIconRest.
-    public InputStream getDatastorePngImage(String componentName, DatastoreImageType imageType) {
-        return datastoreServiceDelegate.getDatastorePngImage(componentName, imageType);
+    public InputStream getDatasetPngImage(String componentName, DatasetImageType imageType) {
+        return datasetServiceDelegate.getDatasetPngImage(componentName, imageType);
     }
 
     @Override
     public void setRepository(Repository repository) {
-        datastoreServiceDelegate.setRepository(repository);
+        datasetServiceDelegate.setRepository(repository);
     }
 
     @RequestMapping(value = BASE_PATH + "/icon/{name}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-    @ApiOperation(value = "Return the icon related to the Datastore", notes = "return the png image related to the Datastore name parameter.")
-    public void getDatastoresImageRest(
-            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of Datastore") String name,
-            @PathVariable(value = "type") @ApiParam(name = "type", value = "Type of the icon requested") DatastoreImageType type,
+    @ApiOperation(value = "Return the icon related to the Dataset", notes = "return the png image related to the Dataset name parameter.")
+    public void getDatasetsImageRest(
+            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of Dataset") String name,
+            @PathVariable(value = "type") @ApiParam(name = "type", value = "Type of the icon requested") DatasetImageType type,
             final HttpServletResponse response) {
-        InputStream componentPngImageStream = getDatastorePngImage(name, type);
+        InputStream componentPngImageStream = getDatasetPngImage(name, type);
         sendStreamBack(response, componentPngImageStream);
     }
 
     // FIXME - make this work for web
     @Override
     public String storeProperties(Properties properties, String name, String repositoryLocation, String schemaPropertyName) {
-        return datastoreServiceDelegate.storeProperties(properties, name, repositoryLocation, schemaPropertyName);
+        return datasetServiceDelegate.storeProperties(properties, name, repositoryLocation, schemaPropertyName);
     }
 
     @Override
     public boolean setNestedPropertiesValues(ComponentProperties targetProperties, Properties nestedValues) {
-        return datastoreServiceDelegate.setNestedPropertiesValues(targetProperties, nestedValues);
+        return datasetServiceDelegate.setNestedPropertiesValues(targetProperties, nestedValues);
     }
 
 }

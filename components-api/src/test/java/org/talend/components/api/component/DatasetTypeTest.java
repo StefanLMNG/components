@@ -10,16 +10,18 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.components.api;
+package org.talend.components.api.component;
 
-public class Constants {
+import static org.junit.Assert.*;
 
-    public static final String COMPONENT_BEAN_PREFIX = "components#";
+import org.junit.Test;
 
-    public static final String COMPONENT_WIZARD_BEAN_PREFIX = "components#wizards#";
+public class DatasetTypeTest {
 
-    public static final String DATASTORE_BEAN_PREFIX = "datastores#";
-
-    public static final String DATASET_BEAN_PREFIX = "datasets#";
+    @Test
+    public void test() {
+        assertEquals(1, DatasetImageType.values().length);
+        assertEquals(DatasetImageType.PALLETE_ICON_32X32, DatasetImageType.valueOf("PALLETE_ICON_32X32")); //$NON-NLS-1$
+    }
 
 }

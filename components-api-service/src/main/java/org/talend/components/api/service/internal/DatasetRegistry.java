@@ -10,16 +10,20 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.components.api;
+package org.talend.components.api.service.internal;
 
-public class Constants {
+import java.util.Map;
 
-    public static final String COMPONENT_BEAN_PREFIX = "components#";
+import org.talend.components.api.component.DatasetDefinition;
 
-    public static final String COMPONENT_WIZARD_BEAN_PREFIX = "components#wizards#";
+/**
+ * Interface for the internal dataset registry that will have a specific implementation for OSGi and Spring
+ */
+public interface DatasetRegistry {
 
-    public static final String DATASTORE_BEAN_PREFIX = "datastores#";
-
-    public static final String DATASET_BEAN_PREFIX = "datasets#";
+    /**
+     * @return a map of datasets using their name as a key, never null.
+     */
+    Map<String, DatasetDefinition> getDatasets();
 
 }

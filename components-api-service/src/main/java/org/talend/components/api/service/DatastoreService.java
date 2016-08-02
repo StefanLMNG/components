@@ -16,8 +16,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.avro.Schema;
-import org.talend.components.api.component.Connector;
+import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatastoreDefinition;
 import org.talend.components.api.component.DatastoreImageType;
 import org.talend.components.api.exception.DatastoreException;
@@ -56,6 +55,17 @@ public interface DatastoreService extends PropertiesService<Properties> {
      * @exception DatastoreException thrown if the datastore is not registered in the service
      */
     ComponentProperties getComponentProperties(String name);
+
+    /**
+     * Return the dataset associated with a datastore
+     */
+    DatasetDefinition[] getDatasets(String name);
+
+    /**
+     * Check the integrity of a specified datastore. The nature of the checks are dependant of the datastore. It must
+     * allow the user to know when the registered parameters are valid before creating a Dataset.
+     */
+    List<Object> validate(String name);
 
     /**
      * Used to get the JSON Schema for the specified datastore.
@@ -123,41 +133,5 @@ public interface DatastoreService extends PropertiesService<Properties> {
      * Mvn+Protocol</a>
      */
     Set<String> getMavenUriDependencies(String datastoreName);
-
-    /**
-     * get the schema associated with a given named connection for a componentProperties
-     * 
-     * @param componentProperties the Properties to get the schema for a given connector name
-     * @param connector token used to identify the connection.
-     * @param isOuput true is the connection is an output connection, false if it is an input connection
-     * @return the schema associated with a given connector token of input or ouput connectors, may be null.
-     * @exception DatastoreException thrown if the connector is not recognized for the given datastore.
-     */
-    Schema getSchema(ComponentProperties componentProperties, Connector connector, boolean isOuput);
-
-    /**
-     * set the schema associated with a given named connection for a componentProperties
-     * 
-     * @param componentProperties the Properties to get the schema for a given connector name
-     * @param connector token used to identify the connection.
-     * @param schema schema to be set for the given connector
-     * @param isOuput true is the connection is an output connection, false if it is an input connection
-     * @return the schema associated with a given connector token of input or ouput connectors, may be null if schema is
-     * associated with the connector. This should never be the case for output connections but may be null for input
-     * connections because the datastore does not need to have any input schema and can handle any data type.
-     */
-    void setSchema(ComponentProperties componentProperties, Connector connector, Schema schema, boolean isOuput);
-
-    /**
-     * get the schema associated with a given named connector for a componentProperties
-     * 
-     * @param componentProperties the Properties to get the connectors from
-     * @param connectedConnetor list of connectors already setup. This shall be managed by the client.
-     * @param isOuput true is the requested connections are output connections, false if the request is on input
-     * connections
-     * @return the set of availalble connectors, may be empty.
-     */
-    Set<? extends Connector> getAvailableConnectors(ComponentProperties componentProperties,
-            Set<? extends Connector> connectedConnetor, boolean isOuput);
 
 }

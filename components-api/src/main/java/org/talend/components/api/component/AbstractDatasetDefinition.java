@@ -25,21 +25,21 @@ import org.talend.daikon.NamedThing;
 import org.talend.daikon.exception.TalendRuntimeException;
 import org.talend.daikon.properties.property.Property;
 
-public abstract class AbstractDatastoreDefinition extends AbstractTopLevelDefinition implements DatastoreDefinition {
+public abstract class AbstractDatasetDefinition extends AbstractTopLevelDefinition implements DatasetDefinition {
 
     /**
-     * Datastore name. It is used to define datastore name, which will be displayed in Studio Palette Also it is used by
-     * bnd library to create OSGi bundle
+     * Dataset name. It is used to define dataset name, which will be displayed in Studio Palette Also it is used by bnd
+     * library to create OSGi bundle
      */
-    private String datastoreName;
+    private String datasetName;
 
     /**
-     * Constructor sets datastore name
+     * Constructor sets dataset name
      * 
-     * @param datastoreName datastore name
+     * @param datasetName dataset name
      */
-    public AbstractDatastoreDefinition(String datastoreName) {
-        this.datastoreName = datastoreName;
+    public AbstractDatasetDefinition(String datasetName) {
+        this.datasetName = datasetName;
         setupI18N(new Property<?>[] { RETURN_ERROR_MESSAGE_PROP, RETURN_REJECT_RECORD_COUNT_PROP,
                 RETURN_SUCCESS_RECORD_COUNT_PROP, RETURN_TOTAL_RECORD_COUNT_PROP });
     }
@@ -47,28 +47,28 @@ public abstract class AbstractDatastoreDefinition extends AbstractTopLevelDefini
     /**
      * {@inheritDoc}
      * 
-     * @return datastore name
+     * @return dataset name
      */
     @Override
     public String getName() {
-        return datastoreName;
+        return datasetName;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getPngImagePath(DatastoreImageType imageType) {
+    public String getPngImagePath(DatasetImageType imageType) {
         switch (imageType) {
         case PALLETE_ICON_32X32:
-            return datastoreName + "_icon32.png";
+            return datasetName + "_icon32.png";
         }
         return null;
     }
 
     @Override
     protected String getI18nPrefix() {
-        return "datastore."; //$NON-NLS-1$
+        return "dataset."; //$NON-NLS-1$
     }
 
     @Override
@@ -136,7 +136,7 @@ public abstract class AbstractDatastoreDefinition extends AbstractTopLevelDefini
     }
 
     /**
-     * @return the associated ComponentProperties class associated with the Datastore. This shall be used to initialised
+     * @return the associated ComponentProperties class associated with the Dataset. This shall be used to initialised
      * the runtime classes.
      */
     // TODO we should rename this
@@ -144,10 +144,10 @@ public abstract class AbstractDatastoreDefinition extends AbstractTopLevelDefini
 
     /**
      * return the list of ComponentProperties that may be assigned to nested properties of the main ComponentProperties
-     * class(see {@link AbstractDatastoreDefinition#getPropertyClass()} associated with this definiton.<br/>
+     * class(see {@link AbstractDatasetDefinition#getPropertyClass()} associated with this definiton.<br/>
      * This method uses static class definition to avoid ComponentProperties instanciation.
      * 
-     * @return return the list of ComponentProperties that may be assigned to a nested property of this datastore
+     * @return return the list of ComponentProperties that may be assigned to a nested property of this dataset
      * associated ComponentProperties.
      */
     public Class<? extends ComponentProperties>[] getNestedCompatibleComponentPropertiesClass() {

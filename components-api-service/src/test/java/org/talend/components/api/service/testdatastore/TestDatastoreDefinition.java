@@ -60,7 +60,7 @@ public class TestDatastoreDefinition extends AbstractDatastoreDefinition impleme
 
     @Override
     public String getMavenGroupId() {
-        return "org.talend.datastores.api.test";
+        return "org.talend.components.api.test";
     }
 
     @Override
@@ -80,7 +80,7 @@ public class TestDatastoreDefinition extends AbstractDatastoreDefinition impleme
      */
     @Override
     public String getJSONSchema() {
-        return "";
+        return "{\"testJSON\":\"true\"}";
     }
 
 }

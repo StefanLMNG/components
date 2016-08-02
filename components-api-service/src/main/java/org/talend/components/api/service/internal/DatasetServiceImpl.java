@@ -58,90 +58,90 @@ import org.eclipse.aether.util.graph.selector.ScopeDependencySelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.components.api.Constants;
+import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.DatasetDefinition;
-import org.talend.components.api.component.DatastoreDefinition;
-import org.talend.components.api.component.DatastoreImageType;
-import org.talend.components.api.exception.DatastoreException;
-import org.talend.components.api.exception.error.DatastoresApiErrorCode;
+import org.talend.components.api.component.DatasetImageType;
+import org.talend.components.api.exception.DatasetException;
+import org.talend.components.api.exception.error.DatasetsApiErrorCode;
 import org.talend.components.api.properties.ComponentProperties;
-import org.talend.components.api.service.DatastoreService;
+import org.talend.components.api.service.DatasetService;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.exception.ExceptionContext;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.service.PropertiesServiceImpl;
 
 /**
- * Main Datastore Service implementation that is not related to any framework (neither OSGI, nor Spring) it uses a
- * DatastoreRegistry implementation that will be provided by framework specific Service classes
+ * Main Dataset Service implementation that is not related to any framework (neither OSGI, nor Spring) it uses a
+ * DatasetRegistry implementation that will be provided by framework specific Service classes
  */
-public class DatastoreServiceImpl extends PropertiesServiceImpl implements DatastoreService {
+public class DatasetServiceImpl extends PropertiesServiceImpl implements DatasetService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatastoreServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatasetServiceImpl.class);
 
     private Map<Artifact, Set<Dependency>> dependenciesCache = new HashMap<>();
 
-    private DatastoreRegistry datastoreRegistry;
+    private DatasetRegistry datasetRegistry;
 
     private ModelBuilder modelBuilder;
 
-    public DatastoreServiceImpl(DatastoreRegistry datastoreRegistry) {
-        this.datastoreRegistry = datastoreRegistry;
+    public DatasetServiceImpl(DatasetRegistry datasetRegistry) {
+        this.datasetRegistry = datasetRegistry;
     }
 
     @Override
-    public Set<String> getAllDatastoreNames() {
-        // remove the datastores# internal prefix to return the simple name
-        Collection<String> datastoresInternalNames = datastoreRegistry.getDatastores().keySet();
-        Set<String> datastoreNames = new HashSet<>(datastoresInternalNames.size());
-        for (String name : datastoresInternalNames) {
-            datastoreNames.add(name.substring(Constants.DATASTORE_BEAN_PREFIX.length()));
+    public Set<String> getAllDatasetNames() {
+        // remove the datasets# internal prefix to return the simple name
+        Collection<String> datasetsInternalNames = datasetRegistry.getDatasets().keySet();
+        Set<String> datasetNames = new HashSet<>(datasetsInternalNames.size());
+        for (String name : datasetsInternalNames) {
+            datasetNames.add(name.substring(Constants.DATASET_BEAN_PREFIX.length()));
         }
-        return datastoreNames;
+        return datasetNames;
     }
 
     @Override
-    public Set<DatastoreDefinition> getAllDatastores() {
-        return new HashSet<>(datastoreRegistry.getDatastores().values());
+    public Set<DatasetDefinition> getAllDatasets() {
+        return new HashSet<>(datasetRegistry.getDatasets().values());
     }
 
     @Override
     public ComponentProperties getComponentProperties(String name) {
-        DatastoreDefinition datasetDef = getDatastoreDefinition(name);
+        DatasetDefinition datasetDef = getDatasetDefinition(name);
         return datasetDef.createProperties();
     }
 
     @Override
-    public DatasetDefinition[] getDatasets(String name) {
-        DatastoreDefinition datasetDef = getDatastoreDefinition(name);
-        return datasetDef.getDatasets();
+    public ComponentDefinition[] getComponents(String name) {
+        DatasetDefinition datasetDef = getDatasetDefinition(name);
+        return datasetDef.getComponents();
     }
 
     @Override
     public List<Object> validate(String name) {
-        DatastoreDefinition datasetDef = getDatastoreDefinition(name);
+        DatasetDefinition datasetDef = getDatasetDefinition(name);
         return datasetDef.validate();
     }
 
     @Override
     public String getJSONSchema(String name) {
-        DatastoreDefinition datasetDef = getDatastoreDefinition(name);
+        DatasetDefinition datasetDef = getDatasetDefinition(name);
         return datasetDef.getJSONSchema();
     }
 
     @Override
-    public DatastoreDefinition getDatastoreDefinition(String name) {
-        final String beanName = Constants.DATASTORE_BEAN_PREFIX + name;
-        DatastoreDefinition datasetDef = datastoreRegistry.getDatastores().get(beanName);
+    public DatasetDefinition getDatasetDefinition(String name) {
+        final String beanName = Constants.DATASET_BEAN_PREFIX + name;
+        DatasetDefinition datasetDef = datasetRegistry.getDatasets().get(beanName);
         if (datasetDef == null) {
-            throw new DatastoreException(DatastoresApiErrorCode.WRONG_DATASTORE_NAME, ExceptionContext.build().put("name", name)); //$NON-NLS-1$
+            throw new DatasetException(DatasetsApiErrorCode.WRONG_DATASET_NAME, ExceptionContext.build().put("name", name)); //$NON-NLS-1$
         } // else got the def so use it
         return datasetDef;
     }
 
     @Override
-    public List<DatastoreDefinition> getPossibleDatastores(ComponentProperties... properties) {
-        List<DatastoreDefinition> returnList = new ArrayList<>();
-        for (DatastoreDefinition cd : datastoreRegistry.getDatastores().values()) {
+    public List<DatasetDefinition> getPossibleDatasets(ComponentProperties... properties) {
+        List<DatasetDefinition> returnList = new ArrayList<>();
+        for (DatasetDefinition cd : datasetRegistry.getDatasets().values()) {
             if (cd.supportsProperties(properties)) {
                 returnList.add(cd);
             }
@@ -155,14 +155,12 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
     }
 
     @Override
-    public InputStream getDatastorePngImage(String datastoreName, DatastoreImageType imageType) {
-        DatastoreDefinition datastoreDefinition = datastoreRegistry.getDatastores().get(
-                Constants.DATASTORE_BEAN_PREFIX + datastoreName);
-        if (datastoreDefinition != null) {
-            return getImageStream(datastoreDefinition, datastoreDefinition.getPngImagePath(imageType));
+    public InputStream getDatasetPngImage(String datasetName, DatasetImageType imageType) {
+        DatasetDefinition datasetDefinition = datasetRegistry.getDatasets().get(Constants.DATASET_BEAN_PREFIX + datasetName);
+        if (datasetDefinition != null) {
+            return getImageStream(datasetDefinition, datasetDefinition.getPngImagePath(imageType));
         } else {
-            throw new DatastoreException(DatastoresApiErrorCode.WRONG_DATASTORE_NAME, ExceptionContext.build().put(
-                    "name", datastoreName)); //$NON-NLS-1$
+            throw new DatasetException(DatasetsApiErrorCode.WRONG_DATASET_NAME, ExceptionContext.build().put("name", datasetName)); //$NON-NLS-1$
         }
     }
 
@@ -170,13 +168,13 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
      * get the image stream or null
      * 
      * @param definition, must not be null
-     * @return the stream or null if no image was defined for th datastore or the path is wrong
+     * @return the stream or null if no image was defined for th dataset or the path is wrong
      */
     private InputStream getImageStream(NamedThing definition, String pngIconPath) {
         InputStream result = null;
         if (pngIconPath != null && !"".equals(pngIconPath)) { //$NON-NLS-1$
             InputStream resourceAsStream = definition.getClass().getResourceAsStream(pngIconPath);
-            if (resourceAsStream == null) {// no resource found so this is an datastore error, so log it and return
+            if (resourceAsStream == null) {// no resource found so this is an dataset error, so log it and return
                                            // null
                 LOGGER.error("Failed to load the Wizard icon [" + definition.getName() + "," + pngIconPath + "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             } else {
@@ -189,24 +187,24 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
     }
 
     @Override
-    public Set<String> getMavenUriDependencies(String datastoreName) {
-        DatastoreDefinition datastoreDef = getDatastoreDefinition(datastoreName);
-        String mavenGroupId = datastoreDef.getMavenGroupId();
-        String mavenArtifactId = datastoreDef.getMavenArtifactId();
+    public Set<String> getMavenUriDependencies(String datasetName) {
+        DatasetDefinition datasetDef = getDatasetDefinition(datasetName);
+        String mavenGroupId = datasetDef.getMavenGroupId();
+        String mavenArtifactId = datasetDef.getMavenArtifactId();
         try {
-            return getDesignTimeDependencies(mavenGroupId, mavenArtifactId, datastoreDef.getClass().getClassLoader());
+            return getDesignTimeDependencies(mavenGroupId, mavenArtifactId, datasetDef.getClass().getClassLoader());
         } catch (IOException e) {
-            throw new DatastoreException(DatastoresApiErrorCode.COMPUTE_DEPENDENCIES_FAILED, e, ExceptionContext.withBuilder()
+            throw new DatasetException(DatasetsApiErrorCode.COMPUTE_DEPENDENCIES_FAILED, e, ExceptionContext.withBuilder()
                     .put("path", computeDesignDependenciesPath(mavenGroupId, mavenArtifactId)).build());
         }
     }
 
     /**
      * this will locate the file META-INF/mavenGroupId/mavenArtifactId/depenencies.properties and parse it to extract
-     * the design time dependencies of the datastore.
+     * the design time dependencies of the dataset.
      * 
-     * @param mavenGroupId group id of the datastore to locate the dep file
-     * @param mavenArtifactId artifact id of the datastore to locate the dep file.
+     * @param mavenGroupId group id of the dataset to locate the dep file
+     * @param mavenArtifactId artifact id of the dataset to locate the dep file.
      * @param classLoader
      * @return set of string pax-url formated
      * @throws IOException if reading the file failed.
@@ -219,7 +217,7 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
         }
         InputStream depStream = classLoader.getResourceAsStream(depPath);
         if (depStream == null) {
-            throw new DatastoreException(DatastoresApiErrorCode.COMPUTE_DEPENDENCIES_FAILED, ExceptionContext.withBuilder()
+            throw new DatasetException(DatasetsApiErrorCode.COMPUTE_DEPENDENCIES_FAILED, ExceptionContext.withBuilder()
                     .put("path", depPath).build());
         } // else we found it so parse it now
         try {
@@ -249,7 +247,7 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
      *     The following files have been resolved:
      *     org.apache.maven:maven-core:jar:3.3.3:compile
      *     org.springframework:spring-beans:jar:4.2.0.RELEASE:test
-     *     org.talend.datastores:datastores-common:jar:0.4.0.BUILD-SNAPSHOT:compile
+     *     org.talend.datasets:datasets-common:jar:0.4.0.BUILD-SNAPSHOT:compile
      *     log4j:log4j:jar:1.2.17:test
      *     org.eclipse.aether:aether-impl:jar:1.0.0.v20140518:compile
      * }
@@ -397,7 +395,7 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
 
             @Override
             public String getLocation() {
-                return "";// FIXME return the datastore name
+                return "";// FIXME return the dataset name
             }
         });
         if (modelBuilder == null) {

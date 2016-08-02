@@ -19,79 +19,79 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
-import org.talend.components.api.component.DatastoreDefinition;
+import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.api.service.testcomponent.TestComponentProperties;
-import org.talend.components.api.test.MockDatastoreRegistry;
+import org.talend.components.api.test.MockDatasetRegistry;
 
-public class DatastoreServiceImplTest {
+public class DatasetServiceImplTest {
 
-    private DatastoreServiceImpl datastoreServiceImpl = new DatastoreServiceImpl(new MockDatastoreRegistry());
+    private DatasetServiceImpl datasetServiceImpl = new DatasetServiceImpl(new MockDatasetRegistry());
 
     @Test
     public void testParseMvnUri() {
-        String parsedMvnUri = datastoreServiceImpl
+        String parsedMvnUri = datasetServiceImpl
                 .parseMvnUri("     org.talend.components:components-api:test-jar:tests:0.4.0.BUILD-SNAPSHOT:test");
         assertEquals("mvn:org.talend.components/components-api/0.4.0.BUILD-SNAPSHOT/test-jar/tests", parsedMvnUri);
-        parsedMvnUri = datastoreServiceImpl
+        parsedMvnUri = datasetServiceImpl
                 .parseMvnUri("    org.talend.components:components-api:jar:0.4.0.BUILD-SNAPSHOT:compile   ");
         assertEquals("mvn:org.talend.components/components-api/0.4.0.BUILD-SNAPSHOT/jar", parsedMvnUri);
     }
 
     @Test
     public void testGetJSONSchema() {
-        String parsedMvnUri = datastoreServiceImpl.getJSONSchema(MockDatastoreRegistry.DATASTORE_NAME);
+        String parsedMvnUri = datasetServiceImpl.getJSONSchema(MockDatasetRegistry.DATASET_NAME);
         assertEquals("{\"testJSON\":\"true\"}", parsedMvnUri);
     }
 
     @Test
-    public void testGetAllDatastoreNames() {
-        Set<String> datastoreNames = datastoreServiceImpl.getAllDatastoreNames();
-        assertEquals(1, datastoreNames.size());
-        assertTrue(datastoreNames.contains("testDatastore"));
+    public void testGetAllDatasetNames() {
+        Set<String> datasetNames = datasetServiceImpl.getAllDatasetNames();
+        assertEquals(1, datasetNames.size());
+        assertTrue(datasetNames.contains("testDataset"));
     }
 
     @Test
-    public void testGetAllDatastores() {
-        Set<DatastoreDefinition> datastores = datastoreServiceImpl.getAllDatastores();
-        assertEquals(1, datastores.size());
-        for (DatastoreDefinition datastore : datastores) {
-            assertEquals("TestDatastore", datastore.getName());
+    public void testGetAllDatasets() {
+        Set<DatasetDefinition> datasets = datasetServiceImpl.getAllDatasets();
+        assertEquals(1, datasets.size());
+        for (DatasetDefinition dataset : datasets) {
+            assertEquals("TestDataset", dataset.getName());
         }
     }
 
     @Test
     public void testGetComponentProperties() {
-        ComponentProperties p = datastoreServiceImpl.getComponentProperties(MockDatastoreRegistry.DATASTORE_NAME);
+        ComponentProperties p = datasetServiceImpl.getComponentProperties(MockDatasetRegistry.DATASET_NAME);
         assertEquals("root", p.getName());
     }
 
     @Test
-    public void testGetDatastoreDefinition() {
-        DatastoreDefinition datastore = datastoreServiceImpl.getDatastoreDefinition(MockDatastoreRegistry.DATASTORE_NAME);
-        assertEquals("TestDatastore", datastore.getName());
+    public void testGetDatasetDefinition() {
+        DatasetDefinition dataset = datasetServiceImpl.getDatasetDefinition(MockDatasetRegistry.DATASET_NAME);
+        assertEquals("TestDataset", dataset.getName());
     }
 
     @Test
-    public void testGetPossibleDatastores() {
-        ComponentProperties p = datastoreServiceImpl.getComponentProperties(MockDatastoreRegistry.DATASTORE_NAME);
-        List<DatastoreDefinition> datastores = datastoreServiceImpl.getPossibleDatastores(p);
-        assertEquals(1, datastores.size());
-        for (DatastoreDefinition datastore : datastores) {
-            assertEquals("TestDatastore", datastore.getName());
+    public void testGetPossibleDatasets() {
+        ComponentProperties p = datasetServiceImpl.getComponentProperties(MockDatasetRegistry.DATASET_NAME);
+        List<DatasetDefinition> datasets = datasetServiceImpl.getPossibleDatasets(p);
+        assertEquals(1, datasets.size());
+        for (DatasetDefinition dataset : datasets) {
+            assertEquals("TestDataset", dataset.getName());
         }
     }
 
     @Test
-    public void testGetPossibleDatastores_invalidCase() {
+    public void testGetPossibleDatasets_invalidCase() {
         TestComponentProperties t = new TestComponentProperties("invalid");
-        List<DatastoreDefinition> datastores = datastoreServiceImpl.getPossibleDatastores(t);
-        assertEquals(0, datastores.size());
+        List<DatasetDefinition> datasets = datasetServiceImpl.getPossibleDatasets(t);
+        assertEquals(0, datasets.size());
     }
 
     @Test
     public void testGetMavenUriDependencies() {
-        Set<String> datastores = datastoreServiceImpl.getMavenUriDependencies(MockDatastoreRegistry.DATASTORE_NAME);
+        Set<String> datastores = datasetServiceImpl.getMavenUriDependencies(MockDatasetRegistry.DATASET_NAME);
         assertThat(datastores, containsInAnyOrder("mvn:org.apache.maven/maven-core/3.3.3/jar", //
                 "mvn:org.eclipse.sisu/org.eclipse.sisu.plexus/0.0.0.M2a/jar", //
                 "mvn:org.apache.maven/maven-artifact/3.3.3/jar", //
@@ -103,7 +103,8 @@ public class DatastoreServiceImplTest {
     @Test
     public void testComputeDesignDependenciesPath() {
         assertEquals("META-INF/maven/mavenGroupId/mavenArtifactId/dependencies.txt",
-                datastoreServiceImpl.computeDesignDependenciesPath("mavenGroupId", "mavenArtifactId"));
+                datasetServiceImpl.computeDesignDependenciesPath("mavenGroupId", "mavenArtifactId"));
 
     }
+
 }

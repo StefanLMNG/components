@@ -10,13 +10,13 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.components.api.service.testdatastore;
+package org.talend.components.api.service.testdataset;
 
 import org.talend.components.api.Constants;
-import org.talend.components.api.component.AbstractDatastoreDefinition;
+import org.talend.components.api.component.AbstractDatasetDefinition;
+import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.DatasetDefinition;
-import org.talend.components.api.component.DatastoreDefinition;
-import org.talend.components.api.component.DatastoreImageType;
+import org.talend.components.api.component.DatasetImageType;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.api.service.testcomponent.ComponentPropertiesWithDefinedI18N;
 import org.talend.components.api.service.testcomponent.TestComponentProperties;
@@ -25,13 +25,13 @@ import org.talend.components.api.service.testcomponent.nestedprop.inherited.Inhe
 
 import aQute.bnd.annotation.component.Component;
 
-@Component(name = Constants.COMPONENT_BEAN_PREFIX + TestDatastoreDefinition.DATASTORE_NAME, provide = DatastoreDefinition.class)
-public class TestDatastoreDefinition extends AbstractDatastoreDefinition implements DatastoreDefinition {
+@Component(name = Constants.COMPONENT_BEAN_PREFIX + TestDatasetDefinition.DATASET_NAME, provide = DatasetDefinition.class)
+public class TestDatasetDefinition extends AbstractDatasetDefinition implements DatasetDefinition {
 
-    public static final String DATASTORE_NAME = "TestDatastore"; //$NON-NLS-1$
+    public static final String DATASET_NAME = "TestDataset"; //$NON-NLS-1$
 
-    public TestDatastoreDefinition() {
-        super(DATASTORE_NAME);
+    public TestDatasetDefinition() {
+        super(DATASET_NAME);
     }
 
     protected TestComponentProperties properties;
@@ -42,13 +42,13 @@ public class TestDatastoreDefinition extends AbstractDatastoreDefinition impleme
     }
 
     @Override
-    public String getPngImagePath(DatastoreImageType imageType) {
+    public String getPngImagePath(DatasetImageType imageType) {
         return "testCompIcon_32x32.png";
     }
 
     @Override
     public Class<? extends ComponentProperties> getPropertyClass() {
-        return TestDatastoreProperties.class;
+        return TestDatasetProperties.class;
     }
 
     @SuppressWarnings("unchecked")
@@ -60,27 +60,32 @@ public class TestDatastoreDefinition extends AbstractDatastoreDefinition impleme
 
     @Override
     public String getMavenGroupId() {
-        return "org.talend.datastores.api.test";
+        return "org.talend.components.api.test";
     }
 
     @Override
     public String getMavenArtifactId() {
-        return "test-datastores";
+        return "test-datasets";
     }
 
     @Override
-    public DatasetDefinition[] getDatasets() {
-        return new DatasetDefinition[] {};
+    public ComponentDefinition[] getComponents() {
+        return new ComponentDefinition[] {};
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.components.api.component.DatastoreDefinition#getJSONSchema()
-     */
     @Override
     public String getJSONSchema() {
-        return "";
+        return "{\"testJSON\":\"true\"}";
+    }
+
+    @Override
+    public Object[] getSample(Integer size) {
+        return null;
+    }
+
+    @Override
+    public String getSchema() {
+        return null;
     }
 
 }
