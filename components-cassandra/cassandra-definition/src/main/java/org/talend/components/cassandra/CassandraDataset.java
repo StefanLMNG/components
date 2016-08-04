@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.components.api.Constants;
 import org.talend.components.api.component.AbstractDatasetDefinition;
-import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.cassandra.input.TCassandraInputDefinition;
@@ -52,8 +51,8 @@ public class CassandraDataset extends AbstractDatasetDefinition {
     }
 
     @Override
-    public ComponentDefinition[] getComponents() {
-        return new ComponentDefinition[] { new TCassandraInputDefinition(), new TCassandraOutputDefinition() };
+    public String[] getComponents() {
+        return new String[] { new TCassandraInputDefinition().getName(), new TCassandraOutputDefinition().getName() };
     }
 
     @Override

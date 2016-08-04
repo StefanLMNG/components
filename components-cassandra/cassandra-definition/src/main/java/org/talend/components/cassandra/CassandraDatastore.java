@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.components.api.Constants;
 import org.talend.components.api.component.AbstractDatastoreDefinition;
-import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatastoreDefinition;
 import org.talend.components.api.properties.ComponentProperties;
 
@@ -50,8 +49,8 @@ public class CassandraDatastore extends AbstractDatastoreDefinition {
     }
 
     @Override
-    public DatasetDefinition[] getDatasets() {
-        return new DatasetDefinition[] { new CassandraDataset() };
+    public String[] getDatasets() {
+        return new String[] { new CassandraDataset().getName() };
     }
 
     @Override

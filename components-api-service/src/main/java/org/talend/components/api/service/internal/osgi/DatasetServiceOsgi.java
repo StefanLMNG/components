@@ -24,7 +24,6 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatasetImageType;
 import org.talend.components.api.properties.ComponentProperties;
@@ -115,7 +114,7 @@ public class DatasetServiceOsgi implements DatasetService {
     }
 
     @Override
-    public ComponentDefinition[] getComponents(String name) {
+    public String[] getComponents(String name) {
         return datasetServiceDelegate.getComponents(name);
     }
 

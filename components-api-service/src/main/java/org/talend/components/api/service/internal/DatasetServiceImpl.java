@@ -58,7 +58,6 @@ import org.eclipse.aether.util.graph.selector.ScopeDependencySelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.components.api.Constants;
-import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatasetImageType;
 import org.talend.components.api.exception.DatasetException;
@@ -111,7 +110,7 @@ public class DatasetServiceImpl extends PropertiesServiceImpl implements Dataset
     }
 
     @Override
-    public ComponentDefinition[] getComponents(String name) {
+    public String[] getComponents(String name) {
         DatasetDefinition datasetDef = getDatasetDefinition(name);
         return datasetDef.getComponents();
     }

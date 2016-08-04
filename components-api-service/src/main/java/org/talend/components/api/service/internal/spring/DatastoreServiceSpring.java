@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatastoreDefinition;
 import org.talend.components.api.component.DatastoreImageType;
 import org.talend.components.api.exception.DatastoreException;
@@ -88,7 +87,7 @@ public class DatastoreServiceSpring implements DatastoreService {
 
     @Override
     @RequestMapping(value = BASE_PATH + "/datasets/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public DatasetDefinition[] getDatasets(
+    public String[] getDatasets(
             @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name) {
         return datastoreServiceDelegate.getDatasets(name);
     }

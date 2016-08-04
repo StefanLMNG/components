@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
-import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatasetImageType;
 import org.talend.components.api.exception.DatasetException;
@@ -59,7 +58,7 @@ public interface DatasetService extends PropertiesService<Properties> {
     /**
      * Return the list of components associated to a dataset
      */
-    ComponentDefinition[] getComponents(String name);
+    String[] getComponents(String name);
 
     /**
      * Return a sample of the data contained inside a specified dataset.

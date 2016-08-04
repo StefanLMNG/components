@@ -14,7 +14,6 @@ package org.talend.components.api.service.testdataset;
 
 import org.talend.components.api.Constants;
 import org.talend.components.api.component.AbstractDatasetDefinition;
-import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatasetImageType;
 import org.talend.components.api.properties.ComponentProperties;
@@ -69,8 +68,8 @@ public class TestDatasetDefinition extends AbstractDatasetDefinition implements 
     }
 
     @Override
-    public ComponentDefinition[] getComponents() {
-        return new ComponentDefinition[] {};
+    public String[] getComponents() {
+        return new String[] { "testComponent1", "testComponent2", "testComponent3" };
     }
 
     @Override

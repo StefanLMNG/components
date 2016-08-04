@@ -58,7 +58,6 @@ import org.eclipse.aether.util.graph.selector.ScopeDependencySelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.components.api.Constants;
-import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatastoreDefinition;
 import org.talend.components.api.component.DatastoreImageType;
 import org.talend.components.api.exception.DatastoreException;
@@ -111,7 +110,7 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
     }
 
     @Override
-    public DatasetDefinition[] getDatasets(String name) {
+    public String[] getDatasets(String name) {
         DatastoreDefinition datasetDef = getDatastoreDefinition(name);
         return datasetDef.getDatasets();
     }

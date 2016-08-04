@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
-import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatastoreDefinition;
 import org.talend.components.api.component.DatastoreImageType;
 import org.talend.components.api.exception.DatastoreException;
@@ -59,7 +58,7 @@ public interface DatastoreService extends PropertiesService<Properties> {
     /**
      * Return the dataset associated with a datastore
      */
-    DatasetDefinition[] getDatasets(String name);
+    String[] getDatasets(String name);
 
     /**
      * Check the integrity of a specified datastore. The nature of the checks are dependant of the datastore. It must

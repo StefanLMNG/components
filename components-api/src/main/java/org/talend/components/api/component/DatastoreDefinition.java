@@ -36,7 +36,7 @@ public interface DatastoreDefinition extends NamedThing {
     /**
      * Returns the list of datasets associated to the current datastore
      */
-    DatasetDefinition[] getDatasets();
+    String[] getDatasets();
 
     /**
      * Check the integrity of the current datastore. The nature of the checks are dependant of the datastore. It must

@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatasetImageType;
 import org.talend.components.api.exception.DatasetException;
@@ -88,7 +87,7 @@ public class DatasetServiceSpring implements DatasetService {
 
     @Override
     @RequestMapping(value = BASE_PATH + "/components/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ComponentDefinition[] getComponents(
+    public String[] getComponents(
             @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
         return datasetServiceDelegate.getComponents(name);
     }

@@ -15,6 +15,7 @@ package org.talend.components.api.service;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -63,6 +64,14 @@ public class DatastoreServiceTest extends AbstractDatastoreTest {
             datastoreService = new DatastoreServiceImpl(testDatastoreRegistry);
         }
         return datastoreService;
+    }
+
+    @Test
+    public void testGetDatastores() {
+        String[] datasets = getDatastoreService().getDatasets(TestDatastoreDefinition.DATASTORE_NAME);
+        assertEquals(2, datasets.length);
+        assertThat(Arrays.asList(datasets), containsInAnyOrder("testDataset1", //
+                "testDataset2"));
     }
 
     @Test

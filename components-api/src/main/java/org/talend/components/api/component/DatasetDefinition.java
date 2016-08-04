@@ -36,7 +36,7 @@ public interface DatasetDefinition extends NamedThing {
     /**
      * Return the list of components associated to the current dataset
      */
-    ComponentDefinition[] getComponents();
+    String[] getComponents();
 
     /**
      * Return a sample of the data contained inside the dataset.

@@ -14,7 +14,6 @@ package org.talend.components.api.service.testdatastore;
 
 import org.talend.components.api.Constants;
 import org.talend.components.api.component.AbstractDatastoreDefinition;
-import org.talend.components.api.component.DatasetDefinition;
 import org.talend.components.api.component.DatastoreDefinition;
 import org.talend.components.api.component.DatastoreImageType;
 import org.talend.components.api.properties.ComponentProperties;
@@ -69,8 +68,8 @@ public class TestDatastoreDefinition extends AbstractDatastoreDefinition impleme
     }
 
     @Override
-    public DatasetDefinition[] getDatasets() {
-        return new DatasetDefinition[] {};
+    public String[] getDatasets() {
+        return new String[] { "testDataset1", "testDataset2" };
     }
 
     /*
