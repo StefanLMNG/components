@@ -4,20 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>cassandra-parent</artifactId>
+        <artifactId>components-parent</artifactId>
         <groupId>org.talend.components</groupId>
         <version>0.14.0-SNAPSHOT</version>
-        <relativePath>./parent-pom.xml</relativePath>
+        <relativePath>../components-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>cassandra</artifactId>
+    <groupId>org.talend.components</groupId>
+    <artifactId>cassandra-parent</artifactId>
     <packaging>pom</packaging>
 
     <name>Cassandra component family.</name>
-    <modules>
-        <module>cassandra-definition</module>
-        <module>cassandra-runtime-common</module>
-        <module>cassandra-runtime_2.2</module>
-        <module>cassandra-runtime_3.0</module>
-    </modules>
 </project>
