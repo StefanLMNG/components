@@ -119,8 +119,8 @@ public class DatasetServiceOsgi implements DatasetService {
     }
 
     @Override
-    public List<Object> validate(String name) {
-        return datasetServiceDelegate.validate(name);
+    public List<String> getValidateChecks(String name) {
+        return datasetServiceDelegate.getValidateChecks(name);
     }
 
     @Override

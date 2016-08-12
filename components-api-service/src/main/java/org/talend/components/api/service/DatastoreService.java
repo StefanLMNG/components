@@ -64,7 +64,7 @@ public interface DatastoreService extends PropertiesService<Properties> {
      * Check the integrity of a specified datastore. The nature of the checks are dependant of the datastore. It must
      * allow the user to know when the registered parameters are valid before creating a Dataset.
      */
-    List<Object> validate(String name);
+    List<String> getValidateChecks(String name);
 
     /**
      * Used to get the JSON Schema for the specified datastore.

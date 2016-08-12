@@ -72,8 +72,8 @@ public abstract class AbstractDatasetDefinition extends AbstractTopLevelDefiniti
     }
 
     @Override
-    public List<Object> validate() {
-        return new ArrayList<Object>();
+    public List<String> getValidateChecks() {
+        return new ArrayList<String>();
     }
 
     @Override

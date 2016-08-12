@@ -76,7 +76,7 @@ public interface DatasetService extends PropertiesService<Properties> {
      * Check the integrity of a specified dataset. The nature of the checks are dependant of the dataset. It must allow
      * the user to know when the registered parameters are valid before creating a Dataset.
      */
-    List<Object> validate(String name);
+    List<String> getValidateChecks(String name);
 
     /**
      * Used to get the JSON Schema for the specified dataset.

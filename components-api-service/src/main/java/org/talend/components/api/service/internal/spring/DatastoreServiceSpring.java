@@ -94,9 +94,9 @@ public class DatastoreServiceSpring implements DatastoreService {
 
     @Override
     @RequestMapping(value = BASE_PATH + "/validate/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Object> validate(
+    public List<String> getValidateChecks(
             @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name) {
-        return datastoreServiceDelegate.validate(name);
+        return datastoreServiceDelegate.getValidateChecks(name);
     }
 
     @Override
@@ -145,10 +145,10 @@ public class DatastoreServiceSpring implements DatastoreService {
     }
 
     @Override
-    @RequestMapping(value = BASE_PATH + "/properties/{propName}/validate", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = BASE_PATH + "/properties/{propName}/getValidateChecks", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Properties validateProperty(
             @PathVariable(value = "propName") @ApiParam(name = "propName", value = "Name of property") String propName,
-            @ApiParam(name = "properties", value = "Properties holding the property to validate") @RequestBody Properties properties)
+            @ApiParam(name = "properties", value = "Properties holding the property to getValidateChecks") @RequestBody Properties properties)
             throws Throwable {
         datastoreServiceDelegate.validateProperty(propName, properties);
         return properties;

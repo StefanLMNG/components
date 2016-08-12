@@ -1,5 +1,7 @@
 package org.talend.components.cassandra;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -7,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.talend.components.api.Constants;
 import org.talend.components.api.component.AbstractDatastoreDefinition;
 import org.talend.components.api.component.DatastoreDefinition;
+import org.talend.components.api.component.runtime.Source;
 import org.talend.components.api.properties.ComponentProperties;
 
 import aQute.bnd.annotation.component.Component;
+import org.talend.components.cassandra.runtime.CassandraSourceOrSink;
 
 @Component(name = Constants.DATASTORE_BEAN_PREFIX + CassandraDatastore.DATASTORE_NAME, provide = DatastoreDefinition.class)
 public class CassandraDatastore extends AbstractDatastoreDefinition {
@@ -49,6 +53,19 @@ public class CassandraDatastore extends AbstractDatastoreDefinition {
     }
 
     @Override
+    public List<String> getValidateChecks() {
+        return Arrays.asList("ping_cassandra");
+    }
+
+    public boolean doValidate(String name, ComponentProperties props) {
+        if (!"ping_cassandra".equals(name)) {
+            return true;
+        }
+        // link to the check in cassandra_runtime_3_0, using the classloader defined in MavenBooter.
+        return true;
+    }
+
+    @Override
     public String[] getDatasets() {
         return new String[] { new CassandraDataset().getName() };
     }
@@ -67,5 +84,4 @@ public class CassandraDatastore extends AbstractDatastoreDefinition {
     public String getMavenArtifactId() {
         return "component-cassandra"; //$NON-NLS-1$
     }
-
 }

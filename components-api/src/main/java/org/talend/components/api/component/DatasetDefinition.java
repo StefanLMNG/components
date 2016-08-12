@@ -54,7 +54,7 @@ public interface DatasetDefinition extends NamedThing {
      * Check the integrity of the current dataset. The nature of the checks are dependant of the dataset. It must allow
      * the user to know when the registered parameters are valid before creating a Dataset.
      */
-    List<Object> validate();
+    List<String> getValidateChecks();
 
     /**
      * Return data of current dataset as a JSONSchema compatible with the UI.

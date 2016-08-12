@@ -94,8 +94,8 @@ public class DatasetServiceSpring implements DatasetService {
 
     @Override
     @RequestMapping(value = BASE_PATH + "/validate/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Object> validate(@PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
-        return datasetServiceDelegate.validate(name);
+    public List<String> getValidateChecks(@PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
+        return datasetServiceDelegate.getValidateChecks(name);
     }
 
     @Override

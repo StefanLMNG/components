@@ -42,7 +42,9 @@ public interface DatastoreDefinition extends NamedThing {
      * Check the integrity of the current datastore. The nature of the checks are dependant of the datastore. It must
      * allow the user to know when the registered parameters are valid before creating a Dataset.
      */
-    List<Object> validate();
+    List<String> getValidateChecks();
+
+    boolean doValidate(String name, ComponentProperties props);
 
     /**
      * Return data of current datastore as a JSONSchema compatible with the UI.

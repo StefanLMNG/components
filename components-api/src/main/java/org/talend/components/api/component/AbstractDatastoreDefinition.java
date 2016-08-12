@@ -72,8 +72,13 @@ public abstract class AbstractDatastoreDefinition extends AbstractTopLevelDefini
     }
 
     @Override
-    public List<Object> validate() {
-        return new ArrayList<Object>();
+    public List<String> getValidateChecks() {
+        return new ArrayList<String>();
+    }
+
+    @Override
+    public boolean doValidate(String name, ComponentProperties props) {
+        return true;
     }
 
     @Override
