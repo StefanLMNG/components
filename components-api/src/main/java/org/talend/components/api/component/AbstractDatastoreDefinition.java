@@ -72,11 +72,6 @@ public abstract class AbstractDatastoreDefinition extends AbstractTopLevelDefini
     }
 
     @Override
-    public List<Object> validate() {
-        return new ArrayList<Object>();
-    }
-
-    @Override
     public ComponentProperties createProperties() {
         ComponentProperties compProp = instantiateComponentProperties();
         compProp.init();

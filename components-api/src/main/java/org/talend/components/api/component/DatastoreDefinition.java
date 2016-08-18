@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.daikon.NamedThing;
+import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 
@@ -42,7 +43,7 @@ public interface DatastoreDefinition extends NamedThing {
      * Check the integrity of the current datastore. The nature of the checks are dependant of the datastore. It must
      * allow the user to know when the registered parameters are valid before creating a Dataset.
      */
-    List<Object> validate();
+    String validate(Properties properties);
 
     /**
      * Return data of current datastore as a JSONSchema compatible with the UI.

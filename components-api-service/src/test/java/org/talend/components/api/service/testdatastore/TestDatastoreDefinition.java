@@ -23,6 +23,7 @@ import org.talend.components.api.service.testcomponent.nestedprop.NestedComponen
 import org.talend.components.api.service.testcomponent.nestedprop.inherited.InheritedComponentProperties;
 
 import aQute.bnd.annotation.component.Component;
+import org.talend.daikon.properties.Properties;
 
 @Component(name = Constants.COMPONENT_BEAN_PREFIX + TestDatastoreDefinition.DATASTORE_NAME, provide = DatastoreDefinition.class)
 public class TestDatastoreDefinition extends AbstractDatastoreDefinition implements DatastoreDefinition {
@@ -70,6 +71,11 @@ public class TestDatastoreDefinition extends AbstractDatastoreDefinition impleme
     @Override
     public String[] getDatasets() {
         return new String[] { "testDataset1", "testDataset2" };
+    }
+
+    @Override
+    public String validate(Properties properties) {
+        return null;
     }
 
     /*

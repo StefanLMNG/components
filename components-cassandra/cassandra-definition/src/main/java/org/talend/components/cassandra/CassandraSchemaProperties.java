@@ -1,6 +1,7 @@
 package org.talend.components.cassandra;
 
 import org.talend.components.api.component.runtime.Source;
+import org.talend.components.api.properties.ConnectionPropertiesProvider;
 import org.talend.components.cassandra.runtime.CassandraSourceOrSink;
 import org.talend.components.api.properties.ComponentPropertiesImpl;
 import org.talend.components.common.SchemaProperties;
@@ -16,7 +17,8 @@ import java.util.List;
 import static org.talend.daikon.properties.property.PropertyFactory.newString;
 
 
-public class CassandraSchemaProperties extends ComponentPropertiesImpl {
+public class CassandraSchemaProperties extends ComponentPropertiesImpl implements
+        ConnectionPropertiesProvider<CassandraConnectionProperties> {
 
     /**
      * named constructor to be used is these properties are nested in other properties. Do not subclass this method for
@@ -24,12 +26,11 @@ public class CassandraSchemaProperties extends ComponentPropertiesImpl {
      *
      * @param name
      */
-    public CassandraSchemaProperties(String name, CassandraConnectionProperties connectionProperties) {
+    public CassandraSchemaProperties(String name) {
         super(name);
-        this.connectionProperties = connectionProperties;
     }
 
-    private CassandraConnectionProperties connectionProperties;
+    public CassandraConnectionProperties connectionProperties = new CassandraConnectionProperties("connectionProperties");
 
     public Property<String> keyspace = newString("keyspace");
     public Property<String> columnFamily = newString("columnFamily");
@@ -41,6 +42,7 @@ public class CassandraSchemaProperties extends ComponentPropertiesImpl {
         Form schemaForm = new Form(this, Form.MAIN);
         schemaForm.addRow(Widget.widget(keyspace).setWidgetType(Widget.NAME_SELECTION_AREA_WIDGET_TYPE));
         schemaForm.addRow(Widget.widget(columnFamily).setWidgetType(Widget.NAME_SELECTION_AREA_WIDGET_TYPE));
+        schemaForm.addRow(main.getForm(Form.MAIN));//add this line for dataset json
         refreshLayout(schemaForm);//FIXME why need to invoke refreshLayout here? refer to SalesforceModuleProperties
 
         Form schemaRefForm = new Form(this, Form.REFERENCE);
@@ -99,4 +101,13 @@ public class CassandraSchemaProperties extends ComponentPropertiesImpl {
         return ValidationResult.OK;
     }
 
+    @Override
+    public void setConnectionProperties(CassandraConnectionProperties props) {
+        connectionProperties = props;
+    }
+
+    @Override
+    public CassandraConnectionProperties getConnectionProperties() {
+        return connectionProperties;
+    }
 }

@@ -93,6 +93,15 @@ public class DatasetServiceSpring implements DatasetService {
     }
 
     @Override
+    @RequestMapping(value = BASE_PATH + "/sample/{name}/{size}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody String getSample(
+            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name,
+            @PathVariable(value = "size") @ApiParam(name = "size", value = "Max return rows of sample") Integer size,
+            @ApiParam(name = "properties", value = "Setting for the current dataset") @RequestBody Properties properties) {
+        return datasetServiceDelegate.getSample(name, size, properties);
+    }
+
+    @Override
     @RequestMapping(value = BASE_PATH + "/validate/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Object> validate(@PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the dataset") String name) {
         return datasetServiceDelegate.validate(name);

@@ -1,14 +1,24 @@
 package org.talend.components.cassandra.runtime_3_0;
 
+import org.apache.avro.generic.GenericDatumReader;
+import org.apache.avro.generic.GenericDatumWriter;
+import org.apache.avro.generic.IndexedRecord;
+import org.apache.avro.io.Decoder;
+import org.apache.avro.io.DecoderFactory;
+import org.apache.avro.io.Encoder;
+import org.apache.avro.io.EncoderFactory;
 import org.junit.Test;
 import org.talend.components.api.component.runtime.BoundedReader;
 import org.talend.components.cassandra.CassandraTestBase;
 import org.talend.components.cassandra.input.TCassandraInputDefinition;
 import org.talend.components.cassandra.input.TCassandraInputProperties;
 import org.talend.components.cassandra.runtime_3_0.CassandraSource;
+import org.talend.daikon.avro.converter.IndexedRecordConverter;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
 
 public class CassandraReaderTestIT extends CassandraTestBase {
 
@@ -34,6 +44,5 @@ public class CassandraReaderTestIT extends CassandraTestBase {
     private void setupQueryProps(TCassandraInputProperties props) {
         props.query.setValue("select * from " + props.schemaProperties.columnFamily.getStringValue());
     }
-
 
 }

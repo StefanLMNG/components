@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.daikon.NamedThing;
+import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 
@@ -42,13 +43,13 @@ public interface DatasetDefinition extends NamedThing {
      * Return a sample of the data contained inside the dataset.
      */
     // TODO Change return type
-    Object[] getSample(Integer size);
+    String getSample(Properties datasetProps, Integer size);
 
     /**
      * Return the schema associated to the current dataset
      */
     // TODO Change return type
-    String getSchema();
+    String getSchema(String datastoreJsonStr, String datasetJsonStr);
 
     /**
      * Check the integrity of the current dataset. The nature of the checks are dependant of the dataset. It must allow

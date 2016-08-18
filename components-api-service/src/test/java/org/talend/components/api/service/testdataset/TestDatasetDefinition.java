@@ -23,6 +23,7 @@ import org.talend.components.api.service.testcomponent.nestedprop.NestedComponen
 import org.talend.components.api.service.testcomponent.nestedprop.inherited.InheritedComponentProperties;
 
 import aQute.bnd.annotation.component.Component;
+import org.talend.daikon.properties.Properties;
 
 @Component(name = Constants.COMPONENT_BEAN_PREFIX + TestDatasetDefinition.DATASET_NAME, provide = DatasetDefinition.class)
 public class TestDatasetDefinition extends AbstractDatasetDefinition implements DatasetDefinition {
@@ -73,18 +74,20 @@ public class TestDatasetDefinition extends AbstractDatasetDefinition implements 
     }
 
     @Override
+    public String getSample(Properties datasetProps, Integer size) {
+        return null;
+    }
+
+
+    @Override
+    public String getSchema(String datastoreJsonStr, String datasetJsonStr) {
+        return null;
+    }
+
+    @Override
     public String getJSONSchema() {
         return "{\"testJSON\":\"true\"}";
     }
 
-    @Override
-    public Object[] getSample(Integer size) {
-        return null;
-    }
-
-    @Override
-    public String getSchema() {
-        return null;
-    }
 
 }

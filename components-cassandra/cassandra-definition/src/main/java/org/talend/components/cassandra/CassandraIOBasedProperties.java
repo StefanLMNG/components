@@ -3,13 +3,16 @@ package org.talend.components.cassandra;
 import org.talend.components.api.component.Connector;
 import org.talend.components.api.component.PropertyPathConnector;
 import org.talend.components.api.properties.ConnectionPropertiesProvider;
+import org.talend.components.api.properties.SchemaPropertiesProvider;
 import org.talend.components.common.FixedConnectorsComponentProperties;
 import org.talend.daikon.properties.presentation.Form;
 
 import java.util.Collections;
 import java.util.Set;
 
-public class CassandraIOBasedProperties extends FixedConnectorsComponentProperties implements ConnectionPropertiesProvider<CassandraConnectionProperties> {
+public class CassandraIOBasedProperties extends FixedConnectorsComponentProperties implements
+        ConnectionPropertiesProvider<CassandraConnectionProperties>,
+        SchemaPropertiesProvider<CassandraSchemaProperties> {
     /**
      * named constructor to be used is these properties are nested in other properties. Do not subclass this method for
      * initialization, use {@link #init()} instead.
@@ -18,14 +21,22 @@ public class CassandraIOBasedProperties extends FixedConnectorsComponentProperti
      */
     public CassandraIOBasedProperties(String name) {
         super(name);
+        schemaProperties.setConnectionProperties(connectionProperties);
     }
 
     //TODO(bchen) want it private, but can't
     public CassandraConnectionProperties connectionProperties = new CassandraConnectionProperties("connectionProperties");
-    public CassandraSchemaProperties schemaProperties = new CassandraSchemaProperties("schemaProperties", connectionProperties);
+    public CassandraSchemaProperties schemaProperties = new CassandraSchemaProperties("schemaProperties");
 
     protected transient PropertyPathConnector MAIN_CONNECTOR = new PropertyPathConnector(Connector.MAIN_NAME, "schemaProperties.main");
 
+
+    @Override
+    public void setSchemaProperties(CassandraSchemaProperties props) {
+
+    }
+
+    @Override
     public CassandraSchemaProperties getSchemaProperties() {
         return schemaProperties;
     }
@@ -41,6 +52,11 @@ public class CassandraIOBasedProperties extends FixedConnectorsComponentProperti
     @Override
     public CassandraConnectionProperties getConnectionProperties() {
         return connectionProperties;
+    }
+
+    @Override
+    public void setConnectionProperties(CassandraConnectionProperties props){
+
     }
 
     @Override

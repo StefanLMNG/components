@@ -34,6 +34,7 @@ public interface DatasetService extends PropertiesService<Properties> {
      *
      * @return return the set of dataset names, never null
      */
+    //TODO(bchen) nouse? should find datset by datastoreService, no?
     Set<String> getAllDatasetNames();
 
     /**
@@ -41,6 +42,7 @@ public interface DatasetService extends PropertiesService<Properties> {
      *
      * @return return the set of dataset definitions, never null.
      */
+    //TODO(bchen) nouse?
     Set<DatasetDefinition> getAllDatasets();
 
     /**
@@ -64,18 +66,20 @@ public interface DatasetService extends PropertiesService<Properties> {
      * Return a sample of the data contained inside a specified dataset.
      */
     // TODO Change return type
-    // Object[] getSample(String name, Integer size);
+    String getSample(String name, Integer size, Properties properties);
 
     /**
      * Return the schema associated to a specified dataset
      */
     // TODO Change return type
+    // TODO(bchen) nouse, you can get schema which in properties
     // String getSchema(String name);
 
     /**
      * Check the integrity of a specified dataset. The nature of the checks are dependant of the dataset. It must allow
      * the user to know when the registered parameters are valid before creating a Dataset.
      */
+    //TODO(bchen) what the usage of it?
     List<Object> validate(String name);
 
     /**
@@ -85,6 +89,7 @@ public interface DatasetService extends PropertiesService<Properties> {
      * @return a JSON Schema as a String.
      * @exception DatasetException thrown if the dataset is not registered in the service
      */
+    //TODO(bchen) nouse? because get component properties will return json schema
     String getJSONSchema(String name);
 
     /**
@@ -95,6 +100,7 @@ public interface DatasetService extends PropertiesService<Properties> {
      * @return the {@code DatasetDefinition} object.
      * @exception DatasetException thrown if the dataset is not registered in the service
      */
+    //TODO(bchen) no use?
     DatasetDefinition getDatasetDefinition(String name);
 
     /**
@@ -104,6 +110,7 @@ public interface DatasetService extends PropertiesService<Properties> {
      * @param properties the {@link ComponentProperties} object to look for.
      * @return the list of compatbible {@link DatasetDefinition} objects.
      */
+    //TODO(bchen) no use?
     List<DatasetDefinition> getPossibleDatasets(ComponentProperties... properties) throws Throwable;
 
     /**
@@ -115,6 +122,7 @@ public interface DatasetService extends PropertiesService<Properties> {
      * @param nestedValues the ComponentProperties which properties will be copied inot the targetProperties.
      * @return true if the copy was done and false if the targetProperties does not accept the nestedValues type.
      */
+    //TODO(bchen) no use?
     boolean setNestedPropertiesValues(ComponentProperties targetProperties, Properties nestedValues);
 
     /**
@@ -133,6 +141,7 @@ public interface DatasetService extends PropertiesService<Properties> {
      * @param repository
      */
     @Override
+    //TODO(bchen) no use?
     void setRepository(Repository repository);
 
     /**

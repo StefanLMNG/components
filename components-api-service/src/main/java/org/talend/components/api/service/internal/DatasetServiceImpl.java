@@ -116,6 +116,12 @@ public class DatasetServiceImpl extends PropertiesServiceImpl implements Dataset
     }
 
     @Override
+    public String getSample(String name, Integer size, Properties properties) {
+        DatasetDefinition datasetDef = getDatasetDefinition(name);
+        return datasetDef.getSample(properties, size);
+    }
+
+    @Override
     public List<Object> validate(String name) {
         DatasetDefinition datasetDef = getDatasetDefinition(name);
         return datasetDef.validate();
@@ -281,7 +287,7 @@ public class DatasetServiceImpl extends PropertiesServiceImpl implements Dataset
      * }
      * </pre>
      * 
-     * @param s
+     * @param dependencyString
      * @return pax-url formatted string
      */
     String parseMvnUri(String dependencyString) {

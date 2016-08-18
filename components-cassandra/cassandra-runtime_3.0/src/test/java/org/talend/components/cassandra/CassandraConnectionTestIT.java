@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.api.test.ComponentTestUtils;
 import org.talend.components.cassandra.connection.TCassandraConnectionDefinition;
+import org.talend.components.cassandra.input.TCassandraInputDefinition;
 import org.talend.daikon.properties.presentation.Form;
 
 import static org.hamcrest.Matchers.is;
@@ -14,7 +15,8 @@ public class CassandraConnectionTestIT extends CassandraTestBase {
 
     @Test
     public void testPropsAndi18n(){
-        ComponentProperties props = new TCassandraConnectionDefinition().createProperties();
+        ComponentProperties props = getComponentService().getComponentProperties(TCassandraConnectionDefinition
+                .COMPONENT_NAME);
         //Basic test, it will check i18n also
         ComponentTestUtils.checkSerialize(props, errorCollector);
         assertThat(props.getForm(Form.MAIN).getName(), is(Form.MAIN));

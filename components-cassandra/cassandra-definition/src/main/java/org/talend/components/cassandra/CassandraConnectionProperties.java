@@ -123,6 +123,11 @@ public class CassandraConnectionProperties extends ComponentPropertiesImpl imple
     }
 
     @Override
+    public void setConnectionProperties(CassandraConnectionProperties props) {
+
+    }
+
+    @Override
     public CassandraConnectionProperties getConnectionProperties() {
         return this;
     }

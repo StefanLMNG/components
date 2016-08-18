@@ -41,6 +41,7 @@ public interface DatastoreService extends PropertiesService<Properties> {
      *
      * @return return the set of datastore definitions, never null.
      */
+    //TODO(bchen) nouse?
     Set<DatastoreDefinition> getAllDatastores();
 
     /**
@@ -61,19 +62,25 @@ public interface DatastoreService extends PropertiesService<Properties> {
     String[] getDatasets(String name);
 
     /**
-     * Check the integrity of a specified datastore. The nature of the checks are dependant of the datastore. It must
-     * allow the user to know when the registered parameters are valid before creating a Dataset.
-     */
-    List<Object> validate(String name);
-
-    /**
      * Used to get the JSON Schema for the specified datastore.
-     * 
+     *
      * @param name the name of the datastore
      * @return a JSON Schema as a String.
      * @exception DatastoreException thrown if the datastore is not registered in the service
      */
+    //TODO(bchen) nouse, because replaced by getComponentProperties when use jsonschema converter
     String getJSONSchema(String name);
+
+    /**
+     * Check the integrity of a specified datastore. The nature of the checks are dependant of the datastore. It must
+     * allow the user to know when the registered parameters are valid before creating a Dataset.
+     *
+     * Check one datastore each times
+     * componentPropertiesJsonStr should include json-schema and json-data for one datastore setting
+     * the json string should be replaced by Properties later, after change the Spring default
+     * object to json handler
+     */
+    String validate(String name, Properties properties);
 
     /**
      * Used to get a the {@link DatastoreDefinition} object for the specified datastore.
@@ -83,6 +90,7 @@ public interface DatastoreService extends PropertiesService<Properties> {
      * @return the {@code DatastoreDefinition} object.
      * @exception DatastoreException thrown if the datastore is not registered in the service
      */
+    //TODO(bchen) nouse?
     DatastoreDefinition getDatastoreDefinition(String name);
 
     /**
@@ -92,6 +100,7 @@ public interface DatastoreService extends PropertiesService<Properties> {
      * @param properties the {@link ComponentProperties} object to look for.
      * @return the list of compatbible {@link DatastoreDefinition} objects.
      */
+    //TODO(bchen) nouse?
     List<DatastoreDefinition> getPossibleDatastores(ComponentProperties... properties) throws Throwable;
 
     /**
@@ -103,6 +112,7 @@ public interface DatastoreService extends PropertiesService<Properties> {
      * @param nestedValues the ComponentProperties which properties will be copied inot the targetProperties.
      * @return true if the copy was done and false if the targetProperties does not accept the nestedValues type.
      */
+    //TODO(bchen) nouse?
     boolean setNestedPropertiesValues(ComponentProperties targetProperties, Properties nestedValues);
 
     /**
@@ -121,6 +131,7 @@ public interface DatastoreService extends PropertiesService<Properties> {
      * @param repository
      */
     @Override
+    //TODO(bchen) nouse?
     void setRepository(Repository repository);
 
     /**

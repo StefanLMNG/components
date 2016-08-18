@@ -44,6 +44,7 @@ import aQute.bnd.annotation.component.Reference;
  * agnostic {@link DatasetServiceImpl}
  */
 @Component
+//TODO(bchen) nouse?
 public class DatasetServiceOsgi implements DatasetService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatasetServiceOsgi.class);
@@ -116,6 +117,11 @@ public class DatasetServiceOsgi implements DatasetService {
     @Override
     public String[] getComponents(String name) {
         return datasetServiceDelegate.getComponents(name);
+    }
+
+    @Override
+    public String getSample(String name, Integer size, Properties properties) {
+        return datasetServiceDelegate.getSample(name, size, properties);
     }
 
     @Override

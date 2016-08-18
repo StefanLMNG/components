@@ -116,9 +116,9 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
     }
 
     @Override
-    public List<Object> validate(String name) {
+    public String validate(String name, Properties properties) {
         DatastoreDefinition datasetDef = getDatastoreDefinition(name);
-        return datasetDef.validate();
+        return datasetDef.validate(properties);
     }
 
     @Override
@@ -283,7 +283,7 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
      * }
      * </pre>
      * 
-     * @param s
+     * @param dependencyString
      * @return pax-url formatted string
      */
     String parseMvnUri(String dependencyString) {

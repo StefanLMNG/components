@@ -93,10 +93,11 @@ public class DatastoreServiceSpring implements DatastoreService {
     }
 
     @Override
-    @RequestMapping(value = BASE_PATH + "/validate/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Object> validate(
-            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name) {
-        return datastoreServiceDelegate.validate(name);
+    @RequestMapping(value = BASE_PATH + "/validate/{name}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody String validate(
+            @PathVariable(value = "name") @ApiParam(name = "name", value = "Name of the datastore") String name,
+            @ApiParam(name = "properties", value = "Setting for the current datastore") @RequestBody Properties properties) {
+        return datastoreServiceDelegate.validate(name, properties);
     }
 
     @Override

@@ -119,8 +119,8 @@ public class DatastoreServiceOsgi implements DatastoreService {
     }
 
     @Override
-    public List<Object> validate(String name) {
-        return datastoreServiceDelegate.validate(name);
+    public String validate(String name, Properties properties) {
+        return datastoreServiceDelegate.validate(name, properties);
     }
 
     @Override
