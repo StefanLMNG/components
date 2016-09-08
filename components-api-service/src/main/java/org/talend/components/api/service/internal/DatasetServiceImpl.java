@@ -122,9 +122,9 @@ public class DatasetServiceImpl extends PropertiesServiceImpl implements Dataset
     }
 
     @Override
-    public List<Object> validate(String name) {
+    public List<String> getValidateChecks(String name) {
         DatasetDefinition datasetDef = getDatasetDefinition(name);
-        return datasetDef.validate();
+        return datasetDef.getValidateChecks();
     }
 
     @Override
@@ -287,7 +287,7 @@ public class DatasetServiceImpl extends PropertiesServiceImpl implements Dataset
      * }
      * </pre>
      * 
-     * @param dependencyString
+     * @param s
      * @return pax-url formatted string
      */
     String parseMvnUri(String dependencyString) {

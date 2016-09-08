@@ -116,9 +116,15 @@ public class DatastoreServiceImpl extends PropertiesServiceImpl implements Datas
     }
 
     @Override
-    public String validate(String name, Properties properties) {
+    public List<String> getValidateChecks(String name) {
         DatastoreDefinition datasetDef = getDatastoreDefinition(name);
-        return datasetDef.validate(properties);
+        return datasetDef.getValidateChecks();
+    }
+
+    @Override
+    public Boolean validate(String name, String check, Properties properties) {
+        DatastoreDefinition datasetDef = getDatastoreDefinition(name);
+        return datasetDef.doValidate(check, properties);
     }
 
     @Override

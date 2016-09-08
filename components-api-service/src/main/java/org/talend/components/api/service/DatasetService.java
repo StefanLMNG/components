@@ -80,7 +80,7 @@ public interface DatasetService extends PropertiesService<Properties> {
      * the user to know when the registered parameters are valid before creating a Dataset.
      */
     //TODO(bchen) what the usage of it?
-    List<Object> validate(String name);
+    List<String> getValidateChecks(String name);
 
     /**
      * Used to get the JSON Schema for the specified dataset.

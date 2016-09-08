@@ -12,19 +12,19 @@
 // ============================================================================
 package org.talend.components.api.component;
 
-import java.util.List;
-
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 
+import java.util.List;
+
 /**
  * Defines a datastore.
  * <p/>
  * A class implementing this interface is the definition of a datastore. Instances are registered with the
- * {@link org.talend.components.api.service.DatastoreService} to allow datastores to be discovered.
+ * {@link DatastoreService} to allow datastores to be discovered.
  */
 
 public interface DatastoreDefinition extends NamedThing {
@@ -43,7 +43,9 @@ public interface DatastoreDefinition extends NamedThing {
      * Check the integrity of the current datastore. The nature of the checks are dependant of the datastore. It must
      * allow the user to know when the registered parameters are valid before creating a Dataset.
      */
-    String validate(Properties properties);
+    List<String> getValidateChecks();
+
+    Boolean doValidate(String name, Properties props);
 
     /**
      * Return data of current datastore as a JSONSchema compatible with the UI.

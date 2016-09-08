@@ -3,6 +3,7 @@ package org.talend.components.cassandra.runtime;
 import org.apache.avro.Schema;
 import org.talend.components.api.component.runtime.SourceOrSink;
 import org.talend.components.api.container.RuntimeContainer;
+import org.talend.components.api.properties.ComponentProperties;
 import org.talend.daikon.NamedThing;
 
 import java.io.IOException;
@@ -17,4 +18,6 @@ public interface CassandraSourceOrSink extends SourceOrSink {
     List<NamedThing> getTableNames(RuntimeContainer container, String stringValue) throws IOException;
 
     Schema getSchema(RuntimeContainer container, String stringValue, String stringValue1) throws IOException;
+
+    boolean doValidate(String name, ComponentProperties properties);
 }

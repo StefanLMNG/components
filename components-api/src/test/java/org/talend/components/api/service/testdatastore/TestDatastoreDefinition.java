@@ -73,10 +73,6 @@ public class TestDatastoreDefinition extends AbstractDatastoreDefinition impleme
         return new String[] {};
     }
 
-    @Override
-    public String validate(Properties properties) {
-        return null;
-    }
 
     /*
      * (non-Javadoc)

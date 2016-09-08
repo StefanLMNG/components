@@ -23,6 +23,7 @@ import org.talend.components.api.AbstractTopLevelDefinition;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.exception.TalendRuntimeException;
+import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.property.Property;
 
 public abstract class AbstractDatastoreDefinition extends AbstractTopLevelDefinition implements DatastoreDefinition {
@@ -69,6 +70,16 @@ public abstract class AbstractDatastoreDefinition extends AbstractTopLevelDefini
     @Override
     protected String getI18nPrefix() {
         return "datastore."; //$NON-NLS-1$
+    }
+
+    @Override
+    public List<String> getValidateChecks() {
+        return new ArrayList<String>();
+    }
+
+    @Override
+    public Boolean doValidate(String name, Properties props) {
+        return true;
     }
 
     @Override

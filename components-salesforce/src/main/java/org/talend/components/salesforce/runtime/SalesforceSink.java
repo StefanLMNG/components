@@ -51,7 +51,7 @@ public class SalesforceSink extends SalesforceSourceOrSink implements Sink {
 
     /**
      * this should never becalled before {@link #validate(RuntimeContainer)} is called but this should not be the case
-     * anyway cause validate is called before the pipeline is created.
+     * anyway cause getValidateChecks is called before the pipeline is created.
      *
      * @return the properties
      */

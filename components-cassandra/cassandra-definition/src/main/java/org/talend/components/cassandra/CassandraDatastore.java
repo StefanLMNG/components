@@ -2,6 +2,9 @@ package org.talend.components.cassandra;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,22 +47,33 @@ public class CassandraDatastore extends AbstractDatastoreDefinition {
     }
 
     @Override
-    public String[] getDatasets() {
-        return new String[] { new CassandraDataset().getName() };
+    public List<String> getValidateChecks() {
+        return Arrays.asList("ping_cassandra");
     }
 
     @Override
-    public String validate(Properties properties) {
-        try {
-            TCassandraConnectionDefinition connectionDefinition = new
-                    TCassandraConnectionDefinition();
-            SourceOrSink runtime = connectionDefinition.getRuntime();
-            runtime.initialize(null, (ComponentProperties)properties);
-            ValidationResult validate = runtime.validate(null);
-            return "{\"status\":\"ok\"}";//TODO(bchen) change it!
-        } catch (Exception e) {
-            return "{\"status\":\"error\", \"message\":"+e.getMessage()+"}";
+    public Boolean doValidate(String name, Properties properties) {
+        if ("ping_cassandra".equals(name)) {
+            try {
+                TCassandraConnectionDefinition connectionDefinition = new
+                        TCassandraConnectionDefinition();
+                SourceOrSink runtime = connectionDefinition.getRuntime();
+                runtime.initialize(null, (ComponentProperties)properties);
+                ValidationResult validate = runtime.validate(null);
+                return true;
+                //return "{\"status\":\"ok\"}";//TODO(bchen) change it!
+            } catch (Exception e) {
+                //return "{\"status\":\"error\", \"message\":"+e.getMessage()+"}";
+                return false;
+            }
         }
+        // link to the check in cassandra_runtime_3_0, using the classloader defined in MavenBooter.
+        return true;
+    }
+
+    @Override
+    public String[] getDatasets() {
+        return new String[] { new CassandraDataset().getName() };
     }
 
     @Override

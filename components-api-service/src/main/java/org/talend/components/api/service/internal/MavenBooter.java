@@ -14,12 +14,10 @@ package org.talend.components.api.service.internal;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.apache.maven.settings.Server;
@@ -35,15 +33,23 @@ import org.codehaus.plexus.util.Os;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
+import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.impl.DefaultServiceLocator;
 import org.eclipse.aether.repository.Authentication;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.resolution.DependencyRequest;
+import org.eclipse.aether.resolution.DependencyResolutionException;
+import org.eclipse.aether.resolution.DependencyResult;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
+import org.eclipse.aether.util.filter.DependencyFilterUtils;
 import org.eclipse.aether.util.repository.AuthenticationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -266,4 +272,52 @@ public class MavenBooter {
         }
         return locator.getService(RepositorySystem.class);
     }
+
+    /**
+     * Download all of the artifacts from the set up repositories to the local repository.
+     *
+     * @param system
+     * @param session
+     * @param gacev groupId:artifact:classifier:extension:version (where classifier and extension are optional.
+     * @param scopes One of {@link org.eclipse.aether.util.artifact.JavaScopes}.
+     * @return The results of the download.
+     * @throws DependencyResolutionException
+     */
+    public DependencyResult downloadAll(RepositorySystem system, RepositorySystemSession session, String gacev, String scopes)
+            throws DependencyResolutionException {
+        List<RemoteRepository> repositories = new ArrayList<>();
+        repositories.addAll(newTalendRepositories());
+        repositories.add(newCentralRepository());
+
+        // Set up the requests
+        CollectRequest collectRequest = new CollectRequest() //
+                .setRoot(new Dependency(new DefaultArtifact(gacev), scopes)) //
+                .setRepositories(repositories);
+        DependencyRequest req = new DependencyRequest(collectRequest, DependencyFilterUtils.classpathFilter(scopes));
+
+        // Execute the command.
+        return system.resolveDependencies(session, req);
+    }
+
+    /**
+     * @param system
+     * @param session
+     * @param gacev groupId:artifact:classifier:extension:version (where classifier and extension are optional.
+     * @param scopes One of {@link org.eclipse.aether.util.artifact.JavaScopes}.
+     * @return A classloader that contains all of the jars for the requested artifact, after going to Maven and
+     * downloading them to the local repository if necessary.
+     * @throws DependencyResolutionException
+     */
+    public URLClassLoader getClassLoaderFor(RepositorySystem system, RepositorySystemSession session, String gacev, String scopes)
+            throws DependencyResolutionException, MalformedURLException {
+        DependencyResult downloadAll = downloadAll(system, session, gacev, scopes);
+        List<ArtifactResult> artifacts = downloadAll.getArtifactResults();
+        URL[] urls = new URL[artifacts.size()];
+        // All of the urls are based on the local filesystem.
+        URL baseUrl = new URL("file:///");
+        for (int i = 0; i < artifacts.size(); i++)
+            urls[i] = new URL(baseUrl, artifacts.get(i).getArtifact().getFile().getAbsolutePath());
+        return new URLClassLoader(urls, getClass().getClassLoader());
+    }
+
 }

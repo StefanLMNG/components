@@ -28,6 +28,18 @@ public class CassandraSourceOrSink implements org.talend.components.cassandra.ru
     }
 
     @Override
+    public boolean doValidate(String name, ComponentProperties properties) {
+        try {
+            CassandraSourceOrSink csos = new CassandraSourceOrSink();
+            csos.initialize(null, properties);
+            csos.getCluster(null).init();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public ValidationResult validate(RuntimeContainer container) {
         try {
             connect(container);

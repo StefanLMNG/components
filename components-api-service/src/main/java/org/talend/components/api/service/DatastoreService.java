@@ -62,6 +62,12 @@ public interface DatastoreService extends PropertiesService<Properties> {
     String[] getDatasets(String name);
 
     /**
+     * Check the integrity of a specified datastore. The nature of the checks are dependant of the datastore. It must
+     * allow the user to know when the registered parameters are valid before creating a Dataset.
+     */
+    List<String> getValidateChecks(String name);
+
+    /**
      * Used to get the JSON Schema for the specified datastore.
      *
      * @param name the name of the datastore
@@ -80,7 +86,7 @@ public interface DatastoreService extends PropertiesService<Properties> {
      * the json string should be replaced by Properties later, after change the Spring default
      * object to json handler
      */
-    String validate(String name, Properties properties);
+    Boolean validate(String name, String check, Properties properties);
 
     /**
      * Used to get a the {@link DatastoreDefinition} object for the specified datastore.
