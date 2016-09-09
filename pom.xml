@@ -4,6 +4,13 @@
 
 	<groupId>org.talend.components</groupId>
 	<version>0.14.0-SNAPSHOT</version>
+	<dependencies>
+		<dependency>
+			<groupId>org.talend.components</groupId>
+			<artifactId>components-api</artifactId>
+			<version>0.14.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 	<artifactId>components</artifactId>
 	<packaging>pom</packaging>
 
@@ -24,6 +31,7 @@
 		<module>components-dataprep</module>
         <module>components-api-full-example</module>
 		<module>components-cassandra</module>
+		<module>components-mongodb</module>
 	</modules>
 	<profiles>
 		<profile>
