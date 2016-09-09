@@ -46,12 +46,12 @@ public class SalesforceSourceOrSinkTestIT extends SalesforceTestBase {
 
     @Test
     public void testValidate() {
-        // check validate is OK with proper credentials
+        // check getValidateChecks is OK with proper credentials
         SalesforceConnectionProperties props = setupProps(null, !ADD_QUOTES);
         SalesforceSourceOrSink salesforceSourceOrSink = new SalesforceSourceOrSink();
         salesforceSourceOrSink.initialize(null, props);
         assertEquals(Result.OK, salesforceSourceOrSink.validate(null).getStatus());
-        // check validate is ERROR with wrong creadentials
+        // check getValidateChecks is ERROR with wrong creadentials
         props.userPassword.userId.setValue("");
         assertEquals(Result.ERROR, salesforceSourceOrSink.validate(null).getStatus());
     }
