@@ -8,7 +8,7 @@ import org.talend.components.mongodb.MongoDBDefinition;
 public class TMongoDBOutputDefinition extends MongoDBDefinition implements OutputComponentDefinition{
     public static final String COMPONENT_NAME = "tMongoDBOutput"; //$NON-NLS-1$
 
-    public TMongoDBOutputDefinition(String componentName) {
+    public TMongoDBOutputDefinition() {
         super(COMPONENT_NAME);
     }
 

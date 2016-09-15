@@ -14,7 +14,7 @@ public class TMongoDBInputDefinition extends MongoDBDefinition implements InputC
 
     public static final String COMPONENT_NAME = "tMongoDBInput"; //$NON-NLS-1$
 
-    public TMongoDBInputDefinition(String componentName) {
+    public TMongoDBInputDefinition() {
         super(COMPONENT_NAME);
     }
 
