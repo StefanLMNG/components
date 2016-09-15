@@ -60,5 +60,4 @@ public interface SourceOrSink extends Serializable {
      * Works in a similar manner to {@link #getSchemaNames(RuntimeContainer)}.
      */
     Schema getEndpointSchema(RuntimeContainer container, String schemaName) throws IOException;
-
 }

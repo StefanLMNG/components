@@ -41,4 +41,9 @@ public class UserPasswordProperties extends PropertiesImpl {
         form.addRow(widget(password).setWidgetType(Widget.HIDDEN_TEXT_WIDGET_TYPE));
     }
 
+    public String getUserPasswordProperties(){
+        String passwordProperties = this.userId + ":" + this.password;
+        return passwordProperties;
+    }
+
 }

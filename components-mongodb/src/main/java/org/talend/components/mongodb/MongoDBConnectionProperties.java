@@ -53,6 +53,11 @@ public class MongoDBConnectionProperties extends ComponentPropertiesImpl impleme
     }
 
     @Override
+    public void setConnectionProperties(MongoDBConnectionProperties props) {
+
+    }
+
+    @Override
     public MongoDBConnectionProperties getConnectionProperties() {
         return this;
     }
@@ -68,9 +73,11 @@ public class MongoDBConnectionProperties extends ComponentPropertiesImpl impleme
         super.setupLayout();
 
         Form wizardForm = new Form(this, "Wizard");
+        // delete property from form ? Try to not use it anymore ?
         wizardForm.addRow((Property) newString("name").setRequired());
         wizardForm.addRow(widget(version).setDeemphasize(true));
         wizardForm.addRow(replicaSet);
+        wizardForm.addRow(widget(replicaTable).setWidgetType(Widget.TABLE_WIDGET_TYPE));
         wizardForm.addRow(host);
         wizardForm.addColumn(port);
         wizardForm.addRow(database);
@@ -111,16 +118,21 @@ public class MongoDBConnectionProperties extends ComponentPropertiesImpl impleme
         refreshLayout(getForm("Wizard"));
     }
 
+    // TODO check if all fields are correct
     @Override
     public void refreshLayout(Form form) {
         super.refreshLayout(form);
-
         String refComponentIdValue = getReferencedComponentId();
         boolean useOtherConnection = refComponentIdValue != null && refComponentIdValue.startsWith(TMongoDBConnectionDefinition.COMPONENT_NAME);
         if (form.getName().equals(Form.MAIN) || form.getName().equals("Wizard")) {
             if (useOtherConnection) {
                 form.getWidget(version.getName()).setHidden(true);
                 form.getWidget(replicaSet.getName()).setHidden(true);
+                if (replicaSet.getValue()){
+                    form.getWidget(replicaTable.getName()).setHidden(false);
+                } else {
+                    form.getWidget(replicaTable.getName()).setHidden(true);
+                }
                 form.getWidget(host.getName()).setHidden(true);
                 form.getWidget(port.getName()).setHidden(true);
                 form.getWidget(database.getName()).setHidden(true);

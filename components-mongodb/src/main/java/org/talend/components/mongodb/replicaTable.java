@@ -39,4 +39,10 @@ public class ReplicaTable extends ComponentPropertiesImpl {
         mainForm.addColumn(replicaPort);
     }
 
+    public String getReplica(){
+
+        String replica = "";
+        return replica;
+    }
+
 }

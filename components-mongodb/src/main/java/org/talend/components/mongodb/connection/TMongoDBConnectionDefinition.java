@@ -19,6 +19,16 @@ public class TMongoDBConnectionDefinition extends MongoDBDefinition implements E
 
     public SourceOrSink getRuntime() {
         // TO DO add return MongoDBSourceOrSink
+        try {
+            // TODO fix the correct version for runtime
+            return (SourceOrSink) Class.forName("org.talend.components.mongodb.runtime_3_2.MonogDBSourceOrSink").newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

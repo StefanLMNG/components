@@ -51,6 +51,11 @@ public class MongoDBIOBasedProperties extends FixedConnectorsComponentProperties
     }
 
     @Override
+    public void setConnectionProperties(MongoDBConnectionProperties props) {
+
+    }
+
+    @Override
     public MongoDBConnectionProperties getConnectionProperties() {
         return connectionProperties;
     }
