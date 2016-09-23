@@ -104,8 +104,6 @@ public class MongoDBDataset extends AbstractDatasetDefinition{
                 out.close();
                 byte[] bytes = out.toByteArray();
                 jsonData.add(new String(bytes));
-            }catch(IOException e){
-                e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();

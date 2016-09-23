@@ -133,6 +133,7 @@ public class MongoDBSourceOrSink implements SourceOrSink{
     }
 
     // TODO check if
+    // schema
     public Schema getSchema(RuntimeContainer container, String collection) throws IOException {
         return null;
     }
