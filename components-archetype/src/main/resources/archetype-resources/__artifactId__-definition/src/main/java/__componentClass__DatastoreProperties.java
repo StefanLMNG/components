@@ -1,7 +1,7 @@
-package ${packageComponent};
+package ${package};
 
-import ${package}.api.component.runtime.RuntimeInfo;
-import ${package}.common.datastore.DatastoreDefinition;
+import ${packageTalend}.api.component.runtime.RuntimeInfo;
+import ${packageTalend}.common.datastore.DatastoreDefinition;
 import org.talend.daikon.SimpleNamedThing;
 import org.talend.daikon.i18n.I18nMessages;
 import org.talend.daikon.properties.Properties;

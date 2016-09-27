@@ -1,6 +1,6 @@
-package ${packageComponent}.input;
+package ${package}.input;
 
-import ${package}.api.properties.ComponentPropertiesImpl;
+import ${packageTalend}.api.properties.ComponentPropertiesImpl;
 
 public class ${componentClass}InputProperties extends ComponentPropertiesImpl {
 

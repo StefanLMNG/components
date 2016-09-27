@@ -2,10 +2,10 @@ package ${package}.input;
 
 import java.util.Set;
 
-import ${package}.api.component.AbstractComponentDefinition;
-import ${package}.api.component.ConnectorTopology;
-import ${package}.api.component.runtime.RuntimeInfo;
-import ${package}.api.properties.ComponentProperties;
+import ${packageTalend}.api.component.AbstractComponentDefinition;
+import ${packageTalend}.api.component.ConnectorTopology;
+import ${packageTalend}.api.component.runtime.RuntimeInfo;
+import ${packageTalend}.api.properties.ComponentProperties;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.property.Property;
 

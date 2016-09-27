@@ -1,10 +1,10 @@
-package ${packageComponent};
+package ${package};
 
 import java.net.URL;
 import java.util.List;
 
-import ${package}.api.component.runtime.RuntimeInfo;
-import ${package}.common.dataset.DatasetDefinition;
+import ${packageTalend}.api.component.runtime.RuntimeInfo;
+import ${packageTalend}.common.dataset.DatasetDefinition;
 import org.talend.daikon.SimpleNamedThing;
 
 public class ${componentClass}DatasetDefinition extends SimpleNamedThing implements DatasetDefinition<${componentClass}DatasetProperties> {

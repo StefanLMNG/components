@@ -11,8 +11,8 @@
         <requiredProperty key="package">
             <defaultValue>${groupId}</defaultValue>
         </requiredProperty>
-        <requiredProperty key="packageComponent">
-            <defaultValue>${package}.${artifactId}</defaultValue>
+        <requiredProperty key="packageTalend">
+            <defaultValue>org.talend.components</defaultValue>
         </requiredProperty>
         <!--<requiredProperty key="resource-name">
             <defaultValue>Resource-default</defaultValue>
@@ -45,7 +45,7 @@
                 <include>pom.xml</include>
             </includes>
         </fileSet>
-        
+
         <!-- Metadata for definition module -->
         <fileSet filtered="true" packaged="true">
             <directory>__artifactId__-definition/src/main/java/</directory>

@@ -1,10 +1,10 @@
-package ${packageComponent}.runtime_XXX;
+package ${package}.runtime_XXX;
 
 import org.apache.avro.Schema;
-import ${package}.api.component.runtime.SourceOrSink;
-import ${package}.api.container.RuntimeContainer;
-import ${package}.api.properties.ComponentProperties;
-import ${packageComponent}.${componentClass}DatastoreProperties;
+import ${packageTalend}.api.component.runtime.SourceOrSink;
+import ${packageTalend}.api.container.RuntimeContainer;
+import ${packageTalend}.api.properties.ComponentProperties;
+import ${package}.${componentClass}DatastoreProperties;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.properties.ValidationResult;
 

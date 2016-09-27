@@ -1,12 +1,12 @@
-package ${packageComponent};
+package ${package};
 
-import ${package}.api.AbstractComponentFamilyDefinition;
-import ${package}.api.ComponentInstaller;
-import ${package}.api.Constants;
+import ${packageTalend}.api.AbstractComponentFamilyDefinition;
+import ${packageTalend}.api.ComponentInstaller;
+import ${packageTalend}.api.Constants;
 
 import aQute.bnd.annotation.component.Component;
-import ${packageComponent}.input.${componentClass}InputDefinition;
-import ${packageComponent}.output.${componentClass}OutputDefinition;
+import ${package}.input.${componentClass}InputDefinition;
+import ${package}.output.${componentClass}OutputDefinition;
 
 /**
  * Install all of the definitions provided for the FullExample family of components.

@@ -1,6 +1,6 @@
-package ${packageComponent}.output;
+package ${package}.output;
 
-import ${package}.api.properties.ComponentPropertiesImpl;
+import ${packageTalend}.api.properties.ComponentPropertiesImpl;
 
 public class ${componentClass}OutputProperties extends ComponentPropertiesImpl {
 

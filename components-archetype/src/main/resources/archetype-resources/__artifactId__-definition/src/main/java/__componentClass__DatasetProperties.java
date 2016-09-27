@@ -1,6 +1,6 @@
-package ${packageComponent};
+package ${package};
 
-import ${package}.common.dataset.DatasetProperties;
+import ${packageTalend}.common.dataset.DatasetProperties;
 import org.talend.daikon.properties.PropertiesImpl;
 
 public class ${componentClass}DatasetProperties extends PropertiesImpl implements DatasetProperties {
