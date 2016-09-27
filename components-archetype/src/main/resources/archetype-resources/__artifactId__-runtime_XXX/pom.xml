@@ -8,12 +8,10 @@
     <version>${version}</version>
   </parent>
 
-  <groupId>blabla</groupId>
-  <artifactId>ferfer</artifactId>
-  <version>1.0</version>
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}-runtime_XXX</artifactId>
   <packaging>pom</packaging>
 
-  <name>subdsdfczs</name>
-
+  <name>Runtime module</name>
 
 </project>

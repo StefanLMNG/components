@@ -8,11 +8,10 @@
     <version>${version}</version>
   </parent>
 
-  <groupId>blabla</groupId>
-  <artifactId>projects</artifactId>
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}-definition</artifactId>
   <packaging>pom</packaging>
 
-  <name>sub projects</name>
-
+  <name>Definition module</name>
 
 </project>

@@ -9,7 +9,10 @@
             <defaultValue>${component-name.substring(0,1).toUpperCase()}${component-name.substring(1)}</defaultValue>
         </requiredProperty>
         <requiredProperty key="package">
-            <defaultValue>${groupId}.${artifactId}</defaultValue>
+            <defaultValue>${groupId}</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="packageComponent">
+            <defaultValue>${package}.${artifactId}</defaultValue>
         </requiredProperty>
         <!--<requiredProperty key="resource-name">
             <defaultValue>Resource-default</defaultValue>
@@ -23,9 +26,27 @@
 
     <fileSets>
         <!-- Metadata for src module -->    
+
+
+ <!-- Metadata for runtime module -->
         <fileSet filtered="true" packaged="true">
-                <directory>src/main/java</directory>
+            <directory>__artifactId__-runtime_XXX/src/main/java/</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
         </fileSet>
+
+        <fileSet filtered="true" packaged="true">
+                <directory>__artifactId__-runtime_XXX/src/main/resources/</directory>
+        </fileSet>
+        <fileSet filtered="true">
+            <directory>__artifactId__-runtime_XXX</directory>
+            <includes>
+                <include>pom.xml</include>
+            </includes>
+        </fileSet>
+        
+        <!-- Metadata for definition module -->
         <fileSet filtered="true" packaged="true">
             <directory>__artifactId__-definition/src/main/java/</directory>
             <includes>
@@ -33,12 +54,18 @@
             </includes>
         </fileSet>
 
+        <fileSet filtered="true" packaged="true">
+                <directory>__artifactId__-definition/src/main/resources/</directory>
+        </fileSet>
         <fileSet filtered="true">
             <directory>__artifactId__-definition</directory>
             <includes>
                 <include>pom.xml</include>
             </includes>
         </fileSet>
+
+       
+
         <!--<fileSet filtered="true" encoding="UTF-8">
             <directory>src/test/resources</directory>
             <includes>

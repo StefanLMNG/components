@@ -8,8 +8,8 @@
   <name>component-${artifactId}</name>
 
   <modules>
+    <module>${artifactId}-runtime_XXX</module>
     <module>${artifactId}-definition</module>
-    <module>src</module>
   </modules>
 
   <build>
