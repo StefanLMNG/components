@@ -1,3 +1,19 @@
+# If this branch finds itself merged into master...
+
+... you have made a horrible mistake.
+
+![I've made a huge mistake.](http://i0.kym-cdn.com/entries/icons/original/000/011/767/35nksf.jpg)
+
+```
+git fetch --all
+git merge origin/feature/TFD-254-beam-runtime
+```
+
+The component-fake module exists here.
+
+Do your work on THOSE branches, and submit THEM as pull requests!  Feel free to merge them here as an intermediate step.
+
+
 # Talend Components
 http://www.talend.com
 
