@@ -18,12 +18,12 @@ import java.util.Set;
 import org.talend.components.api.component.AbstractComponentDefinition;
 import org.talend.components.api.component.ComponentImageType;
 import org.talend.components.api.component.ConnectorTopology;
-import org.talend.components.api.component.runtime.RuntimeInfo;
 import org.talend.components.api.component.runtime.SimpleRuntimeInfo;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.fake.FakeFamilyDefinition;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.property.Property;
+import org.talend.daikon.runtime.RuntimeInfo;
 
 public class TFakeInputDefinition extends AbstractComponentDefinition {
 
@@ -59,8 +59,8 @@ public class TFakeInputDefinition extends AbstractComponentDefinition {
 
     public RuntimeInfo getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology) {
         if (ConnectorTopology.OUTGOING.equals(connectorTopology)) {
-        return new SimpleRuntimeInfo(this.getClass().getClassLoader(), FakeFamilyDefinition.computeDependenciesFilepath(),
-                "org.talend.components.fake.runtime.tfakeinput.tFakeInputRuntime");
+            return new SimpleRuntimeInfo(this.getClass().getClassLoader(), FakeFamilyDefinition.computeDependenciesFilepath(),
+                    "org.talend.components.fake.runtime.tfakeinput.tFakeInputRuntime");
         } else {
             return null;
         }
