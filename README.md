@@ -7,6 +7,8 @@
 ```
 git fetch --all
 git merge origin/feature/TFD-254-beam-runtime
+git merge pbailly/fake-components
+git merge pbailly/components-jms
 ```
 
 The component-fake module exists here.
