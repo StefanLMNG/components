@@ -52,7 +52,7 @@ public class TFakeInputDefinitionTest {
     }
 
     /**
-     * Check {@link TFakeInputDefinition#getRuntimeInfo()} returns instance of
+     * Check {@link TFakeInputDefinition#getRuntimeInfo} returns instance of
      * "org.talend.components.processing.runtime.tfiltercolumn.tFilterColumnRuntime"
      */
     @Test
@@ -62,7 +62,7 @@ public class TFakeInputDefinitionTest {
         assertNull(definition.getRuntimeInfo(null, ConnectorTopology.NONE));
 
         RuntimeInfo runtimeInfo = definition.getRuntimeInfo(null, ConnectorTopology.OUTGOING);
-        assertEquals("org.talend.components.fake.runtime.tfakeinput.tFakeInputRuntime", runtimeInfo.getRuntimeClassName());
+        assertEquals("org.talend.components.fake.runtime.tfakeinput.TFakeInputRuntime", runtimeInfo.getRuntimeClassName());
     }
 
     @Test

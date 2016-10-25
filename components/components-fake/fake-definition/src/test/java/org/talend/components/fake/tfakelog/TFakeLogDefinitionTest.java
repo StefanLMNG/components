@@ -62,7 +62,7 @@ public class TFakeLogDefinitionTest {
         assertNull(definition.getRuntimeInfo(null, ConnectorTopology.NONE));
 
         RuntimeInfo runtimeInfo = definition.getRuntimeInfo(null, ConnectorTopology.INCOMING);
-        assertEquals("org.talend.components.fake.runtime.tfakelog.tFakeLogRuntime", runtimeInfo.getRuntimeClassName());
+        assertEquals("org.talend.components.fake.runtime.tfakelog.TFakeLogRuntime", runtimeInfo.getRuntimeClassName());
     }
 
     @Test

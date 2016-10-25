@@ -5,17 +5,18 @@ import org.apache.beam.sdk.io.Write;
 import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PDone;
+import org.talend.components.api.component.runtime.RuntimableRuntime;
 import org.talend.components.api.container.RuntimeContainer;
-import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.fake.tfakelog.TFakeLogProperties;
 import org.talend.daikon.properties.ValidationResult;
 
-public class TFakeLogRuntime extends PTransform<PCollection<IndexedRecord>, PDone> {
+public class TFakeLogRuntime extends PTransform<PCollection<IndexedRecord>, PDone>
+        implements RuntimableRuntime<TFakeLogProperties> {
 
     private TFakeLogProperties properties;
 
-    public ValidationResult initialize(RuntimeContainer container, ComponentProperties componentProperties) {
-        this.properties = (TFakeLogProperties) componentProperties;
+    public ValidationResult initialize(RuntimeContainer container, TFakeLogProperties componentProperties) {
+        this.properties = componentProperties;
         return ValidationResult.OK;
     }
 
