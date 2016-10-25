@@ -12,13 +12,15 @@
 // ============================================================================
 package org.talend.components.fake.tfakelog;
 
+import java.net.URL;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 import org.talend.components.api.component.AbstractComponentDefinition;
 import org.talend.components.api.component.ComponentImageType;
 import org.talend.components.api.component.ConnectorTopology;
-import org.talend.components.api.component.runtime.SimpleRuntimeInfo;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.fake.FakeFamilyDefinition;
 import org.talend.daikon.properties.Properties;
@@ -59,11 +61,22 @@ public class TFakeLogDefinition extends AbstractComponentDefinition {
 
     public RuntimeInfo getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology) {
         if (ConnectorTopology.INCOMING.equals(connectorTopology)) {
-            return new SimpleRuntimeInfo(this.getClass().getClassLoader(), FakeFamilyDefinition.computeDependenciesFilepath(),
-                    "org.talend.components.fake.runtime.tfakelog.tFakeLogRuntime");
+            return new RuntimeInfo() {
+
+                @Override
+                public List<URL> getMavenUrlDependencies() {
+                    return Collections.emptyList();
+                }
+
+                @Override
+                public String getRuntimeClassName() {
+                    return "org.talend.components.fake.runtime.tfakelog.tFakeLogRuntime";
+                }
+            };
         } else {
             return null;
         }
+
     }
 
     public Set<ConnectorTopology> getSupportedConnectorTopologies() {
