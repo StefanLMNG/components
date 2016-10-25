@@ -70,7 +70,7 @@ public class TFakeLogDefinition extends AbstractComponentDefinition {
 
                 @Override
                 public String getRuntimeClassName() {
-                    return "org.talend.components.fake.runtime.tfakelog.tFakeLogRuntime";
+                    return "org.talend.components.fake.runtime.tfakelog.TFakeLogRuntime";
                 }
             };
         } else {
