@@ -70,7 +70,7 @@ public class TFakeInputDefinition extends AbstractComponentDefinition {
 
                 @Override
                 public String getRuntimeClassName() {
-                    return "org.talend.components.fake.runtime.tfakeinput.tFakeInputRuntime";
+                    return "org.talend.components.fake.runtime.tfakeinput.TFakeInputRuntime";
                 }
             };
         } else {
