@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.talend.components</groupId>
         <artifactId>components-jms</artifactId>
-        <version>0.15.0-SNAPSHOT</version>
+        <version>0.16.0-SNAPSHOT</version>
      </parent>
 
     <artifactId>jms-definition</artifactId>
-    <version>0.15.0-SNAPSHOT</version>
+    <version>0.16.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Components-jms-definition</name>
+    <name>Components - JMS</name>
 
     <build>
         <!-- skip the deployment for artifact, only used for test purposes -->
