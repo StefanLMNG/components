@@ -82,9 +82,9 @@ public class JmsDatastorePropertiesTest {
 
         Collection<Widget> advancedWidgets = advanced.getWidgets();
         assertThat(advancedWidgets, hasSize(4));
-        Widget use_http = advanced.getWidget("use_https");
+        Widget use_http = advanced.getWidget("useHttps");
         assertThat(use_http, notNullValue());
-        Widget https_settings = advanced.getWidget("https_settings");
+        Widget https_settings = advanced.getWidget("httpsSettings");
         assertThat(https_settings, notNullValue());
         Widget property = advanced.getWidget("property");
         assertThat(property, notNullValue());

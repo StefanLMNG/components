@@ -11,7 +11,7 @@
   <artifactId>jms-runtime_1_1</artifactId>
   <packaging>jar</packaging>
 
-  <name>Components-jms-runtime</name>
+  <name>Components - JMS - Runtime 1.1 </name>
   <dependencies>
       <dependency>
           <groupId>org.talend.components</groupId>
