@@ -59,6 +59,7 @@ import static org.junit.Assert.*;
 import static org.talend.daikon.properties.presentation.Form.MAIN;
 
 @SuppressWarnings("nls")
+@Ignore
 public class SnowflakeTestIT extends AbstractComponentTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SnowflakeTestIT.class);
@@ -206,7 +207,7 @@ public class SnowflakeTestIT extends AbstractComponentTest {
 
     @AfterClass
     public static void teardownDatabase() throws SQLException {
-        if (false) {
+        if (!false) {
             testConnection.createStatement().execute(
                     "DROP TABLE IF EXISTS " + schema +
                             "." + testTable);
@@ -474,6 +475,8 @@ public class SnowflakeTestIT extends AbstractComponentTest {
 
         tableProps.tableName.setValue(testTable);
         tableProps = (SnowflakeTableProperties) PropertiesTestUtils.checkAndAfter(getComponentService(), f, tableProps.tableName.getName(), tableProps);
+        Form schemaForm = tableProps.main.getForm(Form.REFERENCE);
+        PropertiesTestUtils.checkAndAfter(getComponentService(), schemaForm, tableProps.main.schema.getName(), tableProps.main);
         Schema schema = tableProps.main.schema.getValue();
         LOGGER.debug(schema.toString());
         for (Schema.Field child : schema.getFields()) {
@@ -1096,7 +1099,6 @@ public class SnowflakeTestIT extends AbstractComponentTest {
     }
 
     @Test
-    @Ignore
     public void testOutputFeedback() throws Throwable {
         TSnowflakeOutputProperties props = (TSnowflakeOutputProperties) getComponentService()
                 .getComponentProperties(TSnowflakeOutputDefinition.COMPONENT_NAME);
@@ -1117,10 +1119,8 @@ public class SnowflakeTestIT extends AbstractComponentTest {
         SnowflakeWriter sfWriter = sfSink.createWriteOperation().createWriter(container);
         sfWriter.open("uid1");
 
-        // Write one record, which should fail badDate
         List<IndexedRecord> rows = makeRows(2);
         IndexedRecord r = rows.get(0);
-
         r.put(0, "badId");
         r.put(2, "badBoolean");
         r.put(4, "badDate");
@@ -1128,9 +1128,56 @@ public class SnowflakeTestIT extends AbstractComponentTest {
         r.put(6, "badTimestamp");
         sfWriter.write(r);
 
+        sfWriter.write(rows.get(1));
+
         Result wr1 = sfWriter.close();
 
         // The rejected writes would come in here
+        Iterable<IndexedRecord> rejected = sfWriter.getRejectedWrites();
+        Iterator<IndexedRecord> it = rejected.iterator();
+        IndexedRecord rej;
+        rej = it.next();
+        assertEquals("1", rej.get(1)); // row
+        assertEquals("1", rej.get(3)); // character
+        assertThat((String)rej.get(4), containsString("Numeric value 'badId'"));
+        assertEquals("0", rej.get(5)); // byte offset
+        assertEquals("1", rej.get(6)); // line
+        assertEquals("100038", rej.get(8)); // code
+
+        rej = it.next();
+        assertEquals("1", rej.get(1)); // row
+        assertEquals("13", rej.get(3)); // character
+        assertThat((String)rej.get(4), containsString("Boolean value 'badBoolean'"));
+        assertEquals("12", rej.get(5)); // byte offset
+        assertEquals("1", rej.get(6)); // line
+        assertEquals("100037", rej.get(8)); // code
+
+        rej = it.next();
+        assertEquals("1", rej.get(1)); // row
+        assertEquals("32", rej.get(3)); // character
+        assertThat((String)rej.get(4), containsString("Date 'badDate'"));
+        assertEquals("31", rej.get(5)); // byte offset
+        assertEquals("1", rej.get(6)); // line
+        assertEquals("100040", rej.get(8)); // code
+
+        rej = it.next();
+        assertEquals("1", rej.get(1)); // row
+        assertEquals("40", rej.get(3)); // character
+        assertThat((String)rej.get(4), containsString("Time 'badTime'"));
+        assertEquals("39", rej.get(5)); // byte offset
+        assertEquals("1", rej.get(6)); // line
+        assertEquals("100108", rej.get(8)); // code
+
+        rej = it.next();
+        assertEquals("1", rej.get(1)); // row
+        assertEquals("48", rej.get(3)); // character
+        assertThat((String)rej.get(4), containsString("Timestamp 'badTimestamp'"));
+        assertEquals("47", rej.get(5)); // byte offset
+        assertEquals("1", rej.get(6)); // line
+        assertEquals("100035", rej.get(8)); // code
+
+        assertFalse(it.hasNext());
+
         assertEquals(1, wr1.getSuccessCount());
         assertEquals(1, wr1.getRejectCount());
         assertEquals(2, wr1.getTotalCount());
