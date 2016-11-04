@@ -26,10 +26,10 @@ import org.talend.daikon.properties.property.PropertyFactory;
 
 import java.util.Hashtable;
 
-import javax.jms.ConnectionFactory;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+//import javax.jms.ConnectionFactory;
+//import javax.naming.Context;
+//import javax.naming.InitialContext;
+//import javax.naming.NamingException;
 
 public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreProperties {
 
@@ -43,6 +43,8 @@ public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreP
     public JmsDatastoreProperties(String name) {
         super(name);
     }
+
+    // FIXME Default values are not working => There are just some examples for the user
 
     public Property<JmsVersion> version = newEnum("version", JmsVersion.class).setRequired();
 
@@ -68,6 +70,7 @@ public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreP
 
     public Property<String> value = PropertyFactory.newString("value","");
 
+
     @Override
     public void setupLayout() {
         super.setupLayout();
@@ -92,50 +95,27 @@ public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreP
         super.refreshLayout(form);
         // Main properties
         if (form.getName().equals(Form.MAIN)) {
-                form.getWidget(version.getName()).setHidden(false);
-                form.getWidget(contextProvider.getName()).setHidden(false);
-                form.getWidget(serverUrl.getName()).setHidden(false);
+                form.getWidget(version.getName()).setVisible();
+                form.getWidget(contextProvider.getName()).setVisible();
+                form.getWidget(serverUrl.getName()).setVisible();
                 if (needUserIdentity.getValue()) {
-                    form.getWidget(userName.getName()).setHidden(false);
-                    form.getWidget(userPassword.getName()).setHidden(false);
+                    form.getWidget(userName.getName()).setVisible();
+                    form.getWidget(userPassword.getName()).setVisible();
                 } else {
-                    form.getWidget(userName.getName()).setHidden(true);
-                    form.getWidget(userPassword.getName()).setHidden(true);
+                    form.getWidget(userName.getName()).setHidden();
+                    form.getWidget(userPassword.getName()).setHidden();
                 }
         }
         // Advanced Properties
         if (form.getName().equals(Form.ADVANCED)){
-            form.getWidget(useHttps.getName()).setHidden(false);
+            form.getWidget(useHttps.getName()).setVisible();
             if (useHttps.getValue()){
-                form.getWidget(httpsSettings.getName()).setHidden(false);
+                form.getWidget(httpsSettings.getName()).setVisible();
             } else {
-                form.getWidget(httpsSettings.getName()).setHidden(true);
+                form.getWidget(httpsSettings.getName()).setHidden();
             }
-            form.getWidget(property.getName()).setHidden(false);
-            form.getWidget(value.getName()).setHidden(false);
+            form.getWidget(property.getName()).setVisible();
+            form.getWidget(value.getName()).setVisible();
         }
-    }
-
-    public ConnectionFactory getConnectionFactory() {
-        InitialContext context;
-        Hashtable env = new Hashtable();
-        env.put(Context.INITIAL_CONTEXT_FACTORY,contextProvider);
-        env.put(Context.PROVIDER_URL, serverUrl);
-        ConnectionFactory connection = null;
-        try {
-            context = new InitialContext(env);
-            connection = (ConnectionFactory)context.lookup(connectionFactoryName.getValue());
-            //TODO check if username required how it works
-            /*
-            if (datastore.needUserIdentity.getValue()) {
-                connection = tcf.createConnection(datastore.userName.getValue(),datastore.userPassword.getValue());
-            } else {
-                connection = tcf.createTopicConnection();
-            }*/
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-
-        return connection;
     }
 }

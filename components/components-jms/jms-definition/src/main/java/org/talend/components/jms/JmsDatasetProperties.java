@@ -20,7 +20,7 @@ import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.property.Property;
 
 import java.util.Hashtable;
-
+/*
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.QueueConnection;
@@ -30,7 +30,7 @@ import javax.jms.TopicConnectionFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
+*/
 import static org.talend.daikon.properties.property.PropertyFactory.newEnum;
 
 public class JmsDatasetProperties extends PropertiesImpl implements DatasetProperties{
@@ -65,12 +65,13 @@ public class JmsDatasetProperties extends PropertiesImpl implements DatasetPrope
         super.refreshLayout(form);
         // Main properties
         if (form.getName().equals(Form.MAIN)) {
-            form.getWidget(msgType.getName()).setHidden(false);
-            form.getWidget(processingMode.getName()).setHidden(false);
+            form.getWidget(msgType.getName()).setVisible();
+            form.getWidget(processingMode.getName()).setVisible();
         }
     }
+/*
+public QueueConnection getQueueConnectionFactory() {
 
-    public QueueConnection getQueueConnectionFactory() {
         InitialContext context;
         Hashtable env = new Hashtable();
         env.put(Context.INITIAL_CONTEXT_FACTORY,datastore.contextProvider);
@@ -90,5 +91,5 @@ public class JmsDatasetProperties extends PropertiesImpl implements DatasetPrope
             e.printStackTrace();
         }
         return connection;
-    }
+    }*/
 }
