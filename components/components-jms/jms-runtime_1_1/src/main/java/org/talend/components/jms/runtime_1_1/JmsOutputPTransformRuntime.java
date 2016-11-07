@@ -26,7 +26,7 @@ import org.talend.daikon.exception.TalendRuntimeException;
 public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, PDone>
         implements RuntimableRuntime {
 
-    private JmsOutputProperties properties;
+    transient private JmsOutputProperties properties;
 
     private JmsMessageType messageType;
 
@@ -45,7 +45,7 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
                 }
             }
         }));
-        //test.setCoder(AvroCoder.of(IndexedRecord.class));
+        test.setCoder(AvroCoder.of(IndexedRecord.class));
 
         PCollection<String> jmsCollection = test.apply("ExtractString", ParDo.of(new DoFn<IndexedRecord, String>() {
             @DoFn.ProcessElement public void processElement(ProcessContext c) throws Exception {
