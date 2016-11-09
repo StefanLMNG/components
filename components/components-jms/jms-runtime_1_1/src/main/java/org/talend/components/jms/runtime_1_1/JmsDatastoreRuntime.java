@@ -85,17 +85,15 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
         this.properties = properties;
         return ValidationResult.OK;
     }
-/*
+
     public ConnectionFactory getConnectionFactory() {
         Context context = null;
         Hashtable<String, String> env  = new Hashtable();
-        env.put(Context.INITIAL_CONTEXT_FACTORY,"org.exolab.jms.jndi.InitialContextFactory");
-        env.put(Context.PROVIDER_URL, "tcp://localhost:3035");
-        env.put(Context.SECURITY_PRINCIPAL, "admin");
-        env.put(Context.SECURITY_CREDENTIALS, "openjms");
+        env.put(Context.INITIAL_CONTEXT_FACTORY,"org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+        env.put(Context.PROVIDER_URL, "tcp://localhost:61616");
 
         ConnectionFactory connection = null;
-        System.out.println("test : " + connectionFactoryName.getValue());
+        System.out.println("test : " + properties.connectionFactoryName.getValue());
         try {
             context = new InitialContext(env);
             System.out.println("context");
@@ -106,12 +104,11 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
                 connection = tcf.createConnection(datastore.userName.getValue(),datastore.userPassword.getValue());
             } else {
                 connection = tcf.createTopicConnection();
-            }
+            }*/
         } catch (NamingException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return connection;
     }
-        */
 }

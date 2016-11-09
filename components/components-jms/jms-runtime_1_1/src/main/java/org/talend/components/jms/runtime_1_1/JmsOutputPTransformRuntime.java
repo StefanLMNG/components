@@ -45,8 +45,8 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
                 }
             }
         }));
-        test.setCoder(AvroCoder.of(IndexedRecord.class));
-
+        test.setCoder(LazyAvroCoder.<IndexedRecord>of("test"));
+        
         PCollection<String> jmsCollection = test.apply("ExtractString", ParDo.of(new DoFn<IndexedRecord, String>() {
             @DoFn.ProcessElement public void processElement(ProcessContext c) throws Exception {
                 c.output(c.element().toString());
@@ -55,16 +55,17 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
 
         if (messageType.equals(JmsMessageType.QUEUE)) {
             return jmsCollection.apply(JmsIO.write()
-                    //.withConnectionFactory(properties.dataset.datastore.getConnectionFactory())
+                    //.withConnectionFactory()
                     .withQueue(properties.to.toString()));
         } else if (messageType.equals(JmsMessageType.TOPIC)) {
             // TODO label comes from user
            return jmsCollection.apply("writeToJms", JmsIO.write()
                     //.withConnectionFactory(properties.dataset.datastore.getConnectionFactory())
                     .withTopic(properties.to.toString()));
-        } else {
-            throw new TalendRuntimeException(CommonErrorCodes.UNEXPECTED_ARGUMENT);
         }
+
+        return null;
+        //return PDone.in(jmsCollection.getPipeline());
     }
 
     @Override public ValidationResult initialize(RuntimeContainer container, Properties properties) {
