@@ -18,6 +18,8 @@ import org.talend.components.api.component.runtime.SimpleRuntimeInfo;
 import org.talend.components.common.dataset.DatasetProperties;
 import org.talend.components.common.datastore.DatastoreDefinition;
 import org.talend.components.common.datastore.DatastoreProperties;
+import org.talend.components.jms.input.JmsInputDefinition;
+import org.talend.components.jms.output.JmsOutputDefinition;
 import org.talend.daikon.SimpleNamedThing;
 import org.talend.daikon.runtime.RuntimeInfo;
 
@@ -25,19 +27,15 @@ public class JmsDatastoreDefinition extends SimpleNamedThing implements Datastor
 
     public static final String RUNTIME_1_1 = "org.talend.components.jms.runtime_1_1.DatastoreRuntime";
 
-    @Override public DatasetProperties createDatasetProperties(DatastoreProperties storeProp) {
-        return null;
+    public static final String NAME = "JmsDatastore";
+
+    @Override
+    public JmsDatastoreProperties createProperties() {
+        JmsDatastoreProperties properties = new JmsDatastoreProperties(NAME);
+        properties.init();
+        return properties;
     }
 
-    @Override public JmsDatastoreProperties createProperties() {
-        return null;
-    }
-
-    /*
-        public JmsDatastoreProperties createProperties() {
-            return new JmsDatastoreProperties(JmsComponentFamilyDefinition.NAME);
-        }
-    */
     @Override
     public RuntimeInfo getRuntimeInfo(JmsDatastoreProperties properties, Object ctx) {
         return new SimpleRuntimeInfo(this.getClass().getClassLoader(),
@@ -48,5 +46,23 @@ public class JmsDatastoreDefinition extends SimpleNamedThing implements Datastor
     @Override
     public String getImagePath() {
         return null;
+    }
+
+    @Override
+    public DatasetProperties createDatasetProperties(JmsDatastoreProperties storeProp) {
+        JmsDatasetProperties setProp = new JmsDatasetProperties(JmsDatasetDefinition.NAME);
+        setProp.init();
+        setProp.setDatastoreProperties(storeProp);
+        return setProp;
+    }
+
+    @Override
+    public String getInputCompDefinitionName() {
+        return JmsInputDefinition.COMPONENT_NAME;
+    }
+
+    @Override
+    public String getOutputCompDefinitionName() {
+        return JmsOutputDefinition.COMPONENT_NAME;
     }
 }

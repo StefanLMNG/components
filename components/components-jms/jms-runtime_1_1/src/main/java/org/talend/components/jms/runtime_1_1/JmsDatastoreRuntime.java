@@ -1,10 +1,13 @@
 package org.talend.components.jms.runtime_1_1;
 
+import net.bytebuddy.implementation.bytecode.Throw;
+
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.talend.components.api.component.runtime.RuntimableRuntime;
 import org.talend.components.api.container.RuntimeContainer;
+import org.talend.components.api.exception.ComponentException;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.common.datastore.DatastoreProperties;
 import org.talend.components.common.datastore.runtime.DatastoreRuntime;
@@ -12,6 +15,8 @@ import org.talend.components.jms.JmsDatastoreProperties;
 import org.talend.components.jms.JmsMessageType;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.SimpleNamedThing;
+import org.talend.daikon.exception.error.ErrorCode;
+import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.ValidationResult;
 
 import java.io.IOException;
@@ -20,7 +25,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -71,12 +75,12 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
         }
 
         } catch (JMSException e) {
-            e.printStackTrace();
-        }
-        return null;
+            throw new ComponentException(e);
+        } return null;
     }
 
-    @Override public ValidationResult initialize(RuntimeContainer container, DatastoreProperties properties) {
+    @Override
+    public ValidationResult initialize(RuntimeContainer container, Properties properties) {
         this.properties = (JmsDatastoreProperties) properties;
         return ValidationResult.OK;
     }
@@ -86,6 +90,7 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
         return ValidationResult.OK;
     }
 
+/*
     public ConnectionFactory getConnectionFactory() {
         Context context = null;
         Hashtable<String, String> env  = new Hashtable();

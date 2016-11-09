@@ -13,13 +13,14 @@
 
 package org.talend.components.jms;
 
+import static org.talend.daikon.properties.property.PropertyFactory.newEnum;
+
 import org.talend.components.common.SchemaProperties;
 import org.talend.components.common.dataset.DatasetProperties;
 import org.talend.daikon.properties.PropertiesImpl;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.property.Property;
 
-import java.util.Hashtable;
 /*
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -30,10 +31,9 @@ import javax.jms.TopicConnectionFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-*/
-import static org.talend.daikon.properties.property.PropertyFactory.newEnum;
+ */
 
-public class JmsDatasetProperties extends PropertiesImpl implements DatasetProperties{
+public class JmsDatasetProperties extends PropertiesImpl implements DatasetProperties<JmsDatastoreProperties> {
 
     public JmsDatasetProperties(String name) {
         super(name);
@@ -44,8 +44,6 @@ public class JmsDatasetProperties extends PropertiesImpl implements DatasetPrope
         content
     }
 
-    public SchemaProperties main = new SchemaProperties("main");
-
     public Property<JmsMessageType> msgType = newEnum("msgType", JmsMessageType.class).setRequired();
 
     public Property<JmsProcessingMode> processingMode = newEnum("processingMode", JmsProcessingMode.class);
@@ -53,23 +51,23 @@ public class JmsDatasetProperties extends PropertiesImpl implements DatasetPrope
     public JmsDatastoreProperties datastore = new JmsDatastoreProperties("datastore");
 
     @Override
+    public JmsDatastoreProperties getDatastoreProperties() {
+        return datastore;
+    }
+
+    @Override
+    public void setDatastoreProperties(JmsDatastoreProperties datastoreProperties) {
+        datastore = datastoreProperties;
+    }
+
+    @Override
     public void setupLayout() {
         Form mainForm = new Form(this, Form.MAIN);
-        mainForm.addRow(main.getForm(Form.MAIN));
         mainForm.addRow(msgType);
         mainForm.addRow(processingMode);
     }
 
-    @Override
-    public void refreshLayout(Form form) {
-        super.refreshLayout(form);
-        // Main properties
-        if (form.getName().equals(Form.MAIN)) {
-            form.getWidget(msgType.getName()).setVisible();
-            form.getWidget(processingMode.getName()).setVisible();
-        }
-    }
-/*
+    /*
 public QueueConnection getQueueConnectionFactory() {
 
         InitialContext context;
