@@ -18,7 +18,7 @@ public class JmsOutputPTransformRuntimeTest {
     public void test() {
 
         PipelineOptions options = PipelineOptionsFactory.create();
-        options.setRunner(FlinkRunner.class);
+        options.setRunner(DirectRunner.class);
         final Pipeline p = Pipeline.create(options);
 
         PCollection<Object> input = p.apply(Create.of((Object)"MyString1", "MyString2"));

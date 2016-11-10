@@ -37,12 +37,13 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
         PCollection<IndexedRecord> test = objectPCollection.apply("ExtractIndexedRecord", ParDo.of(new DoFn<Object, IndexedRecord>() {
             IndexedRecordConverter converter;
             transient AvroRegistry avroRegistry = new AvroRegistry();
+            Object test = "test";
             @DoFn.ProcessElement public void processElement(ProcessContext c) throws Exception {
                 if (c.element() == null){
                     return;
                 }
                 if (converter == null){
-                    converter = avroRegistry.createIndexedRecordConverter(c.element().getClass());
+                    converter = new AvroRegistry().createIndexedRecordConverter(c.element().getClass());
                     c.output((IndexedRecord)converter.convertToAvro(c.element()));
                 }
             }
