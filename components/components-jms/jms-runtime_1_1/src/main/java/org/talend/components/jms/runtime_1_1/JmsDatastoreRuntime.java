@@ -109,11 +109,11 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
                 connection = tcf.createConnection(datastore.userName.getValue(),datastore.userPassword.getValue());
             } else {
                 connection = tcf.createTopicConnection();
-            }*/
+            }
         } catch (NamingException e) {
             e.printStackTrace();
         }
 
         return connection;
-    }
+    }*/
 }

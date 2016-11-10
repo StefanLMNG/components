@@ -52,7 +52,7 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
                 c.output(c.element().toString());
             }
         }));
-
+/*
         if (messageType.equals(JmsMessageType.QUEUE)) {
             return jmsCollection.apply(JmsIO.write()
                     //.withConnectionFactory()
@@ -63,9 +63,9 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
                     //.withConnectionFactory(properties.dataset.datastore.getConnectionFactory())
                     .withTopic(properties.to.toString()));
         }
-
-        return null;
-        //return PDone.in(jmsCollection.getPipeline());
+*/
+        //return null;
+        return PDone.in(jmsCollection.getPipeline());
     }
 
     @Override public ValidationResult initialize(RuntimeContainer container, Properties properties) {
