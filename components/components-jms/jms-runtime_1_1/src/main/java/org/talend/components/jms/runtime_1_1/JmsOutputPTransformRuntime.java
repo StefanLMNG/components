@@ -8,7 +8,9 @@ import org.apache.beam.sdk.io.jms.JmsIO;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.transforms.ParDo;
+import org.apache.beam.sdk.transforms.Partition;
 import org.apache.beam.sdk.values.PCollection;
+import org.apache.beam.sdk.values.PCollectionList;
 import org.apache.beam.sdk.values.PDone;
 
 import org.talend.components.api.component.runtime.RuntimableRuntime;
