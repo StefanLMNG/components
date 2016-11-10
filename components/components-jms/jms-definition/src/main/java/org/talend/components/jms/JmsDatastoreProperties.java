@@ -99,13 +99,8 @@ public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreP
         super.refreshLayout(form);
         // Main properties
         if (form.getName().equals(Form.MAIN)) {
-                form.getWidget(version.getName()).setVisible();
-                form.getWidget(contextProvider.getName()).setVisible();
-                form.getWidget(serverUrl.getName()).setVisible();
                 form.getWidget(userPassword.getName()).setVisible(needUserIdentity);
                 form.getWidget(httpsSettings.getName()).setVisible(useHttps);
-                form.getWidget(property.getName()).setVisible();
-                form.getWidget(value.getName()).setVisible();
         }
     }
 
