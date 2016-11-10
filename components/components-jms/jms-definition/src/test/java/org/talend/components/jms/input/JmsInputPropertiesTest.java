@@ -56,9 +56,7 @@ public class JmsInputPropertiesTest {
         assertThat(main, notNullValue());
 
         Collection<Widget> mainWidgets = main.getWidgets();
-        assertThat(mainWidgets, hasSize(5));
-        Widget mainWidget = main.getWidget("main");
-        assertThat(mainWidget, notNullValue());
+        assertThat(mainWidgets, hasSize(4));
         Widget from = main.getWidget("from");
         assertThat(from, notNullValue());
         Widget timeout = main.getWidget("timeout");

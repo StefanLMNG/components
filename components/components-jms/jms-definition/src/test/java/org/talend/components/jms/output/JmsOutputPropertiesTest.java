@@ -63,9 +63,7 @@ public class JmsOutputPropertiesTest {
         assertThat(advanced, notNullValue());
 
         Collection<Widget> mainWidgets = main.getWidgets();
-        assertThat(mainWidgets, hasSize(2));
-        Widget mainWidget = main.getWidget("main");
-        assertThat(mainWidget, notNullValue());
+        assertThat(mainWidgets, hasSize(1));
         Widget from = main.getWidget("to");
         assertThat(from, notNullValue());
 
