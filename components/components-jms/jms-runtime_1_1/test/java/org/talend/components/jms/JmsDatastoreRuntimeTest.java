@@ -33,7 +33,7 @@ public class JmsDatastoreRuntimeTest {
     }
 
     /**
-     * Check {@link JmsDatastoreRuntime#initialize(RuntimeContainer, DatastoreProperties)}
+     * Check
      * Returns OK
      */
     @Test

@@ -90,18 +90,14 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
         return ValidationResult.OK;
     }
 
-/*
     public ConnectionFactory getConnectionFactory() {
-        Context context = null;
+        Context context;
         Hashtable<String, String> env  = new Hashtable();
-        env.put(Context.INITIAL_CONTEXT_FACTORY,"org.apache.activemq.jndi.ActiveMQInitialContextFactory");
-        env.put(Context.PROVIDER_URL, "tcp://localhost:61616");
-
+        env.put(Context.INITIAL_CONTEXT_FACTORY,properties.contextProvider.getValue());
+        env.put(Context.PROVIDER_URL, properties.serverUrl.getValue());
         ConnectionFactory connection = null;
-        System.out.println("test : " + properties.connectionFactoryName.getValue());
         try {
             context = new InitialContext(env);
-            System.out.println("context");
             connection = (ConnectionFactory)context.lookup("ConnectionFactory");
             //TODO check if username required how it works
             /*
@@ -109,11 +105,10 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
                 connection = tcf.createConnection(datastore.userName.getValue(),datastore.userPassword.getValue());
             } else {
                 connection = tcf.createTopicConnection();
-            }
+            }*/
         } catch (NamingException e) {
             e.printStackTrace();
         }
-
         return connection;
-    }*/
+    }
 }

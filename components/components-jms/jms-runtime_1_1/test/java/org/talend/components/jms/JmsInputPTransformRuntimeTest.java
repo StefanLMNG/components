@@ -1,35 +1,25 @@
 package org.talend.components.jms;
 
 import org.apache.beam.runners.direct.DirectRunner;
-import org.apache.beam.runners.flink.FlinkRunner;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
-import org.apache.beam.sdk.transforms.Create;
+import org.apache.beam.sdk.testing.PAssert;
 import org.apache.beam.sdk.values.PCollection;
 import org.junit.Test;
-import org.talend.components.common.datastore.DatastoreProperties;
-import org.talend.components.jms.output.JmsOutputProperties;
-import org.talend.components.jms.runtime_1_1.JmsOutputPTransformRuntime;
+import org.talend.components.jms.input.JmsInputProperties;
+import org.talend.components.jms.runtime_1_1.JmsInputPTransformRuntime;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 
-public class JmsOutputPTransformRuntimeTest {
-
-    static final Object[] WORDS_ARRAY = new String[] {
-            "hi", "there", "ho", "ha", "sue", "bob"};
-
-    static final List<Object> WORDS = Arrays.asList(WORDS_ARRAY);
-
+public class JmsInputPTransformRuntimeTest {
     @Test
     public void test() {
 
         PipelineOptions options = PipelineOptionsFactory.create();
         options.setRunner(DirectRunner.class);
         final Pipeline p = Pipeline.create(options);
-
-        PCollection<Object> input = p.apply(Create.of(WORDS));
 
         // configure datastore
         JmsDatastoreProperties datastoreProps = new JmsDatastoreProperties("datastoreProps");
@@ -45,18 +35,20 @@ public class JmsOutputPTransformRuntimeTest {
         //datasetProps.setValue("datastore", datastoreProps);
 
         // configure output
-        JmsOutputProperties outputProperties = new JmsOutputProperties("output");
-        outputProperties.setValue("to","Consumer");
-        outputProperties.setValue("delivery_mode", JmsOutputProperties.JmsAdvancedDeliveryMode.persistent);
-        outputProperties.dataset = datasetProps;
+        JmsInputProperties inputProperties = new JmsInputProperties("input");
+        inputProperties.setValue("from","Consumer");
+        inputProperties.setValue("timeout",10000);
+        inputProperties.setValue("max_msg",6);
+        inputProperties.dataset = datasetProps;
         //outputProperties.setValue("dataset",datasetProps);
         //outputProperties.init();
-        JmsOutputPTransformRuntime output = new JmsOutputPTransformRuntime();
-        output.initialize(null, outputProperties);
-        output.setMessageType();
+        JmsInputPTransformRuntime input = new JmsInputPTransformRuntime();
+        input.initialize(null, inputProperties);
+        input.setMessageType();
 
-        output.apply(input);
-        //input.apply(output);
+        PCollection<String> test = input.apply(p.begin());
+
+        PAssert.that(test).containsInAnyOrder(new HashSet<>(Arrays.asList("hi", "ha", "ho", "there","sue", "bob")));
 
         p.run();
     }

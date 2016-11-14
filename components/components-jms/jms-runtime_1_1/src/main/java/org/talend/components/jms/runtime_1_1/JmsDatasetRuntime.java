@@ -12,6 +12,8 @@ public class JmsDatasetRuntime { //implements DatasetRuntime{
 
     private JmsProcessingMode processingMode;
 
+    public JmsDatastoreRuntime datastoreRuntime = new JmsDatastoreRuntime();
+
     /*
     @Override public Schema getEndpointSchema(RuntimeContainer container) throws IOException {
         return null;

@@ -67,8 +67,7 @@ public class JmsDatasetProperties extends PropertiesImpl implements DatasetPrope
         mainForm.addRow(processingMode);
     }
 
-    /*
-public QueueConnection getQueueConnectionFactory() {
+    /* public QueueConnection getQueueConnectionFactory() {
 
         InitialContext context;
         Hashtable env = new Hashtable();
