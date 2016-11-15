@@ -21,8 +21,8 @@ import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.runtime.Reader;
 import org.talend.components.jdbc.JDBCConnectionTestIT;
 import org.talend.components.jdbc.common.DBTestUtils;
-import org.talend.components.jdbc.module.JDBCConnectionModule;
 import org.talend.components.jdbc.runtime.JDBCSource;
+import org.talend.components.jdbc.runtime.setting.AllSetting;
 import org.talend.components.jdbc.runtime.writer.JDBCOutputWriter;
 import org.talend.components.jdbc.tjdbcinput.TJDBCInputDefinition;
 import org.talend.components.jdbc.tjdbcinput.TJDBCInputProperties;
@@ -32,7 +32,6 @@ import org.talend.components.jdbc.tjdbcoutput.TJDBCOutputProperties.DataAction;
 import org.talend.daikon.avro.AvroUtils;
 import org.talend.daikon.avro.SchemaConstants;
 import org.talend.daikon.avro.converter.IndexedRecordConverter;
-import org.talend.daikon.di.DiOutgoingSchemaEnforcer;
 
 public class JDBCTypeMappingTestIT {
 
@@ -44,7 +43,7 @@ public class JDBCTypeMappingTestIT {
 
     private static String password;
 
-    private static JDBCConnectionModule connectionInfo;
+    public static AllSetting allSetting;
 
     private static String tablename;
 
@@ -70,22 +69,21 @@ public class JDBCTypeMappingTestIT {
 
         sql = props.getProperty("sql");
 
-        connectionInfo = new JDBCConnectionModule("connection");
-
-        connectionInfo.driverClass.setValue(driverClass);
-        connectionInfo.jdbcUrl.setValue(jdbcUrl);
-        connectionInfo.userPassword.userId.setValue(userId);
-        connectionInfo.userPassword.password.setValue(password);
+        allSetting = new AllSetting();
+        allSetting.setDriverClass(driverClass);
+        allSetting.setJdbcUrl(jdbcUrl);
+        allSetting.setUsername(userId);
+        allSetting.setPassword(password);
     }
 
     @AfterClass
     public static void clean() throws ClassNotFoundException, SQLException {
-        DBTestUtils.releaseResource(connectionInfo);
+        DBTestUtils.releaseResource(allSetting);
     }
 
     @Before
     public void before() throws ClassNotFoundException, SQLException, Exception {
-        DBTestUtils.prepareTableAndDataForEveryType(connectionInfo);
+        DBTestUtils.prepareTableAndDataForEveryType(allSetting);
     }
 
     private TJDBCInputProperties createCommonJDBCInputProperties(TJDBCInputDefinition definition) {
@@ -109,7 +107,7 @@ public class JDBCTypeMappingTestIT {
         properties.tableSelection.tablename.setValue(tablename);
         properties.sql.setValue(sql);
 
-        JDBCSource source = DBTestUtils.createCommonJDBCSource(definition, properties);
+        JDBCSource source = DBTestUtils.createCommonJDBCSource(properties);
 
         Schema schema = source.getEndpointSchema(null, "TEST");
         assertEquals("TEST", schema.getName().toUpperCase());
@@ -304,35 +302,32 @@ public class JDBCTypeMappingTestIT {
         properties.tableSelection.tablename.setValue(tablename);
         properties.sql.setValue(sql);
 
-        Reader reader = DBTestUtils.createCommonJDBCInputReader(definition, properties);
+        Reader reader = DBTestUtils.createCommonJDBCInputReader(properties);
 
         try {
             IndexedRecordConverter<Object, ? extends IndexedRecord> converter = null;
-
-            DiOutgoingSchemaEnforcer current = new DiOutgoingSchemaEnforcer(properties.main.schema.getValue(), false);
 
             reader.start();
 
             converter = DBTestUtils.getIndexRecordConverter(reader, converter);
 
-            IndexedRecord unenforced = converter.convertToAvro(reader.getCurrent());
-            current.setWrapped(unenforced);
+            IndexedRecord record = converter.convertToAvro(reader.getCurrent());
 
-            assertEquals(Integer.class, current.get(0).getClass());
-            assertEquals(Short.class, current.get(1).getClass());
-            assertEquals(Long.class, current.get(2).getClass());
-            assertEquals(Float.class, current.get(3).getClass());
-            assertEquals(Double.class, current.get(4).getClass());
-            assertEquals(Float.class, current.get(5).getClass());
-            assertEquals(BigDecimal.class, current.get(6).getClass());
-            assertEquals(BigDecimal.class, current.get(7).getClass());
-            assertEquals(Boolean.class, current.get(8).getClass());
-            assertEquals(String.class, current.get(9).getClass());
-            assertEquals(java.util.Date.class, current.get(10).getClass());
-            assertEquals(java.util.Date.class, current.get(11).getClass());
-            assertEquals(java.util.Date.class, current.get(12).getClass());
-            assertEquals(String.class, current.get(13).getClass());
-            assertEquals(String.class, current.get(14).getClass());
+            assertEquals(Integer.class, record.get(0).getClass());
+            assertEquals(Short.class, record.get(1).getClass());
+            assertEquals(Long.class, record.get(2).getClass());
+            assertEquals(Float.class, record.get(3).getClass());
+            assertEquals(Double.class, record.get(4).getClass());
+            assertEquals(Float.class, record.get(5).getClass());
+            assertEquals(BigDecimal.class, record.get(6).getClass());
+            assertEquals(BigDecimal.class, record.get(7).getClass());
+            assertEquals(Boolean.class, record.get(8).getClass());
+            assertEquals(String.class, record.get(9).getClass());
+            assertEquals(Long.class, record.get(10).getClass());
+            assertEquals(Long.class, record.get(11).getClass());
+            assertEquals(Long.class, record.get(12).getClass());
+            assertEquals(String.class, record.get(13).getClass());
+            assertEquals(String.class, record.get(14).getClass());
 
             reader.close();
         } finally {
@@ -361,7 +356,7 @@ public class JDBCTypeMappingTestIT {
             properties.tableSelection.tablename.setValue(tablename);
             properties.sql.setValue(sql);
 
-            reader = DBTestUtils.createCommonJDBCInputReader(definition, properties);
+            reader = DBTestUtils.createCommonJDBCInputReader(properties);
 
             reader.start();
 
@@ -607,7 +602,7 @@ public class JDBCTypeMappingTestIT {
             properties1.tableSelection.tablename.setValue(tablename);
             properties1.sql.setValue(sql);
 
-            reader = DBTestUtils.createCommonJDBCInputReader(definition1, properties1);
+            reader = DBTestUtils.createCommonJDBCInputReader(properties1);
 
             reader.start();
             int i = 0;

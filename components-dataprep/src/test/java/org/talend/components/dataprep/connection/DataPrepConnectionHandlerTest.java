@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.components.dataprep.connection;
 
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
 import java.io.IOException;
 
 import org.apache.http.HttpResponse;
@@ -21,15 +23,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.talend.components.dataprep.runtime.DataPrepOutputModes;
 import org.talend.components.service.spring.SpringTestApp;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = SpringTestApp.class)
-@WebIntegrationTest("server.port:0")
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = SpringTestApp.class, webEnvironment = RANDOM_PORT)
 public class DataPrepConnectionHandlerTest {
 
     @Autowired
@@ -58,6 +58,14 @@ public class DataPrepConnectionHandlerTest {
 
     @Test
     public void testLogin() throws IOException {
+        HttpResponse response = connectionHandler.connect();
+        Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+        Assert.assertNotNull(response.getFirstHeader("Authorization"));
+    }
+
+    @Test
+    public void testLoginWithSpecialChar() throws IOException {
+        connectionHandler = new DataPrepConnectionHandler(URL + serverPort, "username+", "+password", ID, NAME);
         HttpResponse response = connectionHandler.connect();
         Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
         Assert.assertNotNull(response.getFirstHeader("Authorization"));
