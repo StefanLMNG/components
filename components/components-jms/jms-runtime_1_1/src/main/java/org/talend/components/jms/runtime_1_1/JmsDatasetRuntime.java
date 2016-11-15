@@ -4,7 +4,7 @@ import org.talend.components.jms.JmsDatasetProperties;
 import org.talend.components.jms.JmsMessageType;
 import org.talend.components.jms.JmsProcessingMode;
 
-public class JmsDatasetRuntime { //implements DatasetRuntime{
+public class JmsDatasetRuntime { // implements DatasetRuntime{
 
     private JmsDatasetProperties properties;
 

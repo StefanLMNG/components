@@ -13,9 +13,9 @@ import org.talend.components.jms.JmsMessageType;
 import org.talend.components.jms.input.JmsInputProperties;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.ValidationResult;
+import org.joda.time.Duration;
 
-public class JmsInputPTransformRuntime extends PTransform<PBegin, PCollection>
-        implements RuntimableRuntime {
+public class JmsInputPTransformRuntime extends PTransform<PBegin, PCollection> implements RuntimableRuntime {
 
     transient private JmsInputProperties properties;
 
@@ -23,37 +23,44 @@ public class JmsInputPTransformRuntime extends PTransform<PBegin, PCollection>
 
     private JmsMessageType messageType;
 
-    @Override public ValidationResult initialize(RuntimeContainer container, Properties properties) {
+    @Override
+    public ValidationResult initialize(RuntimeContainer container, Properties properties) {
         this.properties = (JmsInputProperties) properties;
         return ValidationResult.OK;
     }
 
-    public void setMessageType(){
+    public void setMessageType() {
         messageType = properties.dataset.msgType.getValue();
     }
 
-    @Override public PCollection apply(PBegin pBegin) {
+    @Override
+    public PCollection apply(PBegin pBegin) {
 
         datastoreRuntime = new JmsDatastoreRuntime();
         datastoreRuntime.initialize(null, properties.dataset.datastore);
 
-        PCollection<JmsRecord> jmsCollection = null;
+        JmsIO.Read read = JmsIO.read().withConnectionFactory(datastoreRuntime.getConnectionFactory());
         if (messageType.equals(JmsMessageType.QUEUE)) {
-            jmsCollection = pBegin.apply(JmsIO.read()
-                    .withConnectionFactory(datastoreRuntime.getConnectionFactory())
-                    .withQueue(properties.from.getValue())
-                    .withMaxNumRecords(properties.max_msg.getValue()));
+            read = read.withQueue(properties.from.getValue());
         } else if (messageType.equals(JmsMessageType.TOPIC)) {
-            // TODO label comes from user
-            jmsCollection = pBegin.apply(JmsIO.read()
-                    .withConnectionFactory(datastoreRuntime.getConnectionFactory())
-                    .withTopic(properties.from.getValue())
-                    .withMaxNumRecords(properties.max_msg.getValue()));
+            read = read.withTopic(properties.from.getValue());
         }
+
+        if (properties.max_msg.getValue() != -1 && properties.timeout.getValue() != -1) {
+            read = read.withMaxNumRecords(properties.max_msg.getValue())
+                    .withMaxReadTime(Duration.millis(properties.timeout.getValue()));
+        } else if (properties.max_msg.getValue() != -1) {
+            read = read.withMaxNumRecords(properties.max_msg.getValue());
+        } else if (properties.timeout.getValue() != -1) {
+            read = read.withMaxReadTime(Duration.millis(properties.timeout.getValue()));
+        }
+        PCollection<JmsRecord> jmsCollection = pBegin.apply("ReadFromJms", read);
 
         if (jmsCollection != null) {
             PCollection<String> outputCollection = jmsCollection.apply("ExtractString", ParDo.of(new DoFn<JmsRecord, String>() {
-                @DoFn.ProcessElement public void processElement(ProcessContext c) throws Exception {
+
+                @DoFn.ProcessElement
+                public void processElement(ProcessContext c) throws Exception {
                     c.output(c.element().getPayload());
                 }
             }));

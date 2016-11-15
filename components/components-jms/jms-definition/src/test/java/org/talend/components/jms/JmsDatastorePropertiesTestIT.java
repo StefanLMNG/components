@@ -6,7 +6,6 @@ public class JmsDatastorePropertiesTestIT {
 
     private JmsDatastoreProperties properties;
 
-
     @Test
     public void testConnection() {
 

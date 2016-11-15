@@ -38,21 +38,23 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
 
     private JmsMessageType msgType;
 
-    @Override public Iterable<ValidationResult> doHealthChecks(RuntimeContainer container) {
+    @Override
+    public Iterable<ValidationResult> doHealthChecks(RuntimeContainer container) {
         try {
-        // create connection factory
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(properties.serverUrl.getValue());
-        // Create a Connection
-        Connection connection = connectionFactory.createConnection();
-        connection.start();
-        connection.close();
-        if (connection != null) {
-            return Arrays.asList(ValidationResult.OK);
-        }
+            // create connection factory
+            ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(properties.serverUrl.getValue());
+            // Create a Connection
+            Connection connection = connectionFactory.createConnection();
+            connection.start();
+            connection.close();
+            if (connection != null) {
+                return Arrays.asList(ValidationResult.OK);
+            }
 
         } catch (JMSException e) {
             throw new ComponentException(e);
-        } return null;
+        }
+        return null;
     }
 
     @Override
@@ -68,20 +70,21 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
 
     public ConnectionFactory getConnectionFactory() {
         Context context;
-        Hashtable<String, String> env  = new Hashtable();
-        env.put(Context.INITIAL_CONTEXT_FACTORY,properties.contextProvider.getValue());
+        Hashtable<String, String> env = new Hashtable();
+        env.put(Context.INITIAL_CONTEXT_FACTORY, properties.contextProvider.getValue());
         env.put(Context.PROVIDER_URL, properties.serverUrl.getValue());
         ConnectionFactory connection = null;
         try {
             context = new InitialContext(env);
-            connection = (ConnectionFactory)context.lookup("ConnectionFactory");
-            //TODO check if username required how it works
+            connection = (ConnectionFactory) context.lookup("ConnectionFactory");
+            // TODO check if username required how it works
             /*
-            if (datastore.needUserIdentity.getValue()) {
-                connection = tcf.createConnection(datastore.userName.getValue(),datastore.userPassword.getValue());
-            } else {
-                connection = tcf.createTopicConnection();
-            }*/
+             * if (datastore.needUserIdentity.getValue()) {
+             * connection = tcf.createConnection(datastore.userName.getValue(),datastore.userPassword.getValue());
+             * } else {
+             * connection = tcf.createTopicConnection();
+             * }
+             */
         } catch (NamingException e) {
             throw new ComponentException(e);
         }

@@ -20,9 +20,7 @@ import org.talend.daikon.properties.ValidationResult;
 
 import java.util.UUID;
 
-
-public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, PDone>
-        implements RuntimableRuntime {
+public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, PDone> implements RuntimableRuntime {
 
     transient private JmsOutputProperties properties;
 
@@ -32,23 +30,30 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
 
     private String id = UUID.randomUUID().toString();
 
-    @Override public PDone apply(PCollection<Object> objectPCollection) {
-        PCollection<IndexedRecord> indexedCollection = objectPCollection.apply("ExtractIndexedRecord", ParDo.of(new DoFn<Object, IndexedRecord>() {
-            IndexedRecordConverter converter;
-            @DoFn.ProcessElement public void processElement(ProcessContext c) throws Exception {
-                if (c.element() == null){
-                    return;
-                }
-                if (converter == null){
-                    converter = new AvroRegistry().createIndexedRecordConverter(c.element().getClass());
-                }
-                c.output((IndexedRecord)converter.convertToAvro(c.element()));
-            }
-        }));
-        indexedCollection.setCoder(LazyAvroCoder.<IndexedRecord>of(id));
-        
+    @Override
+    public PDone apply(PCollection<Object> objectPCollection) {
+        PCollection<IndexedRecord> indexedCollection = objectPCollection.apply("ExtractIndexedRecord",
+                ParDo.of(new DoFn<Object, IndexedRecord>() {
+
+                    IndexedRecordConverter converter;
+
+                    @DoFn.ProcessElement
+                    public void processElement(ProcessContext c) throws Exception {
+                        if (c.element() == null) {
+                            return;
+                        }
+                        if (converter == null) {
+                            converter = new AvroRegistry().createIndexedRecordConverter(c.element().getClass());
+                        }
+                        c.output((IndexedRecord) converter.convertToAvro(c.element()));
+                    }
+                }));
+        indexedCollection.setCoder(LazyAvroCoder.<IndexedRecord> of(id));
+
         PCollection<String> jmsCollection = indexedCollection.apply("ExtractString", ParDo.of(new DoFn<IndexedRecord, String>() {
-            @DoFn.ProcessElement public void processElement(ProcessContext c) throws Exception {
+
+            @DoFn.ProcessElement
+            public void processElement(ProcessContext c) throws Exception {
                 c.output(c.element().get(0).toString());
             }
         }));
@@ -56,25 +61,25 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
         datastoreRuntime = new JmsDatastoreRuntime();
         datastoreRuntime.initialize(null, properties.dataset.datastore);
         if (messageType.equals(JmsMessageType.QUEUE)) {
-            return jmsCollection.apply(JmsIO.write()
-                    .withConnectionFactory(datastoreRuntime.getConnectionFactory())
+            // TODO label comes from user
+            return jmsCollection.apply("writeToJms",JmsIO.write().withConnectionFactory(datastoreRuntime.getConnectionFactory())
                     .withQueue(properties.to.getValue()));
         } else if (messageType.equals(JmsMessageType.TOPIC)) {
             // TODO label comes from user
-           return jmsCollection.apply("writeToJms", JmsIO.write()
-                  .withConnectionFactory(datastoreRuntime.getConnectionFactory())
-                  .withTopic(properties.to.getValue()));
+            return jmsCollection.apply("writeToJms", JmsIO.write().withConnectionFactory(datastoreRuntime.getConnectionFactory())
+                    .withTopic(properties.to.getValue()));
         }
         return null;
 
     }
 
-    @Override public ValidationResult initialize(RuntimeContainer container, Properties properties) {
+    @Override
+    public ValidationResult initialize(RuntimeContainer container, Properties properties) {
         this.properties = (JmsOutputProperties) properties;
         return ValidationResult.OK;
     }
 
-    public void setMessageType(){
+    public void setMessageType() {
         messageType = properties.dataset.msgType.getValue();
     }
 }

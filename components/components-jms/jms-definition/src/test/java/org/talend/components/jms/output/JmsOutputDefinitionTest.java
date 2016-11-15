@@ -26,14 +26,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class JmsOutputDefinitionTest {
+
     private final JmsOutputDefinition outputDefinition = new JmsOutputDefinition();
 
     /**
-     * Check {@link JmsOutputDefinition#getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology)} returns RuntimeInfo,
+     * Check {@link JmsOutputDefinition#getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology)} returns
+     * RuntimeInfo,
      * which runtime class name is "org.talend.components.jms.runtime_1_1.JmsSource"
      */
     @Test
-    public void testGetRuntimeInfo(){
+    public void testGetRuntimeInfo() {
         RuntimeInfo runtimeInfo = outputDefinition.getRuntimeInfo(null, null);
         assertEquals("org.talend.components.jms.runtime_1_1.JmsSource", runtimeInfo.getRuntimeClassName());
     }
@@ -48,6 +50,7 @@ public class JmsOutputDefinitionTest {
         String canonicalName = propertyClass.getCanonicalName();
         assertThat(canonicalName, equalTo("org.talend.components.jms.output.JmsOutputProperties"));
     }
+
     /**
      * Check {@link JmsOutputDefinition#getName()} returns "tJmsOutput"
      */
@@ -61,7 +64,7 @@ public class JmsOutputDefinitionTest {
      * Check {@link JmsOutputDefinition#getSupportedConnectorTopologies()} returns ConnectorTopology.INCOMING
      */
     @Test
-    public void testGetSupportedConnectorTopologies(){
+    public void testGetSupportedConnectorTopologies() {
         Set<ConnectorTopology> test = outputDefinition.getSupportedConnectorTopologies();
         assertTrue(test.contains(ConnectorTopology.INCOMING));
     }

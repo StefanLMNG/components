@@ -19,6 +19,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class JmsDatastoreRuntimeTest {
+
     private final JmsDatastoreRuntime datastoreRuntime = new JmsDatastoreRuntime();
 
     /**
@@ -29,7 +30,7 @@ public class JmsDatastoreRuntimeTest {
     public void testDoHealthChecks() {
         JmsDatastoreProperties props = new JmsDatastoreProperties("test");
         props.serverUrl.setValue("tcp://localhost:61616");
-        datastoreRuntime.initialize(null,props);
+        datastoreRuntime.initialize(null, props);
         Iterable<ValidationResult> healthResult = datastoreRuntime.doHealthChecks(null);
         assertEquals(Arrays.asList(ValidationResult.OK), healthResult);
     }
@@ -48,14 +49,16 @@ public class JmsDatastoreRuntimeTest {
      * Check {@link JmsDatastoreRuntime#getPossibleDatasetNames(RuntimeContainer, String)}
      * Returns // TODO
      */
-    /*@Test
-    public void testGetPossibleDatasetNames() {
-        List<NamedThing> datasetListResult = new ArrayList();
-        try {
-            datasetListResult = datastoreRuntime.getPossibleDatasetNames(null, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assertEquals(null, datasetListResult);
-    }*/
+    /*
+     * @Test
+     * public void testGetPossibleDatasetNames() {
+     * List<NamedThing> datasetListResult = new ArrayList();
+     * try {
+     * datasetListResult = datastoreRuntime.getPossibleDatasetNames(null, null);
+     * } catch (IOException e) {
+     * e.printStackTrace();
+     * }
+     * assertEquals(null, datasetListResult);
+     * }
+     */
 }

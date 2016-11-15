@@ -90,10 +90,10 @@
 
     <profiles>
 
-    <!--
-      The direct runner is available by default.
-      You can also include it on the classpath explicitly with -P direct-runner
-    -->
+        <!--
+          The direct runner is available by default.
+          You can also include it on the classpath explicitly with -P direct-runner
+        -->
         <profile>
             <id>direct-runner</id>
             <activation>

@@ -21,8 +21,7 @@ import org.talend.components.jms.output.JmsOutputDefinition;
 
 import aQute.bnd.annotation.component.Component;
 
-@Component(name = Constants.COMPONENT_INSTALLER_PREFIX
-        + JmsComponentFamilyDefinition.NAME, provide = ComponentInstaller.class)
+@Component(name = Constants.COMPONENT_INSTALLER_PREFIX + JmsComponentFamilyDefinition.NAME, provide = ComponentInstaller.class)
 public class JmsComponentFamilyDefinition extends AbstractComponentFamilyDefinition implements ComponentInstaller {
 
     public static final String NAME = "jms";
@@ -30,8 +29,7 @@ public class JmsComponentFamilyDefinition extends AbstractComponentFamilyDefinit
     public JmsComponentFamilyDefinition() {
         super(NAME,
                 // Components
-                new JmsDatastoreDefinition(), new JmsDatasetDefinition(), new JmsInputDefinition(),
-                new JmsOutputDefinition());
+                new JmsDatastoreDefinition(), new JmsDatasetDefinition(), new JmsInputDefinition(), new JmsOutputDefinition());
     }
 
     @Override

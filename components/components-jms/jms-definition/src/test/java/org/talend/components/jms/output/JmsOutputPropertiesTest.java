@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class JmsOutputPropertiesTest {
+
     /**
      * Checks {@link JmsOutputProperties} sets correctly initial schema
      * property
@@ -35,15 +36,15 @@ public class JmsOutputPropertiesTest {
     @Test
     public void testDefaultProperties() {
         JmsOutputProperties properties = new JmsOutputProperties("test");
-        assertEquals("",properties.to.getValue());
+        assertEquals("", properties.to.getValue());
         assertNull(properties.delivery_mode.getValue());
-        assertEquals("8",properties.pool_max_total.getValue());
-        assertEquals("-1",properties.pool_max_wait.getValue());
-        assertEquals("0",properties.pool_min_Idle.getValue());
-        assertEquals(false,properties.pool_use_eviction.getValue());
-        assertEquals("-1",properties.pool_time_between_eviction.getValue());
-        assertEquals("1800000",properties.pool_eviction_min_idle_time.getValue());
-        assertEquals("0",properties.pool_eviction_soft_min_idle_time.getValue());
+        assertEquals("8", properties.pool_max_total.getValue());
+        assertEquals("-1", properties.pool_max_wait.getValue());
+        assertEquals("0", properties.pool_min_Idle.getValue());
+        assertEquals(false, properties.pool_use_eviction.getValue());
+        assertEquals("-1", properties.pool_time_between_eviction.getValue());
+        assertEquals("1800000", properties.pool_eviction_min_idle_time.getValue());
+        assertEquals("0", properties.pool_eviction_soft_min_idle_time.getValue());
     }
 
     /**

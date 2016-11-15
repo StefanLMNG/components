@@ -34,10 +34,10 @@ public class JmsInputPropertiesTest {
     @Test
     public void testDefaultProperties() {
         JmsInputProperties properties = new JmsInputProperties("test");
-        assertEquals("",properties.from.getValue());
-        assertEquals(-1,(long)properties.timeout.getValue());
-        assertEquals(-1,(long)properties.max_msg.getValue());
-        assertEquals("",properties.msg_selector.getValue());
+        assertEquals("", properties.from.getValue());
+        assertEquals(-1, (long) properties.timeout.getValue());
+        assertEquals(-1, (long) properties.max_msg.getValue());
+        assertEquals("", properties.msg_selector.getValue());
     }
 
     /**

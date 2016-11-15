@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class JmsInputPTransformRuntimeTest {
+
     @Test
     public void test() {
 
@@ -25,8 +26,8 @@ public class JmsInputPTransformRuntimeTest {
         JmsDatastoreProperties datastoreProps = new JmsDatastoreProperties("datastoreProps");
         datastoreProps.setValue("version", JmsDatastoreProperties.JmsVersion.V_1_1);
         datastoreProps.setValue("contextProvider", "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
-        datastoreProps.setValue("serverUrl","tcp://localhost:61616");
-        datastoreProps.setValue("connectionFactoryName","ConnectionFactory");
+        datastoreProps.setValue("serverUrl", "tcp://localhost:61616");
+        datastoreProps.setValue("connectionFactoryName", "ConnectionFactory");
 
         // configure dataset
         JmsDatasetProperties datasetProps = new JmsDatasetProperties("datasetProps");
@@ -35,9 +36,9 @@ public class JmsInputPTransformRuntimeTest {
 
         // configure output
         JmsInputProperties inputProperties = new JmsInputProperties("input");
-        inputProperties.setValue("from","Consumer");
-        inputProperties.setValue("timeout",10000);
-        inputProperties.setValue("max_msg",6);
+        inputProperties.setValue("from", "Consumer");
+        inputProperties.setValue("timeout", 10000);
+        inputProperties.setValue("max_msg", 6);
         inputProperties.dataset = datasetProps;
         JmsInputPTransformRuntime input = new JmsInputPTransformRuntime();
         input.initialize(null, inputProperties);
@@ -45,7 +46,7 @@ public class JmsInputPTransformRuntimeTest {
 
         PCollection<String> test = input.apply(p.begin());
 
-        PAssert.that(test).containsInAnyOrder(new HashSet<>(Arrays.asList("hi", "ha", "ho", "there","sue", "bob")));
+        PAssert.that(test).containsInAnyOrder(new HashSet<>(Arrays.asList("hi", "ha", "ho", "there", "sue", "bob")));
 
         p.run();
     }

@@ -27,13 +27,13 @@ public class JmsInputProperties extends ComponentPropertiesImpl implements IOPro
         super(name);
     }
 
-    public Property<String> from = PropertyFactory.newString("from","");
+    public Property<String> from = PropertyFactory.newString("from", "");
 
-    public Property<Integer> timeout = PropertyFactory.newInteger("timeout",-1);
+    public Property<Integer> timeout = PropertyFactory.newInteger("timeout", -1);
 
-    public Property<Integer> max_msg = PropertyFactory.newInteger("max_msg",-1);
+    public Property<Integer> max_msg = PropertyFactory.newInteger("max_msg", -1);
 
-    public Property<String> msg_selector = PropertyFactory.newString("msg_selector","");
+    public Property<String> msg_selector = PropertyFactory.newString("msg_selector", "");
 
     public JmsDatasetProperties dataset = new JmsDatasetProperties("dataset");
 
@@ -47,11 +47,13 @@ public class JmsInputProperties extends ComponentPropertiesImpl implements IOPro
         mainForm.addRow(msg_selector);
     }
 
-    @Override public DatasetProperties getDatasetProperties() {
+    @Override
+    public DatasetProperties getDatasetProperties() {
         return dataset;
     }
 
-    @Override public void setDatasetProperties(DatasetProperties datasetProperties) {
-        this.dataset = (JmsDatasetProperties)datasetProperties;
+    @Override
+    public void setDatasetProperties(DatasetProperties datasetProperties) {
+        this.dataset = (JmsDatasetProperties) datasetProperties;
     }
 }

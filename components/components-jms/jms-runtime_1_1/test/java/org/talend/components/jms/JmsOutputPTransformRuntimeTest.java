@@ -17,8 +17,7 @@ import java.util.List;
 
 public class JmsOutputPTransformRuntimeTest {
 
-    static final Object[] WORDS_ARRAY = new String[] {
-            "hi", "there", "ho", "ha", "sue", "bob"};
+    static final Object[] WORDS_ARRAY = new String[] { "hi", "there", "ho", "ha", "sue", "bob" };
 
     static final List<Object> WORDS = Arrays.asList(WORDS_ARRAY);
 
@@ -34,8 +33,8 @@ public class JmsOutputPTransformRuntimeTest {
         JmsDatastoreProperties datastoreProps = new JmsDatastoreProperties("datastoreProps");
         datastoreProps.setValue("version", JmsDatastoreProperties.JmsVersion.V_1_1);
         datastoreProps.setValue("contextProvider", "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
-        datastoreProps.setValue("serverUrl","tcp://localhost:61616");
-        datastoreProps.setValue("connectionFactoryName","ConnectionFactory");
+        datastoreProps.setValue("serverUrl", "tcp://localhost:61616");
+        datastoreProps.setValue("connectionFactoryName", "ConnectionFactory");
 
         // configure dataset
         JmsDatasetProperties datasetProps = new JmsDatasetProperties("datasetProps");
@@ -44,8 +43,8 @@ public class JmsOutputPTransformRuntimeTest {
 
         // configure output
         JmsOutputProperties outputProperties = new JmsOutputProperties("output");
-        outputProperties.setValue("to","Consumer");
-        outputProperties.setValue("delivery_mode", JmsOutputProperties.JmsAdvancedDeliveryMode.persistent);
+        outputProperties.setValue("to", "Consumer");
+        outputProperties.setValue("delivery_mode", JmsOutputProperties.JmsAdvancedDeliveryMode.PERSISTENT);
         outputProperties.dataset = datasetProps;
         JmsOutputPTransformRuntime output = new JmsOutputPTransformRuntime();
         output.initialize(null, outputProperties);

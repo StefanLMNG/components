@@ -1,6 +1,5 @@
 package org.talend.components.jms.runtime_1_1;
 
-
 import org.apache.avro.Schema;
 
 import org.apache.avro.generic.IndexedRecord;
@@ -17,11 +16,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class LazyAvroCoder<T extends IndexedRecord> extends StandardCoder<T> {
-        private final String id;
-    private final transient Schema schema;
-    private transient AvroCoder myInternalAvroCoder;
-    private final static HashMap<String, Schema> schemaRegistry=new HashMap<>();
 
+    private final String id;
+
+    private final transient Schema schema;
+
+    private transient AvroCoder myInternalAvroCoder;
+
+    private final static HashMap<String, Schema> schemaRegistry = new HashMap<>();
 
     public static <T extends IndexedRecord> LazyAvroCoder of(String id) {
         return new LazyAvroCoder(id);
@@ -32,30 +34,35 @@ public class LazyAvroCoder<T extends IndexedRecord> extends StandardCoder<T> {
         this.schema = null;
     }
 
-    @Override public void encode(T value, OutputStream outputStream, Context context) throws CoderException, IOException {
+    @Override
+    public void encode(T value, OutputStream outputStream, Context context) throws CoderException, IOException {
         if (myInternalAvroCoder == null) {
-            schemaRegistry.put(id,value.getSchema());
+            schemaRegistry.put(id, value.getSchema());
         }
         myInternalAvroCoder = AvroCoder.of(schemaRegistry.get(id));
         myInternalAvroCoder.encode(value, outputStream, context);
     }
 
-    @Override public T decode(InputStream inputStream, Context context) throws CoderException, IOException {
+    @Override
+    public T decode(InputStream inputStream, Context context) throws CoderException, IOException {
         // FIXME
         if (myInternalAvroCoder == null) {
             return null;
         }
         myInternalAvroCoder = AvroCoder.of(schemaRegistry.get(id));
-        return (T) myInternalAvroCoder.decode(inputStream,context);
+        return (T) myInternalAvroCoder.decode(inputStream, context);
     }
 
-    @Override public List<? extends Coder<?>> getCoderArguments() {
+    @Override
+    public List<? extends Coder<?>> getCoderArguments() {
         return null;
     }
 
-    @Override public void verifyDeterministic() throws NonDeterministicException {
+    @Override
+    public void verifyDeterministic() throws NonDeterministicException {
 
     }
+
     public Schema getSchema() {
         return this.schema;
     }
