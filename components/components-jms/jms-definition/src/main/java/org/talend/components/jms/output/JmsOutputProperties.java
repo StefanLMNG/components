@@ -15,6 +15,8 @@ package org.talend.components.jms.output;
 
 import org.talend.components.api.properties.ComponentPropertiesImpl;
 import org.talend.components.common.SchemaProperties;
+import org.talend.components.common.dataset.DatasetProperties;
+import org.talend.components.common.io.IOProperties;
 import org.talend.components.jms.JmsDatasetProperties;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.property.Property;
@@ -24,7 +26,15 @@ import org.talend.daikon.properties.property.PropertyFactory;
 import static org.talend.daikon.properties.property.PropertyFactory.newBoolean;
 import static org.talend.daikon.properties.property.PropertyFactory.newEnum;
 
-public class JmsOutputProperties extends ComponentPropertiesImpl {
+public class JmsOutputProperties extends ComponentPropertiesImpl implements IOProperties {
+
+    @Override public DatasetProperties getDatasetProperties() {
+        return dataset;
+    }
+
+    @Override public void setDatasetProperties(DatasetProperties datasetProperties) {
+        this.dataset = (JmsDatasetProperties) datasetProperties;
+    }
 
     public enum JmsAdvancedDeliveryMode {
         Non_persistent,
@@ -78,16 +88,7 @@ public class JmsOutputProperties extends ComponentPropertiesImpl {
     @Override
     public void refreshLayout(Form form) {
         super.refreshLayout(form);
-        if (form.getName().equals(Form.MAIN)) {
-            form.getWidget(to.getName()).setHidden(false);
-        }
         if (Form.ADVANCED.equals(form.getName())) {
-            form.getWidget(delivery_mode.getName()).setVisible();
-            form.getWidget(pool_max_total.getName()).setVisible();
-            form.getWidget(pool_max_wait.getName()).setVisible();
-            form.getWidget(pool_min_Idle.getName()).setVisible();
-            form.getWidget(pool_max_Idle.getName()).setVisible();
-            form.getWidget(pool_use_eviction.getName()).setVisible();
             form.getWidget(pool_time_between_eviction.getName()).setVisible(pool_use_eviction);
             form.getWidget(pool_eviction_min_idle_time.getName()).setVisible(pool_use_eviction);
             form.getWidget(pool_eviction_soft_min_idle_time.getName()).setVisible(pool_use_eviction);

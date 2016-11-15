@@ -21,10 +21,12 @@ import org.talend.daikon.properties.presentation.Widget;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 import org.talend.daikon.runtime.RuntimeInfo;
+import org.talend.daikon.runtime.RuntimeUtil;
+import org.talend.daikon.sandbox.SandboxedInstance;
 
 public class KafkaDatasetProperties extends PropertiesImpl implements DatasetProperties<KafkaDatastoreProperties> {
 
-    public KafkaDatastoreProperties datastore = new KafkaDatastoreProperties("datastore");
+    public transient KafkaDatastoreProperties datastore = new KafkaDatastoreProperties("datastore");
 
     public Property<String> topic = PropertyFactory.newString("topic");
 
@@ -54,8 +56,11 @@ public class KafkaDatasetProperties extends PropertiesImpl implements DatasetPro
     }
 
     public ValidationResult beforeTopic() {
-        try {
-            IKafkaDatasetRuntime runtime = getRuntime();
+        KafkaDatasetDefinition definition = new KafkaDatasetDefinition();
+        RuntimeInfo runtimeInfo = definition.getRuntimeInfo(this, null);
+        try (SandboxedInstance sandboxedInstance = RuntimeUtil.createRuntimeClass(runtimeInfo, getClass().getClassLoader())) {
+            IKafkaDatasetRuntime runtime = (IKafkaDatasetRuntime) sandboxedInstance.getInstance();
+            runtime.initialize(null, this);
             List<NamedThing> topics = new ArrayList<>();
             for (String topic : runtime.listTopic()) {
                 topics.add(new SimpleNamedThing(topic, topic));
@@ -65,14 +70,6 @@ public class KafkaDatasetProperties extends PropertiesImpl implements DatasetPro
         } catch (Exception e) {
             return new ValidationResult(new ComponentException(e));
         }
-    }
-
-    private IKafkaDatasetRuntime getRuntime() throws Exception {
-        KafkaDatasetDefinition definition = new KafkaDatasetDefinition();
-        RuntimeInfo runtimeInfo = definition.getRuntimeInfo(this, null);
-        IKafkaDatasetRuntime runtime = (IKafkaDatasetRuntime) Class.forName(runtimeInfo.getRuntimeClassName()).newInstance();
-        runtime.initialize(null, this);
-        return runtime;
     }
 
     @Override

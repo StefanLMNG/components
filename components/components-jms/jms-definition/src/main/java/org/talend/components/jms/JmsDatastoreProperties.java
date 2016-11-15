@@ -68,6 +68,7 @@ public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreP
     @Override
     public void setupProperties(){
         super.setupProperties();
+        version.setValue(JmsVersion.V_1_1);
         contextProvider.setValue("com.tibco.tibjms.naming.TibjmsInitialContextFactory");
         serverUrl.setValue("tibjmsnaming://localhost:7222");
         connectionFactoryName.setValue("GenericConnectionFactory");
@@ -98,18 +99,17 @@ public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreP
         super.refreshLayout(form);
         // Main properties
         if (form.getName().equals(Form.MAIN)) {
-                form.getWidget(version.getName()).setVisible();
-                form.getWidget(contextProvider.getName()).setVisible();
-                form.getWidget(serverUrl.getName()).setVisible();
                 form.getWidget(userPassword.getName()).setVisible(needUserIdentity);
-                form.getWidget(useHttps.getName()).setVisible();
                 form.getWidget(httpsSettings.getName()).setVisible(useHttps);
-                form.getWidget(property.getName()).setVisible();
-                form.getWidget(value.getName()).setVisible();
         }
     }
 
     public void afterNeedUserIdentity() {
         refreshLayout(getForm(Form.MAIN));
     }
+
+    public void afterUseHttps() {
+        refreshLayout(getForm(Form.MAIN));
+    }
+
 }

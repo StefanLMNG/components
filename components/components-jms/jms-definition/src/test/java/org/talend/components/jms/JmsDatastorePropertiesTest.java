@@ -34,7 +34,7 @@ public class JmsDatastorePropertiesTest {
     public void testDefaultProperties() {
         JmsDatastoreProperties properties = new JmsDatastoreProperties("test");
         properties.init();
-        assertNull(properties.version.getValue());
+        assertEquals(JmsDatastoreProperties.JmsVersion.V_1_1, properties.version.getValue());
         // assertNull(properties.contextProvider.getValue());
         assertEquals("com.tibco.tibjms.naming.TibjmsInitialContextFactory", properties.contextProvider.getValue());
         assertEquals("tibjmsnaming://localhost:7222", properties.serverUrl.getValue());
