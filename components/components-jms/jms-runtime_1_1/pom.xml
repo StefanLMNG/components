@@ -80,6 +80,7 @@
             <version>${beam.version}</version>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
 
         <dependency>
             <groupId>org.apache.beam</groupId>
@@ -124,4 +125,7 @@
         </profile>
     </profiles>
 
+=======
+    </dependencies>
+>>>>>>> 8c9607e6894f845683c3fb411a0f340fe5281f54
 </project>

@@ -63,15 +63,15 @@ public class JmsOutputPropertiesTest {
         assertThat(advanced, notNullValue());
 
         Collection<Widget> mainWidgets = main.getWidgets();
-        assertThat(mainWidgets, hasSize(2));
-        Widget mainWidget = main.getWidget("main");
-        assertThat(mainWidget, notNullValue());
+
+        assertThat(mainWidgets, hasSize(1));
         Widget from = main.getWidget("to");
         assertThat(from, notNullValue());
 
         Collection<Widget> advancedWidgets = advanced.getWidgets();
         assertThat(advancedWidgets, hasSize(9));
-        Widget delevery_mode = advanced.getWidget("delevery_mode");
+
+        Widget delevery_mode = advanced.getWidget("delivery_mode");
         assertThat(delevery_mode, notNullValue());
         Widget pool_max_total = advanced.getWidget("pool_max_total");
         assertThat(pool_max_total, notNullValue());
@@ -104,7 +104,8 @@ public class JmsOutputPropertiesTest {
         assertFalse(properties.getForm(Form.MAIN).getWidget("to").isHidden());
 
         properties.refreshLayout(properties.getForm(Form.ADVANCED));
-        assertFalse(properties.getForm(Form.ADVANCED).getWidget("delevery_mode").isHidden());
+
+        assertFalse(properties.getForm(Form.ADVANCED).getWidget("delivery_mode").isHidden());
         assertFalse(properties.getForm(Form.ADVANCED).getWidget("pool_max_total").isHidden());
         assertFalse(properties.getForm(Form.ADVANCED).getWidget("pool_max_wait").isHidden());
         assertFalse(properties.getForm(Form.ADVANCED).getWidget("pool_min_Idle").isHidden());
@@ -116,7 +117,7 @@ public class JmsOutputPropertiesTest {
 
         properties.pool_use_eviction.setValue(true);
         properties.refreshLayout(properties.getForm(Form.ADVANCED));
-        assertFalse(properties.getForm(Form.ADVANCED).getWidget("delevery_mode").isHidden());
+        assertFalse(properties.getForm(Form.ADVANCED).getWidget("delivery_mode").isHidden());
         assertFalse(properties.getForm(Form.ADVANCED).getWidget("pool_max_total").isHidden());
         assertFalse(properties.getForm(Form.ADVANCED).getWidget("pool_max_wait").isHidden());
         assertFalse(properties.getForm(Form.ADVANCED).getWidget("pool_min_Idle").isHidden());

@@ -15,6 +15,8 @@ package org.talend.components.jms.input;
 
 import org.talend.components.api.properties.ComponentPropertiesImpl;
 import org.talend.components.common.SchemaProperties;
+import org.talend.components.common.dataset.DatasetProperties;
+import org.talend.components.common.io.IOProperties;
 import org.talend.components.jms.JmsDatasetProperties;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.property.Property;
@@ -23,7 +25,7 @@ import org.talend.daikon.properties.property.PropertyFactory;
 import static org.talend.daikon.properties.property.PropertyFactory.newInteger;
 import static org.talend.daikon.properties.property.PropertyFactory.newString;
 
-public class JmsInputProperties extends ComponentPropertiesImpl {
+public class JmsInputProperties extends ComponentPropertiesImpl implements IOProperties {
 
     public JmsInputProperties(String name) {
         super(name);
@@ -47,5 +49,13 @@ public class JmsInputProperties extends ComponentPropertiesImpl {
         mainForm.addRow(timeout);
         mainForm.addRow(max_msg);
         mainForm.addRow(msg_selector);
+    }
+
+    @Override public DatasetProperties getDatasetProperties() {
+        return dataset;
+    }
+
+    @Override public void setDatasetProperties(DatasetProperties datasetProperties) {
+        this.dataset = (JmsDatasetProperties)datasetProperties;
     }
 }

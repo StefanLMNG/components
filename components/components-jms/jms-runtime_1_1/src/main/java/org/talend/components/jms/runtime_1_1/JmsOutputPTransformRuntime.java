@@ -8,9 +8,7 @@ import org.apache.beam.sdk.io.jms.JmsIO;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.transforms.ParDo;
-import org.apache.beam.sdk.transforms.Partition;
 import org.apache.beam.sdk.values.PCollection;
-import org.apache.beam.sdk.values.PCollectionList;
 import org.apache.beam.sdk.values.PDone;
 
 import org.talend.components.api.component.runtime.RuntimableRuntime;
@@ -78,12 +76,14 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
                   .withTopic(properties.to.getValue()));
         }
         return null;
+
     }
 
     @Override public ValidationResult initialize(RuntimeContainer container, Properties properties) {
         this.properties = (JmsOutputProperties) properties;
         return ValidationResult.OK;
     }
+
 
     public void setMessageType(){
         messageType = properties.dataset.msgType.getValue();

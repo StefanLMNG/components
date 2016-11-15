@@ -62,12 +62,15 @@ public class JmsDatasetProperties extends PropertiesImpl implements DatasetPrope
 
     @Override
     public void setupLayout() {
+        super.setupLayout();
         Form mainForm = new Form(this, Form.MAIN);
         mainForm.addRow(msgType);
         mainForm.addRow(processingMode);
     }
 
-    /* public QueueConnection getQueueConnectionFactory() {
+
+    /*
+public QueueConnection getQueueConnectionFactory() {
 
         InitialContext context;
         Hashtable env = new Hashtable();

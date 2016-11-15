@@ -59,6 +59,16 @@
         <!-- Jar containing Test utils methods -->
         <dependency>
             <groupId>org.talend.components</groupId>
+<<<<<<< HEAD
+=======
+            <artifactId>components-api</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.talend.components</groupId>
+>>>>>>> 8c9607e6894f845683c3fb411a0f340fe5281f54
             <artifactId>components-api-service-common</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
@@ -72,16 +82,42 @@
         </dependency>
         <!-- spring jar for integration tests -->
         <dependency>
+<<<<<<< HEAD
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
+=======
+            <groupId>org.talend.components</groupId>
+            <artifactId>components-api-service-rest</artifactId>
+            <version>0.16.0-SNAPSHOT</version>
+            <classifier>lib</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.talend.components</groupId>
+            <artifactId>components-api-service-rest</artifactId>
+            <version>0.16.0-SNAPSHOT</version>
+            <type>test-jar</type>
+>>>>>>> 8c9607e6894f845683c3fb411a0f340fe5281f54
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+<<<<<<< HEAD
             <artifactId>spring-boot-starter</artifactId>
             <scope>test</scope>
         </dependency>
 
+=======
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+       <dependency>
+            <groupId>org.talend.components</groupId>
+            <artifactId>components-api-service-rest</artifactId>
+            <version>0.16.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+>>>>>>> 8c9607e6894f845683c3fb411a0f340fe5281f54
         <!-- dep for OSGI tests -->
         <dependency>
             <groupId>org.talend.components</groupId>

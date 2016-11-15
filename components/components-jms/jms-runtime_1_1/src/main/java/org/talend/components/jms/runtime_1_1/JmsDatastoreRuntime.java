@@ -63,7 +63,6 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
     @Override public Iterable<ValidationResult> doHealthChecks(RuntimeContainer container) {
         try {
         // create connection factory
-        //ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(properties.serverUrl.getValue());
         // Create a Connection
         Connection connection = connectionFactory.createConnection();
@@ -107,7 +106,7 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
                 connection = tcf.createTopicConnection();
             }*/
         } catch (NamingException e) {
-            e.printStackTrace();
+            throw new ComponentException(e);
         }
         return connection;
     }
