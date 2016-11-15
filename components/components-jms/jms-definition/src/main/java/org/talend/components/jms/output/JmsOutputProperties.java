@@ -13,10 +13,14 @@
 
 package org.talend.components.jms.output;
 
+import static org.talend.daikon.properties.property.PropertyFactory.*;
+
 import org.talend.components.api.properties.ComponentPropertiesImpl;
 import org.talend.components.common.dataset.DatasetProperties;
 import org.talend.components.common.io.IOProperties;
+import org.talend.components.jms.JmsDatasetDefinition;
 import org.talend.components.jms.JmsDatasetProperties;
+import org.talend.daikon.properties.ReferenceProperties;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
@@ -25,16 +29,6 @@ import static org.talend.daikon.properties.property.PropertyFactory.newBoolean;
 import static org.talend.daikon.properties.property.PropertyFactory.newEnum;
 
 public class JmsOutputProperties extends ComponentPropertiesImpl implements IOProperties {
-
-    @Override
-    public DatasetProperties getDatasetProperties() {
-        return dataset;
-    }
-
-    @Override
-    public void setDatasetProperties(DatasetProperties datasetProperties) {
-        this.dataset = (JmsDatasetProperties) datasetProperties;
-    }
 
     public enum JmsAdvancedDeliveryMode {
         NON_PERSISTENT,
@@ -66,7 +60,18 @@ public class JmsOutputProperties extends ComponentPropertiesImpl implements IOPr
 
     public Property<String> pool_eviction_soft_min_idle_time = PropertyFactory.newString("pool_eviction_soft_min_idle_time", "0");
 
-    public JmsDatasetProperties dataset = new JmsDatasetProperties("dataset");
+    transient public ReferenceProperties<JmsDatasetProperties> datasetRef = new ReferenceProperties<>("datasetRef",
+            JmsDatasetDefinition.NAME);
+
+    @Override
+    public DatasetProperties getDatasetProperties() {
+        return datasetRef.getReference();
+    }
+
+    @Override
+    public void setDatasetProperties(DatasetProperties datasetProperties) {
+        datasetRef.setReference(datasetProperties);
+    }
 
     @Override
     public void setupLayout() {

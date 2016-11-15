@@ -7,14 +7,14 @@ import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PDone;
-
 import org.talend.components.api.component.runtime.RuntimableRuntime;
 import org.talend.components.api.container.RuntimeContainer;
 import org.talend.components.jms.JmsMessageType;
 import org.talend.components.jms.output.JmsOutputProperties;
-
 import org.talend.daikon.avro.AvroRegistry;
 import org.talend.daikon.avro.converter.IndexedRecordConverter;
+import org.talend.daikon.exception.TalendRuntimeException;
+import org.talend.daikon.exception.error.CommonErrorCodes;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.ValidationResult;
 
@@ -55,11 +55,12 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
             @DoFn.ProcessElement
             public void processElement(ProcessContext c) throws Exception {
                 c.output(c.element().get(0).toString());
+
             }
         }));
 
         datastoreRuntime = new JmsDatastoreRuntime();
-        datastoreRuntime.initialize(null, properties.dataset.datastore);
+        datastoreRuntime.initialize(null, properties.datasetRef.getReference().getDatastoreProperties());
         if (messageType.equals(JmsMessageType.QUEUE)) {
             // TODO label comes from user
             return jmsCollection.apply("writeToJms",JmsIO.write().withConnectionFactory(datastoreRuntime.getConnectionFactory())
@@ -68,9 +69,10 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
             // TODO label comes from user
             return jmsCollection.apply("writeToJms", JmsIO.write().withConnectionFactory(datastoreRuntime.getConnectionFactory())
                     .withTopic(properties.to.getValue()));
-        }
-        return null;
 
+        } else {
+            throw new TalendRuntimeException(CommonErrorCodes.UNEXPECTED_ARGUMENT);
+        }
     }
 
     @Override
@@ -80,6 +82,7 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
     }
 
     public void setMessageType() {
-        messageType = properties.dataset.msgType.getValue();
+        messageType = properties.datasetRef.getReference().msgType.getValue();
+        messageType = properties.datasetRef.getReference().msgType.getValue();
     }
 }

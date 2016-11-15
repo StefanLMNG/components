@@ -16,7 +16,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.jms.ConnectionFactory;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class JmsDatastoreRuntimeTest {
 
@@ -61,4 +64,19 @@ public class JmsDatastoreRuntimeTest {
      * assertEquals(null, datasetListResult);
      * }
      */
+
+    /**
+     * Check {@link JmsDatastoreRuntime#getConnectionFactory()}
+     * Returns // TODO
+     */
+    @Test
+    public void testGetConnectionFactory() {
+        JmsDatastoreProperties props = new JmsDatastoreProperties("test");
+        props.contextProvider.setValue("org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+        props.version.setValue(JmsDatastoreProperties.JmsVersion.V_1_1);
+        props.serverUrl.setValue("tcp://localhost:61616");
+        datastoreRuntime.initialize(null, props);
+        ConnectionFactory connectionFactory = datastoreRuntime.getConnectionFactory();
+        assertNotNull(connectionFactory);
+    }
 }

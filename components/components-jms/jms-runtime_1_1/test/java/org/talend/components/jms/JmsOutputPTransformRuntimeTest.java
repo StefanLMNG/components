@@ -39,13 +39,13 @@ public class JmsOutputPTransformRuntimeTest {
         // configure dataset
         JmsDatasetProperties datasetProps = new JmsDatasetProperties("datasetProps");
         datasetProps.setValue("msgType", JmsMessageType.QUEUE);
-        datasetProps.datastore = datastoreProps;
+        datasetProps.datastoreRef.setReference(datastoreProps);
 
         // configure output
         JmsOutputProperties outputProperties = new JmsOutputProperties("output");
         outputProperties.setValue("to", "Consumer");
         outputProperties.setValue("delivery_mode", JmsOutputProperties.JmsAdvancedDeliveryMode.PERSISTENT);
-        outputProperties.dataset = datasetProps;
+        outputProperties.datasetRef.setReference(datasetProps);
         JmsOutputPTransformRuntime output = new JmsOutputPTransformRuntime();
         output.initialize(null, outputProperties);
         output.setMessageType();

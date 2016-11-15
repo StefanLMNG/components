@@ -30,14 +30,14 @@ public class JmsInputPTransformRuntime extends PTransform<PBegin, PCollection> i
     }
 
     public void setMessageType() {
-        messageType = properties.dataset.msgType.getValue();
+        messageType = properties.datasetRef.getReference().msgType.getValue();
     }
 
     @Override
     public PCollection apply(PBegin pBegin) {
 
         datastoreRuntime = new JmsDatastoreRuntime();
-        datastoreRuntime.initialize(null, properties.dataset.datastore);
+        datastoreRuntime.initialize(null, properties.datasetRef.getReference().getDatastoreProperties());
 
         JmsIO.Read read = JmsIO.read().withConnectionFactory(datastoreRuntime.getConnectionFactory());
         if (messageType.equals(JmsMessageType.QUEUE)) {

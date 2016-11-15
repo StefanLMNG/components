@@ -13,38 +13,40 @@
 
 package org.talend.components.jms;
 
-import static org.talend.daikon.properties.property.PropertyFactory.newEnum;
+import static org.talend.daikon.properties.property.PropertyFactory.*;
 
 import org.talend.components.common.dataset.DatasetProperties;
 import org.talend.daikon.properties.PropertiesImpl;
+import org.talend.daikon.properties.ReferenceProperties;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.property.Property;
 
 public class JmsDatasetProperties extends PropertiesImpl implements DatasetProperties<JmsDatastoreProperties> {
+
+    public final Property<JmsMessageType> msgType = newEnum("msgType", JmsMessageType.class).setRequired();
+
+    public final Property<JmsProcessingMode> processingMode = newEnum("processingMode", JmsProcessingMode.class);
+
+    public final transient ReferenceProperties<JmsDatastoreProperties> datastoreRef = new ReferenceProperties<>("datastoreRef",
+            JmsDatastoreDefinition.NAME);
 
     public JmsDatasetProperties(String name) {
         super(name);
     }
 
     public enum AdvancedPropertiesArrayType {
-        RAW,
+        ROW,
         CONTENT
     }
 
-    public Property<JmsMessageType> msgType = newEnum("msgType", JmsMessageType.class).setRequired();
-
-    public Property<JmsProcessingMode> processingMode = newEnum("processingMode", JmsProcessingMode.class);
-
-    public JmsDatastoreProperties datastore = new JmsDatastoreProperties("datastore");
-
     @Override
     public JmsDatastoreProperties getDatastoreProperties() {
-        return datastore;
+        return datastoreRef.getReference();
     }
 
     @Override
     public void setDatastoreProperties(JmsDatastoreProperties datastoreProperties) {
-        datastore = datastoreProperties;
+        datastoreRef.setReference(datastoreProperties);
     }
 
     @Override

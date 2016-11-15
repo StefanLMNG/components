@@ -13,7 +13,7 @@
 
 package org.talend.components.jms;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.talend.daikon.runtime.RuntimeInfo;
@@ -37,7 +37,6 @@ public class JmsDatasetDefinitionTest {
      */
     @Test
     public void testCreateProperties() {
-        JmsDatasetProperties props = datasetDefinition.createProperties();
-        assertEquals("JmsDataset", props.getName());
+        assertEquals(JmsDatasetProperties.class, datasetDefinition.getPropertiesClass());
     }
 }

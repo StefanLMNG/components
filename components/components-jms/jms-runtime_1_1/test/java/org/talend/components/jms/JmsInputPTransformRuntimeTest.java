@@ -32,14 +32,14 @@ public class JmsInputPTransformRuntimeTest {
         // configure dataset
         JmsDatasetProperties datasetProps = new JmsDatasetProperties("datasetProps");
         datasetProps.setValue("msgType", JmsMessageType.QUEUE);
-        datasetProps.datastore = datastoreProps;
+        datasetProps.datastoreRef.setReference(datastoreProps);
 
         // configure output
         JmsInputProperties inputProperties = new JmsInputProperties("input");
         inputProperties.setValue("from", "Consumer");
         inputProperties.setValue("timeout", 10000);
         inputProperties.setValue("max_msg", 6);
-        inputProperties.dataset = datasetProps;
+        inputProperties.datasetRef.setReference(datasetProps);
         JmsInputPTransformRuntime input = new JmsInputPTransformRuntime();
         input.initialize(null, inputProperties);
         input.setMessageType();
