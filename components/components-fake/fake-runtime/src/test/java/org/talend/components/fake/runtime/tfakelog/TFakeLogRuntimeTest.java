@@ -1,15 +1,10 @@
 package org.talend.components.fake.runtime.tfakelog;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.beam.runners.direct.DirectRunner;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
-import org.apache.beam.sdk.values.PCollection;
 import org.junit.Test;
-import org.talend.components.api.beam.BeamJobContext;
 import org.talend.components.fake.runtime.tfakeinput.TFakeInputRuntime;
 import org.talend.components.fake.tfakeinput.TFakeInputProperties;
 import org.talend.components.fake.tfakelog.TFakeLogProperties;
