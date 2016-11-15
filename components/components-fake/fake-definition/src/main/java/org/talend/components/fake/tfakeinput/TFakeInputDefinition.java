@@ -59,7 +59,7 @@ public class TFakeInputDefinition extends AbstractComponentDefinition {
         }
     }
 
-    public RuntimeInfo getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology) {
+    public RuntimeInfo getRuntimeInfo(ComponentProperties properties, ConnectorTopology connectorTopology) {
         if (ConnectorTopology.OUTGOING.equals(connectorTopology)) {
             return new RuntimeInfo() {
 

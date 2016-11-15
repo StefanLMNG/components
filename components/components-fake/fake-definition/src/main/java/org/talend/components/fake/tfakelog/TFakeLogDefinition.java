@@ -59,7 +59,7 @@ public class TFakeLogDefinition extends AbstractComponentDefinition {
         }
     }
 
-    public RuntimeInfo getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology) {
+    public RuntimeInfo getRuntimeInfo(ComponentProperties properties, ConnectorTopology connectorTopology) {
         if (ConnectorTopology.INCOMING.equals(connectorTopology)) {
             return new RuntimeInfo() {
 
