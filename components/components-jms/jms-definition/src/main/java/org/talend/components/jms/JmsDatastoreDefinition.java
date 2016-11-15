@@ -17,7 +17,6 @@ import org.talend.components.api.component.runtime.DependenciesReader;
 import org.talend.components.api.component.runtime.SimpleRuntimeInfo;
 import org.talend.components.common.dataset.DatasetProperties;
 import org.talend.components.common.datastore.DatastoreDefinition;
-import org.talend.components.common.datastore.DatastoreProperties;
 
 import org.talend.components.jms.input.JmsInputDefinition;
 import org.talend.components.jms.output.JmsOutputDefinition;

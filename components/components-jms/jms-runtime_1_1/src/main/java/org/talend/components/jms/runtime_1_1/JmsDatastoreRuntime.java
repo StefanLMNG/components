@@ -1,46 +1,24 @@
 package org.talend.components.jms.runtime_1_1;
 
-import net.bytebuddy.implementation.bytecode.Throw;
-
-import org.apache.activemq.ActiveMQConnection;
-import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.activemq.command.ActiveMQTopic;
-import org.talend.components.api.component.runtime.RuntimableRuntime;
 import org.talend.components.api.container.RuntimeContainer;
 import org.talend.components.api.exception.ComponentException;
-import org.talend.components.api.properties.ComponentProperties;
-import org.talend.components.common.datastore.DatastoreProperties;
 import org.talend.components.common.datastore.runtime.DatastoreRuntime;
 import org.talend.components.jms.JmsDatastoreProperties;
 import org.talend.components.jms.JmsMessageType;
-import org.talend.daikon.NamedThing;
-import org.talend.daikon.SimpleNamedThing;
-import org.talend.daikon.exception.error.ErrorCode;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.ValidationResult;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Hashtable;
-import java.util.List;
-import java.util.Set;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
-import javax.jms.Queue;
-import javax.jms.Topic;
-import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
-
-import static java.lang.Thread.sleep;
 
 public class JmsDatastoreRuntime implements DatastoreRuntime {
 
@@ -68,7 +46,6 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
         Connection connection = connectionFactory.createConnection();
         connection.start();
         connection.close();
-
         if (connection != null) {
             return Arrays.asList(ValidationResult.OK);
         }

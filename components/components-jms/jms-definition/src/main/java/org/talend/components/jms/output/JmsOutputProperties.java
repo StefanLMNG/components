@@ -14,7 +14,6 @@
 package org.talend.components.jms.output;
 
 import org.talend.components.api.properties.ComponentPropertiesImpl;
-import org.talend.components.common.SchemaProperties;
 import org.talend.components.common.dataset.DatasetProperties;
 import org.talend.components.common.io.IOProperties;
 import org.talend.components.jms.JmsDatasetProperties;
@@ -37,8 +36,8 @@ public class JmsOutputProperties extends ComponentPropertiesImpl implements IOPr
     }
 
     public enum JmsAdvancedDeliveryMode {
-        Non_persistent,
-        persistent
+        NON_PERSISTENT,
+        PERSISTENT
     }
 
     public JmsOutputProperties(String name) {

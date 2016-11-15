@@ -1,9 +1,6 @@
 package org.talend.components.jms.runtime_1_1;
 
 import org.apache.avro.generic.IndexedRecord;
-
-import org.apache.beam.sdk.coders.AvroCoder;
-import org.apache.beam.sdk.coders.StringUtf8Coder;
 import org.apache.beam.sdk.io.jms.JmsIO;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.PTransform;
@@ -18,18 +15,11 @@ import org.talend.components.jms.output.JmsOutputProperties;
 
 import org.talend.daikon.avro.AvroRegistry;
 import org.talend.daikon.avro.converter.IndexedRecordConverter;
-import org.talend.daikon.exception.error.CommonErrorCodes;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.ValidationResult;
-import org.talend.daikon.exception.TalendRuntimeException;
 
-import java.util.Hashtable;
 import java.util.UUID;
 
-import javax.jms.ConnectionFactory;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, PDone>
         implements RuntimableRuntime {
@@ -83,7 +73,6 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
         this.properties = (JmsOutputProperties) properties;
         return ValidationResult.OK;
     }
-
 
     public void setMessageType(){
         messageType = properties.dataset.msgType.getValue();

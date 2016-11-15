@@ -13,24 +13,15 @@
 
 package org.talend.components.jms;
 
-import static org.talend.daikon.properties.presentation.Widget.widget;
 import static org.talend.daikon.properties.property.PropertyFactory.*;
-
-import org.talend.components.common.SchemaProperties;
 import org.talend.components.common.UserPasswordProperties;
 import org.talend.components.common.datastore.DatastoreProperties;
 import org.talend.daikon.properties.PropertiesImpl;
 import org.talend.daikon.properties.presentation.Form;
-import org.talend.daikon.properties.presentation.Widget;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 
 import java.util.Hashtable;
-
-//import javax.jms.ConnectionFactory;
-//import javax.naming.Context;
-//import javax.naming.InitialContext;
-//import javax.naming.NamingException;
 
 public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreProperties {
 
@@ -107,7 +98,6 @@ public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreP
     public void afterNeedUserIdentity() {
         refreshLayout(getForm(Form.MAIN));
     }
-
 
     public void afterUseHttps() {
         refreshLayout(getForm(Form.MAIN));

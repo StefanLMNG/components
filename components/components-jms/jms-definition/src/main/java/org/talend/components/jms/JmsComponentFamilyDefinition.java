@@ -21,9 +21,6 @@ import org.talend.components.jms.output.JmsOutputDefinition;
 
 import aQute.bnd.annotation.component.Component;
 
-/**
- * Install all of the definitions provided for the FullExample family of components.
- */
 @Component(name = Constants.COMPONENT_INSTALLER_PREFIX
         + JmsComponentFamilyDefinition.NAME, provide = ComponentInstaller.class)
 public class JmsComponentFamilyDefinition extends AbstractComponentFamilyDefinition implements ComponentInstaller {

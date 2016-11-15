@@ -23,8 +23,6 @@ public class JmsInputPTransformRuntime extends PTransform<PBegin, PCollection>
 
     private JmsMessageType messageType;
 
-    //private String id = UUID.randomUUID().toString();
-
     @Override public ValidationResult initialize(RuntimeContainer container, Properties properties) {
         this.properties = (JmsInputProperties) properties;
         return ValidationResult.OK;
@@ -61,7 +59,6 @@ public class JmsInputPTransformRuntime extends PTransform<PBegin, PCollection>
             }));
             return outputCollection;
         }
-
         return null;
     }
 }
