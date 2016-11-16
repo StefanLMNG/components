@@ -11,7 +11,7 @@
 //
 // ============================================================================
 
-package org.talend.components.jms.runtime_1_1;
+package org.talend.components.adapter.beam;
 
 import org.apache.avro.Schema;
 
