@@ -1,3 +1,16 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+
 package org.talend.components.jms.runtime_1_1;
 
 import org.apache.avro.generic.IndexedRecord;
@@ -63,7 +76,7 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
         datastoreRuntime.initialize(null, properties.datasetRef.getReference().getDatastoreProperties());
         if (messageType.equals(JmsMessageType.QUEUE)) {
             // TODO label comes from user
-            return jmsCollection.apply("writeToJms",JmsIO.write().withConnectionFactory(datastoreRuntime.getConnectionFactory())
+            return jmsCollection.apply("writeToJms", JmsIO.write().withConnectionFactory(datastoreRuntime.getConnectionFactory())
                     .withQueue(properties.to.getValue()));
         } else if (messageType.equals(JmsMessageType.TOPIC)) {
             // TODO label comes from user

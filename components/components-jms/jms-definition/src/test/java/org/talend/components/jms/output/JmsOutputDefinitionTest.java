@@ -31,7 +31,8 @@ public class JmsOutputDefinitionTest {
     private final JmsOutputDefinition outputDefinition = new JmsOutputDefinition();
 
     /**
-     * Check {@link JmsOutputDefinition#getRuntimeInfo(ComponentProperties properties, ConnectorTopology connectorTopology) returns RuntimeInfo,
+     * Check {@link JmsOutputDefinition#getRuntimeInfo(ComponentProperties properties, ConnectorTopology connectorTopology)
+     * returns RuntimeInfo,
      * which runtime class name is "org.talend.components.jms.runtime_1_1.JmsSource"
      */
     @Test

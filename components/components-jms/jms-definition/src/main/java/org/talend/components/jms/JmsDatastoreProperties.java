@@ -51,10 +51,6 @@ public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreP
 
     public Property<String> httpsSettings = PropertyFactory.newString("httpsSettings");
 
-    public Property<String> property = PropertyFactory.newString("property", "");
-
-    public Property<String> value = PropertyFactory.newString("value", "");
-
     @Override
     public void setupProperties() {
         super.setupProperties();
@@ -80,8 +76,6 @@ public class JmsDatastoreProperties extends PropertiesImpl implements DatastoreP
 
         mainForm.addRow(useHttps);
         mainForm.addRow(httpsSettings);
-        mainForm.addRow(property);
-        mainForm.addRow(value);
     }
 
     @Override
