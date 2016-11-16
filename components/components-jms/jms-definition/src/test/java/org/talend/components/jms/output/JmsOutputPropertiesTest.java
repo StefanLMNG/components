@@ -13,19 +13,18 @@
 
 package org.talend.components.jms.output;
 
-import org.junit.Test;
-import org.talend.daikon.properties.presentation.Form;
-import org.talend.daikon.properties.presentation.Widget;
-
-import java.util.Collection;
-
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Collection;
+
+import org.junit.Test;
+import org.talend.daikon.properties.presentation.Form;
+import org.talend.daikon.properties.presentation.Widget;
 
 public class JmsOutputPropertiesTest {
 
@@ -36,7 +35,6 @@ public class JmsOutputPropertiesTest {
     @Test
     public void testDefaultProperties() {
         JmsOutputProperties properties = new JmsOutputProperties("test");
-        assertEquals("", properties.to.getValue());
         assertNull(properties.delivery_mode.getValue());
         assertEquals("8", properties.pool_max_total.getValue());
         assertEquals("-1", properties.pool_max_wait.getValue());
@@ -65,9 +63,7 @@ public class JmsOutputPropertiesTest {
 
         Collection<Widget> mainWidgets = main.getWidgets();
 
-        assertThat(mainWidgets, hasSize(1));
-        Widget from = main.getWidget("to");
-        assertThat(from, notNullValue());
+        assertThat(mainWidgets, hasSize(0));
 
         Collection<Widget> advancedWidgets = advanced.getWidgets();
         assertThat(advancedWidgets, hasSize(9));
@@ -101,8 +97,6 @@ public class JmsOutputPropertiesTest {
         JmsOutputProperties properties = new JmsOutputProperties("test");
         properties.init();
         properties.refreshLayout(properties.getForm(Form.MAIN));
-
-        assertFalse(properties.getForm(Form.MAIN).getWidget("to").isHidden());
 
         properties.refreshLayout(properties.getForm(Form.ADVANCED));
 

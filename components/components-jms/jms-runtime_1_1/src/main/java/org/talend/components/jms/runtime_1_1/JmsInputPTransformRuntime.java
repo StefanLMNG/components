@@ -58,9 +58,9 @@ public class JmsInputPTransformRuntime extends PTransform<PBegin, PCollection> i
 
         JmsIO.Read read = JmsIO.read().withConnectionFactory(datastoreRuntime.getConnectionFactory());
         if (messageType.equals(JmsMessageType.QUEUE)) {
-            read = read.withQueue(properties.from.getValue());
+            read = read.withQueue(properties.datasetRef.getReference().queueTopicName.getValue());
         } else if (messageType.equals(JmsMessageType.TOPIC)) {
-            read = read.withTopic(properties.from.getValue());
+            read = read.withTopic(properties.datasetRef.getReference().queueTopicName.getValue());
         }
 
         if (properties.max_msg.getValue() != -1 && properties.timeout.getValue() != -1) {

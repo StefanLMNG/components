@@ -77,11 +77,11 @@ public class JmsOutputPTransformRuntime extends PTransform<PCollection<Object>, 
         if (messageType.equals(JmsMessageType.QUEUE)) {
             // TODO label comes from user
             return jmsCollection.apply("writeToJms", JmsIO.write().withConnectionFactory(datastoreRuntime.getConnectionFactory())
-                    .withQueue(properties.to.getValue()));
+                    .withQueue(properties.datasetRef.getReference().queueTopicName.getValue()));
         } else if (messageType.equals(JmsMessageType.TOPIC)) {
             // TODO label comes from user
             return jmsCollection.apply("writeToJms", JmsIO.write().withConnectionFactory(datastoreRuntime.getConnectionFactory())
-                    .withTopic(properties.to.getValue()));
+                    .withTopic(properties.datasetRef.getReference().queueTopicName.getValue()));
 
         } else {
             throw new TalendRuntimeException(CommonErrorCodes.UNEXPECTED_ARGUMENT);
