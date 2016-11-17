@@ -90,14 +90,6 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
         try {
             context = new InitialContext(env);
             connection = (ConnectionFactory) context.lookup("ConnectionFactory");
-            // TODO check if username required how it works
-            /*
-             * if (datastore.needUserIdentity.getValue()) {
-             * connection = tcf.createConnection(datastore.userName.getValue(),datastore.userPassword.getValue());
-             * } else {
-             * connection = tcf.createTopicConnection();
-             * }
-             */
         } catch (NamingException e) {
             throw new ComponentException(e);
         }
