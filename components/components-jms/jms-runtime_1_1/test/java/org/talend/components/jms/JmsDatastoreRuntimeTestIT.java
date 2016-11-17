@@ -62,23 +62,6 @@ public class JmsDatastoreRuntimeTestIT {
     }
 
     /**
-     * Check {@link JmsDatastoreRuntime#getPossibleDatasetNames(RuntimeContainer, String)}
-     * Returns // TODO
-     */
-    /*
-     * @Test
-     * public void testGetPossibleDatasetNames() {
-     * List<NamedThing> datasetListResult = new ArrayList();
-     * try {
-     * datasetListResult = datastoreRuntime.getPossibleDatasetNames(null, null);
-     * } catch (IOException e) {
-     * e.printStackTrace();
-     * }
-     * assertEquals(null, datasetListResult);
-     * }
-     */
-
-    /**
      * Check {@link JmsDatastoreRuntime#getConnectionFactory()}
      * Returns // TODO
      */
