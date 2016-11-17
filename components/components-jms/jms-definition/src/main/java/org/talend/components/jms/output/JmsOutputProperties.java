@@ -28,8 +28,8 @@ import org.talend.daikon.properties.property.PropertyFactory;
 public class JmsOutputProperties extends ComponentPropertiesImpl implements IOProperties {
 
     public enum JmsAdvancedDeliveryMode {
-        Non_persistent,
-        persistent
+        NON_PERSISTENT,
+        PERSISTENT
     }
 
     public JmsOutputProperties(String name) {

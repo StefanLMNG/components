@@ -1,3 +1,16 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+
 package org.talend.components.jms;
 
 import org.apache.avro.Schema;
@@ -16,9 +29,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import javax.jms.ConnectionFactory;
 
-public class JmsDatastoreRuntimeTest {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+public class JmsDatastoreRuntimeTestIT {
 
     private final JmsDatastoreRuntime datastoreRuntime = new JmsDatastoreRuntime();
 
@@ -36,7 +52,7 @@ public class JmsDatastoreRuntimeTest {
     }
 
     /**
-     * Check {@link JmsDatastoreRuntime#initialize(RuntimeContainer, Properties)}
+     * Check
      * Returns OK
      */
     @Test
@@ -61,4 +77,19 @@ public class JmsDatastoreRuntimeTest {
      * assertEquals(null, datasetListResult);
      * }
      */
+
+    /**
+     * Check {@link JmsDatastoreRuntime#getConnectionFactory()}
+     * Returns // TODO
+     */
+    @Test
+    public void testGetConnectionFactory() {
+        JmsDatastoreProperties props = new JmsDatastoreProperties("test");
+        props.contextProvider.setValue("org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+        props.version.setValue(JmsDatastoreProperties.JmsVersion.V_1_1);
+        props.serverUrl.setValue("tcp://localhost:61616");
+        datastoreRuntime.initialize(null, props);
+        ConnectionFactory connectionFactory = datastoreRuntime.getConnectionFactory();
+        assertNotNull(connectionFactory);
+    }
 }

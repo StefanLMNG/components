@@ -22,18 +22,6 @@ import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 
-/*
- * import javax.jms.ConnectionFactory;
- * import javax.jms.JMSException;
- * import javax.jms.QueueConnection;
- * import javax.jms.QueueConnectionFactory;
- * import javax.jms.TopicConnection;
- * import javax.jms.TopicConnectionFactory;
- * import javax.naming.Context;
- * import javax.naming.InitialContext;
- * import javax.naming.NamingException;
- */
-
 public class JmsDatasetProperties extends PropertiesImpl implements DatasetProperties<JmsDatastoreProperties> {
 
     public final Property<JmsMessageType> msgType = newEnum("msgType", JmsMessageType.class).setRequired();
@@ -72,29 +60,4 @@ public class JmsDatasetProperties extends PropertiesImpl implements DatasetPrope
         mainForm.addRow(queueTopicName);
         mainForm.addRow(processingMode);
     }
-
-    /*
-     * public QueueConnection getQueueConnectionFactory() {
-     * 
-     * InitialContext context;
-     * Hashtable env = new Hashtable();
-     * env.put(Context.INITIAL_CONTEXT_FACTORY,datastore.contextProvider);
-     * env.put(Context.PROVIDER_URL, datastore.serverUrl);
-     * QueueConnection connection = null;
-     * try {
-     * context = new InitialContext(env);
-     * QueueConnectionFactory qcf = (javax.jms.QueueConnectionFactory)context.lookup(datastore.connectionFactoryName.getValue());
-     * if (datastore.needUserIdentity.getValue()) {
-     * connection = qcf.createQueueConnection(datastore.userName.getValue(),datastore.userPassword.getValue());
-     * } else {
-     * connection = qcf.createQueueConnection();
-     * }
-     * } catch (NamingException e) {
-     * e.printStackTrace();
-     * } catch (JMSException e) {
-     * e.printStackTrace();
-     * }
-     * return connection;
-     * }
-     */
 }

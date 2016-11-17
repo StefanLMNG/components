@@ -66,6 +66,7 @@ public class JmsOutputPropertiesTest {
 
         Collection<Widget> advancedWidgets = advanced.getWidgets();
         assertThat(advancedWidgets, hasSize(9));
+
         Widget delevery_mode = advanced.getWidget("delivery_mode");
         assertThat(delevery_mode, notNullValue());
         Widget pool_max_total = advanced.getWidget("pool_max_total");
@@ -97,6 +98,7 @@ public class JmsOutputPropertiesTest {
         properties.refreshLayout(properties.getForm(Form.MAIN));
 
         properties.refreshLayout(properties.getForm(Form.ADVANCED));
+
         assertFalse(properties.getForm(Form.ADVANCED).getWidget("delivery_mode").isHidden());
         assertFalse(properties.getForm(Form.ADVANCED).getWidget("pool_max_total").isHidden());
         assertFalse(properties.getForm(Form.ADVANCED).getWidget("pool_max_wait").isHidden());

@@ -21,8 +21,13 @@
 		<module>components-api-full-example</module>
 		<module>services</module>
 		<module>examples</module>
+<<<<<<< HEAD
         <module>components</module>
     </modules>
+=======
+		<module>components</module>
+	</modules>
+>>>>>>> components-jms
 	<profiles>
 		<profile>
 			<id>eclipse</id>

@@ -90,6 +90,10 @@
             <artifactId>components-api-service-rest</artifactId>
             <version>0.16.0-SNAPSHOT</version>
             <type>test-jar</type>
+<<<<<<< HEAD
+=======
+
+>>>>>>> components-jms
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -97,7 +101,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.talend.components</groupId>
             <artifactId>components-api-service-rest</artifactId>
             <version>0.16.0-SNAPSHOT</version>

@@ -17,7 +17,6 @@ import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
-
 import java.util.Collection;
 
 import org.junit.Test;

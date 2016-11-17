@@ -56,7 +56,6 @@ public class JmsDatasetPropertiesTest {
         assertThat(msgType, notNullValue());
         Widget queueTopicName = main.getWidget("queueTopicName");
         assertThat(queueTopicName, notNullValue());
-
         Widget processingMode = main.getWidget("processingMode");
         assertThat(processingMode, notNullValue());
     }
@@ -73,5 +72,6 @@ public class JmsDatasetPropertiesTest {
         assertFalse(properties.getForm(Form.MAIN).getWidget("msgType").isHidden());
         assertFalse(properties.getForm(Form.MAIN).getWidget("queueTopicName").isHidden());
         assertFalse(properties.getForm(Form.MAIN).getWidget("processingMode").isHidden());
+        assertFalse(properties.getForm(Form.MAIN).getWidget("queueTopicName").isHidden());
     }
 }
