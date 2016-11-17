@@ -36,7 +36,7 @@ public class JmsDatasetDefinitionTest {
      * Check {@link JmsDatasetDefinition#getImagePath()} ()} returns JmsDatasetProperties, which canonical name is "jms"
      */
     @Test
-    public void testCreateProperties() {
+    public void testGetImagePath() {
         assertEquals(null, datasetDefinition.getImagePath());
     }
 

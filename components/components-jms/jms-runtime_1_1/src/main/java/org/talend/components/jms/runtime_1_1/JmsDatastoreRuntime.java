@@ -33,7 +33,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-public class JmsDatastoreRuntime implements DatastoreRuntime {
+public class JmsDatastoreRuntime implements DatastoreRuntime<JmsDatastoreProperties> {
 
     protected transient JmsDatastoreProperties properties;
 
@@ -68,12 +68,6 @@ public class JmsDatastoreRuntime implements DatastoreRuntime {
             throw new ComponentException(e);
         }
         return null;
-    }
-
-    @Override
-    public ValidationResult initialize(RuntimeContainer container, Properties properties) {
-        this.properties = (JmsDatastoreProperties) properties;
-        return ValidationResult.OK;
     }
 
     public ValidationResult initialize(RuntimeContainer container, JmsDatastoreProperties properties) {

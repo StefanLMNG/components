@@ -52,12 +52,12 @@ public class JmsInputDefinitionTest {
     }
 
     /**
-     * Check {@link JmsInputDefinition#getName()} returns "tJIRAInput"
+     * Check {@link JmsInputDefinition#getName()} returns "JmsInput"
      */
     @Test
     public void testGetName() {
         String componentName = inputDefinition.getName();
-        assertEquals(componentName, "tJmsInput");
+        assertEquals(componentName, "JmsInput");
     }
 
     /**

@@ -14,7 +14,6 @@
 package org.talend.components.jms;
 
 import org.apache.beam.runners.direct.DirectRunner;
-import org.apache.beam.runners.flink.FlinkRunner;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;

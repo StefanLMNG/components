@@ -53,12 +53,12 @@ public class JmsOutputDefinitionTest {
     }
 
     /**
-     * Check {@link JmsOutputDefinition#getName()} returns "tJmsOutput"
+     * Check {@link JmsOutputDefinition#getName()} returns "JmsOutput"
      */
     @Test
     public void testGetName() {
         String componentName = outputDefinition.getName();
-        assertEquals(componentName, "tJmsOutput");
+        assertEquals(componentName, "JmsOutput");
     }
 
     /**
