@@ -1,8 +1,24 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.jdbc;
 
 import org.talend.components.api.AbstractComponentFamilyDefinition;
 import org.talend.components.api.ComponentInstaller;
 import org.talend.components.api.Constants;
+import org.talend.components.jdbc.dataprep.JDBCInputDefinition;
+import org.talend.components.jdbc.dataprep.di.TDataPrepDBInputDefinition;
+import org.talend.components.jdbc.dataset.JDBCDatasetDefinition;
+import org.talend.components.jdbc.datastore.JDBCDatastoreDefinition;
 import org.talend.components.jdbc.tjdbcclose.TJDBCCloseDefinition;
 import org.talend.components.jdbc.tjdbccommit.TJDBCCommitDefinition;
 import org.talend.components.jdbc.tjdbcconnection.TJDBCConnectionDefinition;
@@ -27,8 +43,11 @@ public class JDBCFamilyDefinition extends AbstractComponentFamilyDefinition impl
                 // Components
                 new TJDBCCloseDefinition(), new TJDBCCommitDefinition(), new TJDBCConnectionDefinition(),
                 new TJDBCInputDefinition(), new TJDBCOutputDefinition(), new TJDBCRollbackDefinition(), new TJDBCRowDefinition(),
+                new TDataPrepDBInputDefinition(),
                 // Component wizards
-                new JDBCConnectionWizardDefinition());
+                new JDBCConnectionWizardDefinition(),
+                // Datastore, Dataset and the component
+                new JDBCDatastoreDefinition(), new JDBCDatasetDefinition(), new JDBCInputDefinition());
     }
 
     @Override

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -61,8 +61,8 @@ public class TSalesforceBulkExecDefinition extends SalesforceDefinition {
     }
 
     @Override
-    public RuntimeInfo getRuntimeInfo(Properties properties, ConnectorTopology componentType) {
-        if (componentType == ConnectorTopology.OUTGOING) {
+    public RuntimeInfo getRuntimeInfo(ComponentProperties properties, ConnectorTopology componentType) {
+        if (componentType == ConnectorTopology.OUTGOING || componentType == ConnectorTopology.NONE) {
             return getCommonRuntimeInfo(this.getClass().getClassLoader(), SalesforceSource.class);
         } else {
             return null;

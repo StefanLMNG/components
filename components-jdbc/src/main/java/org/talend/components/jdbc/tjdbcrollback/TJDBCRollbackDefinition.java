@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -21,10 +21,13 @@ import org.talend.components.api.component.runtime.DependenciesReader;
 import org.talend.components.api.component.runtime.SimpleRuntimeInfo;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.jdbc.runtime.JDBCRollbackSourceOrSink;
-import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.runtime.RuntimeInfo;
 
+/**
+ * JDBC roll back component
+ *
+ */
 public class TJDBCRollbackDefinition extends AbstractComponentDefinition {
 
     public static final String COMPONENT_NAME = "tJDBCRollbackNew";
@@ -56,7 +59,7 @@ public class TJDBCRollbackDefinition extends AbstractComponentDefinition {
     }
 
     @Override
-    public RuntimeInfo getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology) {
+    public RuntimeInfo getRuntimeInfo(ComponentProperties properties, ConnectorTopology connectorTopology) {
         if (connectorTopology == ConnectorTopology.NONE) {
             return new SimpleRuntimeInfo(this.getClass().getClassLoader(),
                     DependenciesReader.computeDependenciesFilePath("org.talend.components", "components-jdbc"),

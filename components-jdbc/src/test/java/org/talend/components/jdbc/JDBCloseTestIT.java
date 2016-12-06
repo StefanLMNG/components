@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -12,9 +12,8 @@
 // ============================================================================
 package org.talend.components.jdbc;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,9 +24,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.components.api.container.RuntimeContainer;
 import org.talend.components.jdbc.common.DBTestUtils;
-import org.talend.components.jdbc.module.JDBCConnectionModule;
 import org.talend.components.jdbc.runtime.JDBCCloseSourceOrSink;
 import org.talend.components.jdbc.runtime.JDBCSourceOrSink;
+import org.talend.components.jdbc.runtime.setting.AllSetting;
 import org.talend.components.jdbc.tjdbcclose.TJDBCCloseDefinition;
 import org.talend.components.jdbc.tjdbcclose.TJDBCCloseProperties;
 import org.talend.components.jdbc.tjdbcconnection.TJDBCConnectionDefinition;
@@ -36,17 +35,9 @@ import org.talend.daikon.properties.ValidationResult;
 
 public class JDBCloseTestIT {
 
-    private static String driverClass;
-
-    private static String jdbcUrl;
-
-    private static String userId;
-
-    private static String password;
-
-    private static JDBCConnectionModule connectionInfo;
-
     private final String refComponentId = "tJDBCConnection1";
+
+    public static AllSetting allSetting;
 
     RuntimeContainer container = new RuntimeContainer() {
 
@@ -75,38 +66,19 @@ public class JDBCloseTestIT {
     };
 
     @BeforeClass
-    public static void init() throws Exception {
-        java.util.Properties props = new java.util.Properties();
-        try (InputStream is = JDBCloseTestIT.class.getClassLoader().getResourceAsStream("connection.properties")) {
-            props = new java.util.Properties();
-            props.load(is);
-        }
-
-        driverClass = props.getProperty("driverClass");
-
-        jdbcUrl = props.getProperty("jdbcUrl");
-
-        userId = props.getProperty("userId");
-
-        password = props.getProperty("password");
-
-        connectionInfo = new JDBCConnectionModule("connection");
-
-        connectionInfo.driverClass.setValue(driverClass);
-        connectionInfo.jdbcUrl.setValue(jdbcUrl);
-        connectionInfo.userPassword.userId.setValue(userId);
-        connectionInfo.userPassword.password.setValue(password);
+    public static void beforeClass() throws Exception {
+        allSetting = DBTestUtils.createAllSetting();
     }
 
     @AfterClass
-    public static void clean() throws ClassNotFoundException, SQLException {
+    public static void afterClass() throws ClassNotFoundException, SQLException {
         DBTestUtils.shutdownDBIfNecessary();
     }
 
     @Test
     public void testClose() {
         TJDBCConnectionDefinition connectionDefinition = new TJDBCConnectionDefinition();
-        TJDBCConnectionProperties properties = createCommonJDBCConnectionProperties(connectionDefinition);
+        TJDBCConnectionProperties properties = DBTestUtils.createCommonJDBCConnectionProperties(allSetting, connectionDefinition);
 
         JDBCSourceOrSink sourceOrSink = new JDBCSourceOrSink();
         sourceOrSink.initialize(null, properties);
@@ -123,28 +95,14 @@ public class JDBCloseTestIT {
         closeSourceOrSink.initialize(container, closeProperties);
         closeSourceOrSink.validate(container);
 
-        java.sql.Connection conn = (java.sql.Connection) container.getComponentData(refComponentId,
-                ComponentConstants.CONNECTION_KEY);
-        if (conn != null) {
-            try {
+        try (java.sql.Connection conn = (java.sql.Connection) container.getComponentData(refComponentId,
+                ComponentConstants.CONNECTION_KEY)) {
+            if (conn != null) {
                 Assert.assertTrue(conn.isClosed());
-            } catch (SQLException e) {
-                Assert.fail(e.getMessage());
             }
+        } catch (SQLException e) {
+            Assert.fail(e.getMessage());
         }
-
-    }
-
-    private TJDBCConnectionProperties createCommonJDBCConnectionProperties(TJDBCConnectionDefinition connectionDefinition) {
-        TJDBCConnectionProperties properties = (TJDBCConnectionProperties) connectionDefinition.createRuntimeProperties();
-
-        // TODO now framework doesn't support to load the JDBC jar by the setting
-        // properties.connection.driverJar.setValue("port", props.getProperty("port"));
-        properties.connection.driverClass.setValue(driverClass);
-        properties.connection.jdbcUrl.setValue(jdbcUrl);
-        properties.connection.userPassword.userId.setValue(userId);
-        properties.connection.userPassword.password.setValue(password);
-        return properties;
     }
 
 }

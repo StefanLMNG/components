@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.filedelimited.tfileoutputdelimited;
 
 import java.util.EnumSet;
@@ -28,17 +40,12 @@ public class TFileOutputDelimitedDefinition extends FileDelimitedDefinition {
 
     @Override
     public boolean isSchemaAutoPropagate() {
-        return false;
-    }
-
-    @Override
-    public boolean isConditionalInputs() {
         return true;
     }
 
     @Override
     public String getPartitioning() {
-        return AUTO;
+        return NONE;
     }
 
     @Override
@@ -52,7 +59,7 @@ public class TFileOutputDelimitedDefinition extends FileDelimitedDefinition {
     }
 
     @Override
-    public RuntimeInfo getRuntimeInfo(Properties properties, ConnectorTopology componentType) {
+    public RuntimeInfo getRuntimeInfo(ComponentProperties properties, ConnectorTopology componentType) {
         if (componentType == ConnectorTopology.INCOMING || componentType == ConnectorTopology.INCOMING_AND_OUTGOING) {
             return new SimpleRuntimeInfo(this.getClass().getClassLoader(),
                     DependenciesReader.computeDependenciesFilePath(getMavenGroupId(), getMavenArtifactId()),

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,13 +14,14 @@ package org.talend.components.jdbc.tjdbcconnection;
 
 import org.talend.components.api.properties.ComponentPropertiesImpl;
 import org.talend.components.jdbc.CommonUtils;
-import org.talend.components.jdbc.JDBCConnectionInfoProperties;
+import org.talend.components.jdbc.RuntimeSettingProvider;
 import org.talend.components.jdbc.module.JDBCConnectionModule;
+import org.talend.components.jdbc.runtime.setting.AllSetting;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 
-public class TJDBCConnectionProperties extends ComponentPropertiesImpl implements JDBCConnectionInfoProperties {
+public class TJDBCConnectionProperties extends ComponentPropertiesImpl implements RuntimeSettingProvider {
 
     public TJDBCConnectionProperties(String name) {
         super(name);
@@ -113,8 +114,15 @@ public class TJDBCConnectionProperties extends ComponentPropertiesImpl implement
     }
 
     @Override
-    public JDBCConnectionModule getJDBCConnectionModule() {
-        return connection;
+    public AllSetting getRuntimeSetting() {
+        AllSetting setting = new AllSetting();
+
+        CommonUtils.setCommonConnectionInfo(setting, connection);
+
+        setting.setUseAutoCommit(this.useAutoCommit.getValue());
+        setting.setAutocommit(this.autocommit.getValue());
+
+        return setting;
     }
 
 }

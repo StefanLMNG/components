@@ -7,13 +7,13 @@
     <parent>
         <groupId>org.talend.components</groupId>
         <artifactId>components-parent</artifactId>
-        <version>0.15.0-SNAPSHOT</version>
+        <version>0.16.0-SNAPSHOT</version>
         <relativePath>../components-parent/pom.xml</relativePath>
     </parent>
 
     <name>Components - Shared Component Parts</name>
     <artifactId>components-common</artifactId>
-    <version>0.15.0-SNAPSHOT</version>
+    <version>0.16.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>org.talend.components</groupId>
             <artifactId>components-api</artifactId>
-            <version>0.15.0-SNAPSHOT</version>
+            <version>0.16.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>biz.aQute.bnd</groupId>
@@ -35,28 +35,33 @@
         <dependency>
             <groupId>org.talend.components</groupId>
             <artifactId>components-api-service-common</artifactId>
-            <version>0.15.0-SNAPSHOT</version>
+            <version>0.16.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.talend.components</groupId>
             <artifactId>components-api-service-common</artifactId>
-            <version>0.15.0-SNAPSHOT</version>
+            <version>0.16.0-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.talend.components</groupId>
             <artifactId>components-api</artifactId>
-            <version>0.15.0-SNAPSHOT</version>
+            <version>0.16.0-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.talend.components</groupId>
             <artifactId>components-osgitest</artifactId>
-            <version>0.15.0-SNAPSHOT</version>
+            <version>0.16.0-SNAPSHOT</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.talend.components</groupId>
+            <artifactId>components-api</artifactId>
+            <version>0.16.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
@@ -68,6 +73,7 @@
                 <version>0.4.2-Talend</version>
                 <executions>
                     <execution>
+                        <id>Generate .link files</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>generate-test-resources</goal>
@@ -153,28 +159,6 @@
                     </execution>
                 </executions>
             </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.20-PAXEXAM-PATCH</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<argLine>-Xms512m -Xmx1024m</argLine>
-					<systemPropertyVariables>
-						<pax.exam.karaf.version>4.0.2</pax.exam.karaf.version>
-						<salesforce.user>${salesforce.user}</salesforce.user>
-						<salesforce.password>${salesforce.password}</salesforce.password>
-						<salesforce.key>${salesforce.key}</salesforce.key>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
         </plugins>
     </build>
 

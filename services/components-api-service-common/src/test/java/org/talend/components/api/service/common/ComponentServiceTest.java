@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -85,7 +85,7 @@ public class ComponentServiceTest extends AbstractComponentTest {
     @Override
     public ComponentService getComponentService() {
         if (componentService == null) {
-            ComponentRegistry testComponentRegistry = new ComponentRegistry();
+            DefinitionRegistry testComponentRegistry = new DefinitionRegistry();
             testComponentRegistry.registerDefinition(Arrays.asList(new TestComponentDefinition()));
             testComponentRegistry.registerComponentWizardDefinition(Arrays.asList(new TestComponentWizardDefinition()));
             componentService = new ComponentServiceImpl(testComponentRegistry);

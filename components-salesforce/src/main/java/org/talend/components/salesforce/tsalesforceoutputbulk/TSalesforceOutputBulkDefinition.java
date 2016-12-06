@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -54,7 +54,7 @@ public class TSalesforceOutputBulkDefinition extends SalesforceDefinition {
     }
 
     @Override
-    public RuntimeInfo getRuntimeInfo(Properties properties, ConnectorTopology componentType) {
+    public RuntimeInfo getRuntimeInfo(ComponentProperties properties, ConnectorTopology componentType) {
         if (componentType == ConnectorTopology.INCOMING) {
             return getCommonRuntimeInfo(this.getClass().getClassLoader(), SalesforceBulkFileSink.class);
         } else {

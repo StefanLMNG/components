@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -27,8 +27,13 @@ import org.talend.components.api.component.runtime.Writer;
 import org.talend.components.api.exception.ComponentException;
 import org.talend.components.api.exception.error.ComponentsApiErrorCode;
 import org.talend.components.api.service.ComponentService;
+import org.talend.daikon.properties.test.PropertiesTestUtils;
 
 public abstract class AbstractComponentTest {
+
+    static {
+        PropertiesTestUtils.setupPaxUrlFromMavenLaunch();
+    }
 
     // for benchmarking the apis, one suggestion is to use http://openjdk.java.net/projects/code-tools/jmh/.
     @Rule

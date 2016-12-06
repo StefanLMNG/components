@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -16,7 +16,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -26,82 +25,50 @@ import org.apache.avro.Schema.Field;
 import org.apache.avro.generic.IndexedRecord;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.runtime.Reader;
 import org.talend.components.jdbc.common.DBTestUtils;
-import org.talend.components.jdbc.module.JDBCConnectionModule;
 import org.talend.components.jdbc.runtime.JDBCSource;
+import org.talend.components.jdbc.runtime.setting.AllSetting;
 import org.talend.components.jdbc.tjdbcinput.TJDBCInputDefinition;
 import org.talend.components.jdbc.tjdbcinput.TJDBCInputProperties;
 import org.talend.daikon.NamedThing;
-import org.talend.daikon.avro.AvroUtils;
-import org.talend.daikon.avro.SchemaConstants;
 import org.talend.daikon.avro.converter.IndexedRecordConverter;
-import org.talend.daikon.di.DiOutgoingSchemaEnforcer;
 
 public class JDBCInputTestIT {
 
-    private static String driverClass;
-
-    private static String jdbcUrl;
-
-    private static String userId;
-
-    private static String password;
-
-    private static String tablename;
-
-    private static String sql;
-
-    public static JDBCConnectionModule connectionInfo;
+    public static AllSetting allSetting;
 
     @BeforeClass
-    public static void init() throws Exception {
-        java.util.Properties props = new java.util.Properties();
-        try (InputStream is = JDBCInputTestIT.class.getClassLoader().getResourceAsStream("connection.properties")) {
-            props = new java.util.Properties();
-            props.load(is);
-        }
+    public static void beforeClass() throws Exception {
+        allSetting = DBTestUtils.createAllSetting();
 
-        driverClass = props.getProperty("driverClass");
-
-        jdbcUrl = props.getProperty("jdbcUrl");
-
-        userId = props.getProperty("userId");
-
-        password = props.getProperty("password");
-
-        tablename = props.getProperty("tablename");
-
-        sql = props.getProperty("sql");
-
-        connectionInfo = new JDBCConnectionModule("connection");
-
-        connectionInfo.driverClass.setValue(driverClass);
-        connectionInfo.jdbcUrl.setValue(jdbcUrl);
-        connectionInfo.userPassword.userId.setValue(userId);
-        connectionInfo.userPassword.password.setValue(password);
-
-        DBTestUtils.prepareTableAndData(connectionInfo);
+        DBTestUtils.createTable(allSetting);
     }
 
     @AfterClass
-    public static void clean() throws ClassNotFoundException, SQLException {
-        DBTestUtils.releaseResource(connectionInfo);
+    public static void afterClass() throws ClassNotFoundException, SQLException {
+        DBTestUtils.releaseResource(allSetting);
+    }
+
+    @Before
+    public void before() throws SQLException, ClassNotFoundException {
+        DBTestUtils.truncateTableAndLoadData(allSetting);
     }
 
     @Test
     public void testGetSchemaNames() throws Exception {
         TJDBCInputDefinition definition = new TJDBCInputDefinition();
-        TJDBCInputProperties properties = createCommonJDBCInputProperties(definition);
+        TJDBCInputProperties properties = DBTestUtils.createCommonJDBCInputProperties(allSetting, definition);
 
         properties.main.schema.setValue(DBTestUtils.createTestSchema());
-        properties.tableSelection.tablename.setValue(tablename);
-        properties.sql.setValue(sql);
+        properties.tableSelection.tablename.setValue(DBTestUtils.getTablename());
+        properties.sql.setValue(DBTestUtils.getSQL());
 
-        JDBCSource source = DBTestUtils.createCommonJDBCSource(definition, properties);
+        JDBCSource source = DBTestUtils.createCommonJDBCSource(properties);
 
         List<NamedThing> schemaNames = source.getSchemaNames(null);
         assertTrue(schemaNames != null);
@@ -121,42 +88,18 @@ public class JDBCInputTestIT {
     @Test
     public void testGetSchema() throws Exception {
         TJDBCInputDefinition definition = new TJDBCInputDefinition();
-        TJDBCInputProperties properties = createCommonJDBCInputProperties(definition);
+        TJDBCInputProperties properties = DBTestUtils.createCommonJDBCInputProperties(allSetting, definition);
 
         properties.main.schema.setValue(DBTestUtils.createTestSchema());
-        properties.tableSelection.tablename.setValue(tablename);
-        properties.sql.setValue(sql);
+        properties.tableSelection.tablename.setValue(DBTestUtils.getTablename());
+        properties.sql.setValue(DBTestUtils.getSQL());
 
-        JDBCSource source = DBTestUtils.createCommonJDBCSource(definition, properties);
+        JDBCSource source = DBTestUtils.createCommonJDBCSource(properties);
 
         Schema schema = source.getEndpointSchema(null, "TEST");
         assertEquals("TEST", schema.getName().toUpperCase());
         List<Field> columns = schema.getFields();
-        testMetadata(columns);
-    }
-
-    private void testMetadata(List<Field> columns) {
-        Schema.Field field = columns.get(0);
-
-        assertEquals("ID", field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_COLUMN_NAME));
-        assertEquals(Schema.Type.INT, AvroUtils.unwrapIfNullable(field.schema()).getType());
-        assertEquals(java.sql.Types.INTEGER, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_TYPE));
-        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_LENGTH));
-        assertEquals(10, field.getObjectProp(SchemaConstants.TALEND_COLUMN_PRECISION));
-        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_SCALE));
-        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_PATTERN));
-        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DEFAULT));
-
-        field = columns.get(1);
-
-        assertEquals("NAME", field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_COLUMN_NAME));
-        assertEquals(Schema.Type.STRING, AvroUtils.unwrapIfNullable(field.schema()).getType());
-        assertEquals(java.sql.Types.VARCHAR, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_TYPE));
-        assertEquals(8, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_LENGTH));
-        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_PRECISION));
-        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_SCALE));
-        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_PATTERN));
-        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DEFAULT));
+        DBTestUtils.testMetadata(columns);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -165,13 +108,13 @@ public class JDBCInputTestIT {
         Reader reader = null;
         try {
             TJDBCInputDefinition definition = new TJDBCInputDefinition();
-            TJDBCInputProperties properties = createCommonJDBCInputProperties(definition);
+            TJDBCInputProperties properties = DBTestUtils.createCommonJDBCInputProperties(allSetting, definition);
 
             properties.main.schema.setValue(DBTestUtils.createTestSchema());
-            properties.tableSelection.tablename.setValue(tablename);
-            properties.sql.setValue(sql);
+            properties.tableSelection.tablename.setValue(DBTestUtils.getTablename());
+            properties.sql.setValue(DBTestUtils.getSQL());
 
-            reader = DBTestUtils.createCommonJDBCInputReader(definition, properties);
+            reader = DBTestUtils.createCommonJDBCInputReader(properties);
 
             reader.start();
 
@@ -222,45 +165,30 @@ public class JDBCInputTestIT {
     @Test
     public void testType() throws Exception {
         TJDBCInputDefinition definition = new TJDBCInputDefinition();
-        TJDBCInputProperties properties = createCommonJDBCInputProperties(definition);
+        TJDBCInputProperties properties = DBTestUtils.createCommonJDBCInputProperties(allSetting, definition);
 
         properties.main.schema.setValue(DBTestUtils.createTestSchema());
-        properties.tableSelection.tablename.setValue(tablename);
-        properties.sql.setValue(sql);
+        properties.tableSelection.tablename.setValue(DBTestUtils.getTablename());
+        properties.sql.setValue(DBTestUtils.getSQL());
 
-        Reader reader = DBTestUtils.createCommonJDBCInputReader(definition, properties);
+        Reader reader = DBTestUtils.createCommonJDBCInputReader(properties);
 
         try {
             IndexedRecordConverter<Object, ? extends IndexedRecord> converter = null;
 
-            DiOutgoingSchemaEnforcer current = new DiOutgoingSchemaEnforcer(properties.main.schema.getValue(), false);
-
             for (boolean available = reader.start(); available; available = reader.advance()) {
                 converter = DBTestUtils.getIndexRecordConverter(reader, converter);
 
-                IndexedRecord unenforced = converter.convertToAvro(reader.getCurrent());
-                current.setWrapped(unenforced);
+                IndexedRecord record = converter.convertToAvro(reader.getCurrent());
 
-                assertEquals(Integer.class, current.get(0).getClass());
-                assertEquals(String.class, current.get(1).getClass());
+                assertEquals(Integer.class, record.get(0).getClass());
+                assertEquals(String.class, record.get(1).getClass());
             }
 
             reader.close();
         } finally {
             reader.close();
         }
-    }
-
-    private TJDBCInputProperties createCommonJDBCInputProperties(TJDBCInputDefinition definition) {
-        TJDBCInputProperties properties = (TJDBCInputProperties) definition.createRuntimeProperties();
-
-        // TODO now framework doesn't support to load the JDBC jar by the setting
-        // properties.connection.driverJar.setValue("port", props.getProperty("port"));
-        properties.connection.driverClass.setValue(driverClass);
-        properties.connection.jdbcUrl.setValue(jdbcUrl);
-        properties.connection.userPassword.userId.setValue(userId);
-        properties.connection.userPassword.password.setValue(password);
-        return properties;
     }
 
 }

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -12,15 +12,14 @@
 // ============================================================================
 package org.talend.components.api;
 
-import org.talend.components.api.wizard.ComponentWizardDefinition;
 import org.talend.daikon.NamedThing;
+import org.talend.daikon.definition.Definition;
 
 /**
  * Placeholder for a Component family catalog item.
  */
 public interface ComponentFamilyDefinition extends NamedThing {
 
-    Iterable<? extends RuntimableDefinition<?, ?>> getDefinitions();
+    Iterable<? extends Definition> getDefinitions();
 
-    Iterable<? extends ComponentWizardDefinition> getComponentWizards();
 }

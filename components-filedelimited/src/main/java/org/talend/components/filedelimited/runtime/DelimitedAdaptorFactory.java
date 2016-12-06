@@ -1,4 +1,18 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.filedelimited.runtime;
+
+import static org.talend.components.filedelimited.tfileinputdelimited.TFileInputDelimitedProperties.FIELD_ERROR_MESSAGE;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +32,10 @@ public class DelimitedAdaptorFactory implements IndexedRecordConverter<String[],
     Schema schema;
 
     FileDelimitedProperties properties;
+
+    private boolean trimValues[];
+
+    private AvroConverter[] fieldConverter = null;
 
     @Override
     public Class<String[]> getDatumClass() {
@@ -52,6 +70,26 @@ public class DelimitedAdaptorFactory implements IndexedRecordConverter<String[],
         this.properties = properties;
     }
 
+    private void initializeConverters() {
+        if (properties == null) {
+            throw new IllegalArgumentException("Runtime properties for converter is not be set!");
+        }
+        trimValues = new boolean[getSchema().getFields().size()];
+        fieldConverter = new AvroConverter[trimValues.length];
+        Object trimSelect = ((TFileInputDelimitedProperties) properties).trimColumns.trimTable.trim.getValue();
+        boolean trimAll = ((TFileInputDelimitedProperties) properties).trimColumns.trimAll.getValue();
+        for (int j = 0; j < trimValues.length; j++) {
+            Schema.Field f = getSchema().getFields().get(j);
+            fieldConverter[j] = new FileDelimitedAvroRegistry().getConverter(f, properties);
+            if (trimAll) {
+                trimValues[j] = true;
+            } else if (trimSelect != null && (trimSelect instanceof List) && (j < ((List<Boolean>) trimSelect).size())) {
+                trimValues[j] = ((List<Boolean>) trimSelect).get(j);
+            }
+
+        }
+    }
+
     private class DelimitedIndexedRecord implements IndexedRecord {
 
         String[] values;
@@ -65,34 +103,14 @@ public class DelimitedAdaptorFactory implements IndexedRecordConverter<String[],
             throw new UnsupportedOperationException();
         }
 
-        private boolean trimValues[];
-
-        AvroConverter[] fieldConverter = null;
-
         @Override
         public Object get(int index) {
             // Lazy initialization of the cached converter objects.
-            Object value = null;
             if (trimValues == null) {
-                if (properties == null) {
-                    throw new IllegalArgumentException("Runtime properties for converter is not be set!");
-                }
-                trimValues = new boolean[getSchema().getFields().size()];
-                fieldConverter = new AvroConverter[trimValues.length];
-                Object trimSelect = ((TFileInputDelimitedProperties) properties).trimColumns.trimTable.trim.getValue();
-                boolean trimAll = ((TFileInputDelimitedProperties) properties).trimColumns.trimAll.getValue();
-                for (int j = 0; j < trimValues.length; j++) {
-                    Schema.Field f = getSchema().getFields().get(j);
-                    fieldConverter[j] = new FileDelimitedAvroRegistry().getConverter(f, properties);
-                    if (trimAll) {
-                        trimValues[j] = true;
-                    } else if (trimSelect != null && (trimSelect instanceof List) && (j < ((List<Boolean>) trimSelect).size())) {
-                        trimValues[j] = ((List<Boolean>) trimSelect).get(j);
-                    }
-
-                }
-
+                initializeConverters();
             }
+
+            Object value = null;
             if (index < values.length) {
                 try {
                     if (trimValues[index] && !StringUtils.isEmpty(values[index])) {
@@ -104,7 +122,7 @@ public class DelimitedAdaptorFactory implements IndexedRecordConverter<String[],
                         throw e;
                     } else {
                         Map<String, Object> resultMessage = new HashMap<String, Object>();
-                        resultMessage.put("errorMessage", e.getMessage());
+                        resultMessage.put(FIELD_ERROR_MESSAGE, e.getMessage());
                         resultMessage.put("talend_record", this);
                         throw new DataRejectException(resultMessage);
                     }

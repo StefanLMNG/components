@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -18,23 +18,21 @@ import static org.talend.daikon.properties.property.PropertyFactory.newString;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.avro.Schema;
 import org.talend.components.api.component.Connector;
 import org.talend.components.api.component.PropertyPathConnector;
-import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.api.properties.ComponentReferenceProperties;
 import org.talend.components.api.properties.ComponentReferencePropertiesEnclosing;
 import org.talend.components.common.FixedConnectorsComponentProperties;
 import org.talend.components.common.SchemaProperties;
 import org.talend.components.jdbc.CommonUtils;
-import org.talend.components.jdbc.JDBCConnectionInfoProperties;
-import org.talend.components.jdbc.ReferAnotherComponent;
+import org.talend.components.jdbc.RuntimeSettingProvider;
 import org.talend.components.jdbc.module.JDBCConnectionModule;
 import org.talend.components.jdbc.module.JDBCTableSelectionModule;
 import org.talend.components.jdbc.module.PreparedStatementTable;
+import org.talend.components.jdbc.runtime.setting.AllSetting;
 import org.talend.components.jdbc.runtime.sqlbuilder.JDBCSQLBuilder;
 import org.talend.components.jdbc.tjdbcconnection.TJDBCConnectionDefinition;
 import org.talend.daikon.avro.SchemaConstants;
@@ -46,7 +44,7 @@ import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 
 public class TJDBCRowProperties extends FixedConnectorsComponentProperties
-        implements ComponentReferencePropertiesEnclosing, JDBCConnectionInfoProperties, ReferAnotherComponent {
+        implements ComponentReferencePropertiesEnclosing, RuntimeSettingProvider {
 
     public TJDBCRowProperties(String name) {
         super(name);
@@ -189,21 +187,6 @@ public class TJDBCRowProperties extends FixedConnectorsComponentProperties
         refreshLayout(getForm(Form.ADVANCED));
     }
 
-    @Override
-    public JDBCConnectionModule getJDBCConnectionModule() {
-        return connection;
-    }
-
-    @Override
-    public String getReferencedComponentId() {
-        return referencedComponent.componentInstanceId.getValue();
-    }
-
-    @Override
-    public ComponentProperties getReferencedComponentProperties() {
-        return referencedComponent.componentProperties;
-    }
-
     public void updateOutputSchemas() {
         Schema inputSchema = main.schema.getValue();
 
@@ -223,33 +206,9 @@ public class TJDBCRowProperties extends FixedConnectorsComponentProperties
         field.addProp(SchemaConstants.TALEND_COLUMN_DB_LENGTH, "255");
         additionalRejectFields.add(field);
 
-        Schema rejectSchema = newSchema(inputSchema, "rejectOutput", additionalRejectFields);
+        Schema rejectSchema = CommonUtils.newSchema(inputSchema, "rejectOutput", additionalRejectFields);
 
         schemaReject.schema.setValue(rejectSchema);
-    }
-
-    private Schema newSchema(Schema metadataSchema, String newSchemaName, List<Schema.Field> moreFields) {
-        Schema newSchema = Schema.createRecord(newSchemaName, metadataSchema.getDoc(), metadataSchema.getNamespace(),
-                metadataSchema.isError());
-
-        List<Schema.Field> copyFieldList = new ArrayList<>();
-        for (Schema.Field se : metadataSchema.getFields()) {
-            Schema.Field field = new Schema.Field(se.name(), se.schema(), se.doc(), se.defaultVal(), se.order());
-            field.getObjectProps().putAll(se.getObjectProps());
-            for (Map.Entry<String, Object> entry : se.getObjectProps().entrySet()) {
-                field.addProp(entry.getKey(), entry.getValue());
-            }
-            copyFieldList.add(field);
-        }
-
-        copyFieldList.addAll(moreFields);
-
-        newSchema.setFields(copyFieldList);
-        for (Map.Entry<String, Object> entry : metadataSchema.getObjectProps().entrySet()) {
-            newSchema.addProp(entry.getKey(), entry.getValue());
-        }
-
-        return newSchema;
     }
 
     @Override
@@ -292,12 +251,37 @@ public class TJDBCRowProperties extends FixedConnectorsComponentProperties
     }
 
     private List<String> getFieldNames(Property<Schema> schema) {
-        Schema s = (Schema) schema.getValue();
+        Schema s = schema.getValue();
         List<String> fieldNames = new ArrayList<>();
         for (Schema.Field f : s.getFields()) {
             fieldNames.add(f.name());
         }
         return fieldNames;
+    }
+
+    @Override
+    public AllSetting getRuntimeSetting() {
+        AllSetting setting = new AllSetting();
+
+        setting.setReferencedComponentId(referencedComponent.componentInstanceId.getValue());
+        setting.setReferencedComponentProperties(referencedComponent.componentProperties);
+
+        CommonUtils.setCommonConnectionInfo(setting, connection);
+
+        setting.setTablename(this.tableSelection.tablename.getValue());
+        setting.setSql(this.sql.getValue());
+        setting.setDieOnError(this.dieOnError.getValue());
+
+        setting.setCommitEvery(this.commitEvery.getValue());
+
+        setting.setPropagateQueryResultSet(this.propagateQueryResultSet.getValue());
+        setting.setUseColumn(this.useColumn.getValue());
+        setting.setUsePreparedStatement(this.usePreparedStatement.getValue());
+        setting.setIndexs(this.preparedStatementTable.indexs.getValue());
+        setting.setTypes(this.preparedStatementTable.types.getValue());
+        setting.setValues(this.preparedStatementTable.values.getValue());
+
+        return setting;
     }
 
 }

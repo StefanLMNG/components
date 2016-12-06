@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -30,14 +30,14 @@ public class JDBCConnectionWizard extends ComponentWizard {
         addForm(connectionProperties.getForm(Form.MAIN));
 
         moduleProperties = new JDBCModuleListWizardProperties("moduleList").setName(connectionProperties.name.getValue())
-                .setConnection(connectionProperties.getJDBCConnectionModule()).setRepositoryLocation(getRepositoryLocation());
+                .setConnection(connectionProperties.connection).setRepositoryLocation(getRepositoryLocation());
         moduleProperties.init();
         addForm(moduleProperties.getForm(Form.MAIN));
     }
 
     public void setupProperties(JDBCConnectionWizardProperties connectionProperties) {
         this.connectionProperties.copyValuesFrom(connectionProperties);
-        this.moduleProperties.setConnection(connectionProperties.getJDBCConnectionModule());
+        this.moduleProperties.setConnection(connectionProperties.connection);
     }
 
 }

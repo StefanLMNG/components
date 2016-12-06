@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.talend.components.api.exception.ComponentException;
 import org.talend.components.api.properties.ComponentProperties;
-import org.talend.components.jdbc.JDBCConnectionInfoProperties;
+import org.talend.components.jdbc.RuntimeSettingProvider;
 import org.talend.components.jdbc.runtime.JDBCSourceOrSink;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.properties.PropertiesImpl;
@@ -28,11 +28,15 @@ import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.presentation.Widget;
 import org.talend.daikon.properties.property.StringProperty;
 
+/**
+ * common database table selection properties
+ *
+ */
 public class JDBCTableSelectionModule extends PropertiesImpl {
 
     public StringProperty tablename = newString("tablename");
 
-    private JDBCConnectionInfoProperties connection = null;
+    private RuntimeSettingProvider connection = null;
 
     public JDBCTableSelectionModule(String name) {
         super(name);
@@ -64,7 +68,7 @@ public class JDBCTableSelectionModule extends PropertiesImpl {
         return ValidationResult.OK;
     }
 
-    public void setConnection(JDBCConnectionInfoProperties connection) {
+    public void setConnection(RuntimeSettingProvider connection) {
         this.connection = connection;
     }
 

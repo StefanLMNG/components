@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.salesforce.runtime;
 
 import java.io.*;
@@ -414,32 +426,6 @@ public class SalesforceBulkRuntime {
         }
         batchInfoList.add(info);
         closeJob();
-    }
-
-    public InputStream getQueryResultStream(String resultId) throws AsyncApiException, IOException, ConnectionException {
-        return getQueryResultStream(job.getId(), batchInfoList.get(0).getId(), resultId);
-    }
-
-    public List<Map<String, String>> getQueryResult(String resultId) throws AsyncApiException, IOException, ConnectionException {
-        // batchInfoList was populated when batches were created and submitted
-        List<Map<String, String>> resultInfoList = new ArrayList<Map<String, String>>();
-        Map<String, String> resultInfo;
-        baseFileReader = new com.csvreader.CsvReader(new java.io.BufferedReader(new java.io.InputStreamReader(
-                getQueryResultStream(job.getId(), batchInfoList.get(0).getId(), resultId), FILE_ENCODING)), ',');
-
-        if (baseFileReader.readRecord()) {
-            baseFileHeader = Arrays.asList(baseFileReader.getValues());
-        }
-        baseFileHeaderSize = baseFileHeader.size();
-        List<String> row = null;
-        while (baseFileReader.readRecord()) {
-            resultInfo = new HashMap<String, String>();
-            for (int i = 0; i < baseFileHeaderSize; i++) {
-                resultInfo.put(baseFileHeader.get(i), row.get(i));
-            }
-            resultInfoList.add(resultInfo);
-        }
-        return resultInfoList;
     }
 
     public BulkResultSet getQueryResultSet(String resultId) throws AsyncApiException, IOException, ConnectionException {

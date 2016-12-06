@@ -17,13 +17,17 @@ import org.talend.components.api.component.runtime.WriteOperation;
 import org.talend.components.api.container.RuntimeContainer;
 import org.talend.daikon.properties.ValidationResult;
 
+/**
+ * JDBC row runtime execution object for output action
+ *
+ */
 public class JDBCRowSink extends JDBCRowSourceOrSink implements Sink {
 
     private static final long serialVersionUID = 3228265006313531905L;
 
     @Override
     public WriteOperation<?> createWriteOperation() {
-        return new JDBCWriteOperation(this);
+        return new JDBCRowWriteOperation(this);
     }
 
     @Override

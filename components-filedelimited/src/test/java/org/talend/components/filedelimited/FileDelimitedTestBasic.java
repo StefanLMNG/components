@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.filedelimited;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +39,7 @@ import org.talend.components.api.container.RuntimeContainer;
 import org.talend.components.api.exception.DataRejectException;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.api.service.ComponentService;
-import org.talend.components.api.service.common.ComponentRegistry;
+import org.talend.components.api.service.common.DefinitionRegistry;
 import org.talend.components.api.service.common.ComponentServiceImpl;
 import org.talend.components.api.test.AbstractComponentTest;
 import org.talend.components.api.test.ComponentTestUtils;
@@ -77,7 +89,7 @@ public class FileDelimitedTestBasic extends AbstractComponentTest {
     @Override
     public ComponentService getComponentService() {
         if (componentService == null) {
-            ComponentRegistry testComponentRegistry = new ComponentRegistry();
+            DefinitionRegistry testComponentRegistry = new DefinitionRegistry();
 
             testComponentRegistry.registerComponentFamilyDefinition(new FileDelimitedFamilyDefinition());
             componentService = new ComponentServiceImpl(testComponentRegistry);
@@ -197,15 +209,15 @@ public class FileDelimitedTestBasic extends AbstractComponentTest {
         sink.initialize(adaptor, props);
         sink.validate(adaptor);
         FileDelimitedWriteOperation writeOperation = sink.createWriteOperation();
-        FileDelimitedWriter saleforceWriter = writeOperation.createWriter(adaptor);
+        FileDelimitedWriter delimitedWriter = writeOperation.createWriter(adaptor);
         Result result;
-        saleforceWriter.open("foo");
+        delimitedWriter.open("foo");
         try {
             for (IndexedRecord row : outputRows) {
-                saleforceWriter.write(row);
+                delimitedWriter.write(row);
             }
         } finally {
-            result = saleforceWriter.close();
+            result = delimitedWriter.close();
         }
         return result;
     }

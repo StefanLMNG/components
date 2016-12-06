@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.jdbc.runtime.type;
 
 import java.math.BigDecimal;
@@ -7,8 +19,21 @@ import java.sql.SQLException;
 import org.apache.avro.Schema;
 import org.talend.daikon.avro.AvroUtils;
 
+/**
+ * the mapping tool for JDBC writer
+ *
+ */
 public class JDBCMapping {
 
+    /**
+     * fill the prepared statement object
+     * 
+     * @param index
+     * @param statement
+     * @param f
+     * @param value
+     * @throws SQLException
+     */
     public static void setValue(int index, final PreparedStatement statement, final Schema.Field f, final Object value)
             throws SQLException {
         Schema basicSchema = AvroUtils.unwrapIfNullable(f.schema());

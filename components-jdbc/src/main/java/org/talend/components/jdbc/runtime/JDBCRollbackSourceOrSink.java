@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -21,19 +21,24 @@ import org.talend.components.api.component.runtime.SourceOrSink;
 import org.talend.components.api.container.RuntimeContainer;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.jdbc.ComponentConstants;
-import org.talend.components.jdbc.tjdbcrollback.TJDBCRollbackProperties;
+import org.talend.components.jdbc.RuntimeSettingProvider;
+import org.talend.components.jdbc.runtime.setting.AllSetting;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.properties.ValidationResult;
 
+/**
+ * JDBC roll back runtime execution object
+ *
+ */
 public class JDBCRollbackSourceOrSink implements SourceOrSink {
 
     private static final long serialVersionUID = -1301033726721076440L;
 
-    public TJDBCRollbackProperties properties;
+    public ComponentProperties properties;
 
     @Override
     public ValidationResult initialize(RuntimeContainer runtime, ComponentProperties properties) {
-        this.properties = (TJDBCRollbackProperties) properties;
+        this.properties = properties;
         return ValidationResult.OK;
     }
 
@@ -68,14 +73,15 @@ public class JDBCRollbackSourceOrSink implements SourceOrSink {
     }
 
     public void doRollbackAction(RuntimeContainer runtime) throws SQLException {
-        String refComponentId = properties.getReferencedComponentId();
+        String refComponentId = ((RuntimeSettingProvider) properties).getRuntimeSetting().getReferencedComponentId();
         if (refComponentId != null && runtime != null) {
             java.sql.Connection conn = (java.sql.Connection) runtime.getComponentData(refComponentId,
                     ComponentConstants.CONNECTION_KEY);
             if (conn != null && !conn.isClosed()) {
                 conn.rollback();
 
-                if (properties.closeConnection.getValue()) {
+                AllSetting setting = ((RuntimeSettingProvider) properties).getRuntimeSetting();
+                if (setting.getCloseConnection()) {
                     conn.close();
                 }
             }

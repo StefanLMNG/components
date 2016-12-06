@@ -1,6 +1,18 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.api;
 
-import org.talend.daikon.NamedThing;
+import org.talend.daikon.definition.Definition;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.runtime.RuntimeInfo;
 
@@ -32,20 +44,15 @@ import org.talend.daikon.runtime.RuntimeInfo;
  *
  * @param <PropT> The type of properties that the specific definition works with.
  * @param <RuntimeInfoContextT> Creating a runtime object for this class may require additional information than just
- * the properties.
+ *            the properties.
  */
-public interface RuntimableDefinition<PropT extends Properties, RuntimeInfoContextT> extends NamedThing {
-
-    /**
-     * @return An empty instance of the properties for an instance of this definition.
-     */
-    PropT createProperties();
+public interface RuntimableDefinition<P extends Properties, RuntimeInfoContextT> extends Definition<P> {
 
     /**
      * @param properties an instance of the definition.
      * @param ctx a helper context containing additional information outside of the instance, if any.
      * @return an object that can be used to create a runtime instance of this definition, configured by the properties
-     * of the instance and the context. This can be null if no runtime applies.
+     *         of the instance and the context. This can be null if no runtime applies.
      */
-    RuntimeInfo getRuntimeInfo(PropT properties, RuntimeInfoContextT ctx);
+    RuntimeInfo getRuntimeInfo(P properties, RuntimeInfoContextT ctx);
 }

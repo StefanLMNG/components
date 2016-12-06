@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -32,8 +32,10 @@ import org.talend.components.api.service.ComponentService;
 import org.talend.components.api.wizard.ComponentWizardDefinition;
 import org.talend.components.api.wizard.WizardImageType;
 import org.talend.daikon.properties.Properties;
+import org.talend.daikon.properties.PropertiesImpl;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.test.PropertiesTestUtils;
+import org.talend.daikon.runtime.RuntimeUtil;
 
 // import static org.hamcrest.Matchers.*;
 
@@ -53,7 +55,8 @@ public class ComponentTestUtils {
     static public void testAlli18n(ComponentService componentService, ErrorCollector errorCollector) {
         Set<ComponentDefinition> allComponents = componentService.getAllComponents();
         for (ComponentDefinition cd : allComponents) {
-            ComponentProperties props = cd.createProperties();
+            ComponentProperties props = (ComponentProperties) PropertiesImpl.createNewInstance(cd.getPropertiesClass(), "root")
+                    .init();
             // check all properties
             if (props != null) {
                 checkAllI18N(props, errorCollector);
@@ -61,7 +64,9 @@ public class ComponentTestUtils {
                 System.out.println("No properties to check fo I18n for :" + cd.getName());
             }
             // check component definition title
-            errorCollector.checkThat("missing I18n property :" + cd.getTitle(), cd.getTitle().contains("component."), is(false));
+            errorCollector.checkThat(
+                    "missing I18n property [" + cd.getTitle() + "] for definition [" + cd.getClass().getName() + "]",
+                    cd.getTitle().contains("component."), is(false));
             // check return properties i18n
             checkAllPropertyI18n(cd.getReturnProperties(), cd, errorCollector);
         }
@@ -119,24 +124,10 @@ public class ComponentTestUtils {
 
     /**
      * this will setup the mvn URL handler if not already setup and use any maven local repo if it exists
+     * @Deprecated use {@link RuntimeUtil#registerMavenUrlHandler()}
      */
     public static void setupMavenUrlHandler() {
-        try {
-            new URL("mvn:foo/bar");
-        } catch (MalformedURLException e) {// setup the mvn protocla handler if not already setup
-            URL.setURLStreamHandlerFactory(new URLStreamHandlerFactory() {
-
-                @Override
-                public URLStreamHandler createURLStreamHandler(String protocol) {
-                    if (ServiceConstants.PROTOCOL.equals(protocol)) {
-                        return new Handler();
-                    } else {
-                        return null;
-                    }
-                }
-            });
-        }
-
+        RuntimeUtil.registerMavenUrlHandler();
     }
 
 }

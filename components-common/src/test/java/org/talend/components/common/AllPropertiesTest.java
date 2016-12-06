@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -39,6 +39,7 @@ public class AllPropertiesTest {
         ComponentTestUtils.checkAllI18N(new ProxyProperties(null).init(), errorCollector);
         ComponentTestUtils.checkAllI18N(new SchemaProperties(null).init(), errorCollector);
         ComponentTestUtils.checkAllI18N(new UserPasswordProperties(null).init(), errorCollector);
+        ComponentTestUtils.checkAllI18N(new SslProperties(null).init(), errorCollector);
     }
 
 }

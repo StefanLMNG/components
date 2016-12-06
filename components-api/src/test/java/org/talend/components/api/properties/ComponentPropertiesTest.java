@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
+import org.talend.daikon.serialize.SerializerDeserializer;
 
 public class ComponentPropertiesTest {
 
@@ -75,6 +76,7 @@ public class ComponentPropertiesTest {
     @Test
     public void testUpdateNestedProperties() throws IllegalAccessException {
         NestedNestedProperties nestedProperties = new NestedNestedProperties("bar");
+        System.out.println(SerializerDeserializer.toSerializedPersistent(nestedProperties));
         nestedProperties.value.setValue("XYZ");
         assertNull(foo.two.four.value.getValue());
         ComponentProperties oldProp = foo.two.four;

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -17,23 +17,21 @@ import static org.talend.daikon.properties.presentation.Widget.widget;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.avro.Schema;
 import org.talend.components.api.component.Connector;
 import org.talend.components.api.component.PropertyPathConnector;
-import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.api.properties.ComponentReferenceProperties;
 import org.talend.components.api.properties.ComponentReferencePropertiesEnclosing;
 import org.talend.components.common.FixedConnectorsComponentProperties;
 import org.talend.components.common.SchemaProperties;
 import org.talend.components.jdbc.CommonUtils;
-import org.talend.components.jdbc.JDBCConnectionInfoProperties;
-import org.talend.components.jdbc.ReferAnotherComponent;
+import org.talend.components.jdbc.RuntimeSettingProvider;
 import org.talend.components.jdbc.module.JDBCConnectionModule;
 import org.talend.components.jdbc.module.JDBCTableSelectionModule;
 import org.talend.components.jdbc.runtime.JDBCSourceOrSink;
+import org.talend.components.jdbc.runtime.setting.AllSetting;
 import org.talend.components.jdbc.tjdbcconnection.TJDBCConnectionDefinition;
 import org.talend.daikon.avro.SchemaConstants;
 import org.talend.daikon.properties.PresentationItem;
@@ -44,7 +42,7 @@ import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 
 public class TJDBCOutputProperties extends FixedConnectorsComponentProperties
-        implements ComponentReferencePropertiesEnclosing, JDBCConnectionInfoProperties, ReferAnotherComponent {
+        implements ComponentReferencePropertiesEnclosing, RuntimeSettingProvider {
 
     public TJDBCOutputProperties(String name) {
         super(name);
@@ -128,33 +126,9 @@ public class TJDBCOutputProperties extends FixedConnectorsComponentProperties
         field.addProp(SchemaConstants.TALEND_COLUMN_DB_LENGTH, "255");
         additionalRejectFields.add(field);
 
-        Schema rejectSchema = newSchema(inputSchema, "rejectOutput", additionalRejectFields);
+        Schema rejectSchema = CommonUtils.newSchema(inputSchema, "rejectOutput", additionalRejectFields);
 
         schemaReject.schema.setValue(rejectSchema);
-    }
-
-    private Schema newSchema(Schema metadataSchema, String newSchemaName, List<Schema.Field> moreFields) {
-        Schema newSchema = Schema.createRecord(newSchemaName, metadataSchema.getDoc(), metadataSchema.getNamespace(),
-                metadataSchema.isError());
-
-        List<Schema.Field> copyFieldList = new ArrayList<>();
-        for (Schema.Field se : metadataSchema.getFields()) {
-            Schema.Field field = new Schema.Field(se.name(), se.schema(), se.doc(), se.defaultVal(), se.order());
-            field.getObjectProps().putAll(se.getObjectProps());
-            for (Map.Entry<String, Object> entry : se.getObjectProps().entrySet()) {
-                field.addProp(entry.getKey(), entry.getValue());
-            }
-            copyFieldList.add(field);
-        }
-
-        copyFieldList.addAll(moreFields);
-
-        newSchema.setFields(copyFieldList);
-        for (Map.Entry<String, Object> entry : metadataSchema.getObjectProps().entrySet()) {
-            newSchema.addProp(entry.getKey(), entry.getValue());
-        }
-
-        return newSchema;
     }
 
     @Override
@@ -243,16 +217,6 @@ public class TJDBCOutputProperties extends FixedConnectorsComponentProperties
     }
 
     @Override
-    public JDBCConnectionModule getJDBCConnectionModule() {
-        return connection;
-    }
-
-    @Override
-    public String getReferencedComponentId() {
-        return referencedComponent.componentInstanceId.getValue();
-    }
-
-    @Override
     protected Set<PropertyPathConnector> getAllSchemaPropertiesConnectors(boolean isOutputConnection) {
         HashSet<PropertyPathConnector> connectors = new HashSet<>();
         if (isOutputConnection) {
@@ -279,8 +243,25 @@ public class TJDBCOutputProperties extends FixedConnectorsComponentProperties
     }
 
     @Override
-    public ComponentProperties getReferencedComponentProperties() {
-        return referencedComponent.componentProperties;
+    public AllSetting getRuntimeSetting() {
+        AllSetting setting = new AllSetting();
+
+        setting.setReferencedComponentId(referencedComponent.componentInstanceId.getValue());
+        setting.setReferencedComponentProperties(referencedComponent.componentProperties);
+
+        CommonUtils.setCommonConnectionInfo(setting, connection);
+
+        setting.setTablename(this.tableSelection.tablename.getValue());
+        setting.setDataAction(this.dataAction.getValue());
+        setting.setClearDataInTable(this.clearDataInTable.getValue());
+        setting.setDieOnError(this.dieOnError.getValue());
+
+        setting.setCommitEvery(this.commitEvery.getValue());
+        setting.setDebug(this.debug.getValue());
+        setting.setUseBatch(this.useBatch.getValue());
+        setting.setBatchSize(this.batchSize.getValue());
+
+        return setting;
     }
 
 }

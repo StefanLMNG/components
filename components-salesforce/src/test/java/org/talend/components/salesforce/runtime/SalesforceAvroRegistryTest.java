@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.salesforce.runtime;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -12,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.avro.Schema;
+import org.apache.avro.Schema.Type;
 import org.junit.Test;
 import org.talend.components.salesforce.runtime.SalesforceAvroRegistry;
 import org.talend.daikon.avro.AvroUtils;
@@ -175,5 +188,21 @@ public class SalesforceAvroRegistryTest {
         assertThat(s.getType(), is(Schema.Type.STRING));
         assertThat(s.getProp(SchemaConstants.JAVA_CLASS_FLAG), is(BigDecimal.class.getCanonicalName()));
         // assertThat(s.getLogicalType(), is((LogicalType) LogicalTypes.decimal(8, 5)));
+    }
+    
+    /**
+     * Tests {@link SalesforceAvroRegistry#inferSchema(Object)} returns {@link Schema} of type {@link Type#DOUBLE},
+     * when percent Field is passed
+     * 
+     * This test-case related to https://jira.talendforge.org/browse/TDI-37479 bug
+     */
+    @Test
+    public void testInferSchemaFieldPercent() {
+        Field percentField = new Field();
+        percentField.setType(FieldType.percent);
+
+        Schema schema = sRegistry.inferSchema(percentField);
+        Schema.Type actualType = schema.getType();
+        assertThat(actualType, is(Schema.Type.DOUBLE));
     }
 }

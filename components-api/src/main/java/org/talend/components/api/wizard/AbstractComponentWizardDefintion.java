@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -35,8 +35,20 @@ public abstract class AbstractComponentWizardDefintion extends AbstractTopLevelD
         return getI18nMessage(getI18nPrefix() + getName() + I18N_MENU_NAME_SUFFIX);
     }
 
+    @Override
     public boolean isTopLevel() {
         return false;
+    }
+
+    @Override
+    public String getImagePath() {
+        return getPngImagePath(WizardImageType.TREE_ICON_16X16);
+    }
+
+    @Override
+    public Class getPropertiesClass() {
+        // this should eventually be used to create the Properties class associated with the wizard.
+        return null;
     }
 
 }

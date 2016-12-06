@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.talend.components</groupId>
 		<artifactId>components-parent</artifactId>
-		<version>0.15.0-SNAPSHOT</version>
+		<version>0.16.0-SNAPSHOT</version>
 		<relativePath>../../../components-parent/pom.xml</relativePath>
 	</parent>
 
@@ -17,7 +17,7 @@
 		<repository>
 			<id>talend_nexus</id>
 			<name>snapshots</name>
-			<url>${talend_snapshots}</url>
+			<url>http://newbuild.talend.com:8081/nexus/content/repositories/TalendOpenSourceSnapshot/</url>
 		</repository>
 		<repository>
 			<id>releases</id>
@@ -26,7 +26,7 @@
 	</repositories>
 
 	<properties>
-		<talend_snapshots>http://newbuild.talend.com:8081/nexus/content/repositories/TalendOpenSourceSnapshot/</talend_snapshots>
+		
 	</properties>
 
 	<dependencies>
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-api</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>biz.aQute.bnd</groupId>
@@ -51,19 +51,13 @@
 		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-common</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.talend.components</groupId>
-			<artifactId>components-api-runtime-service</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-		</dependency>
-
 		<!-- Jar containing Test utils methods -->
 		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-api</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
@@ -71,26 +65,20 @@
 		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-api-service-rest</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
+            <classifier>lib</classifier>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-api-service-rest</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.talend.components</groupId>
-			<artifactId>components-api-runtime-service</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-			<classifier>tests</classifier>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -102,7 +90,7 @@
 		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-osgitest</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

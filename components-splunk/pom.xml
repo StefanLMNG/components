@@ -6,14 +6,14 @@
 	<parent>
 		<groupId>org.talend.components</groupId>
 		<artifactId>components-parent</artifactId>
-		<version>0.15.0-SNAPSHOT</version>
+		<version>0.16.0-SNAPSHOT</version>
 		<relativePath>../components-parent/pom.xml</relativePath>
 	</parent>
 
 	<name>Components - tSplunkEventCollector</name>
 	<groupId>org.talend.components</groupId>
 	<artifactId>components-splunk</artifactId>
-	<version>0.15.0-SNAPSHOT</version>
+	<version>0.16.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<dependencies>
 
@@ -25,30 +25,25 @@
 		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-api</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Shared component properties such as Use/Password or Schema -->
 		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-common</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Jar containing Test utils methods -->
 		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-api</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-
+		
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -59,25 +54,21 @@
         <dependency>
             <groupId>org.talend.components</groupId>
             <artifactId>components-api-service-rest</artifactId>
-            <version>0.15.0-SNAPSHOT</version>
+            <version>0.16.0-SNAPSHOT</version>
+            <classifier>lib</classifier>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.talend.components</groupId>
             <artifactId>components-api-service-rest</artifactId>
-            <version>0.15.0-SNAPSHOT</version>
+            <version>0.16.0-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.talend.components</groupId>
 			<artifactId>components-api-service-rest</artifactId>
-			<version>0.15.0-SNAPSHOT</version>
+			<version>0.16.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -167,7 +158,7 @@
 							<goal>start</goal>
 						</goals>
 						<configuration>
-							<skip>${skipITs}</skip>
+						    <skip>${really.skip.tests}</skip>
 							<images>
 								<image>
 									<name>dchmyga/splunk</name>
@@ -197,7 +188,7 @@
 							<goal>stop</goal>
 						</goals>
 						<configuration>
-							<skip>${skipITs}</skip>
+                            <skip>${really.skip.tests}</skip>
 						</configuration>
 					</execution>
 				</executions>

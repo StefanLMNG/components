@@ -1,4 +1,20 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.filedelimited.runtime;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,10 +36,6 @@ import org.talend.components.filedelimited.FileDelimitedTestBasic;
 import org.talend.components.filedelimited.tfileoutputdelimited.TFileOutputDelimitedProperties;
 import org.talend.daikon.avro.AvroUtils;
 import org.talend.daikon.avro.SchemaConstants;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class FileDelimitedWriterTestIT extends FileDelimitedTestBasic {
 
@@ -216,6 +228,29 @@ public class FileDelimitedWriterTestIT extends FileDelimitedTestBasic {
         // properties.fileName.setValue(new FileOutputStream(new File(outputFile)));
         properties.compress.setValue(true);
         basicOutputTest(properties, refFile);
+
+    }
+
+    @Test
+    public void testOutputRowMode() throws Throwable {
+        String resources = getResourceFolder();
+        String outputFile = resources + "/out/test_output_row_mode.csv";
+        LOGGER.debug("Test file path: " + outputFile);
+
+        // Delimited mode
+        TFileOutputDelimitedProperties properties = createOutputProperties(outputFile, false);
+        properties.rowMode.setValue(true);
+        properties.targetIsStream.setValue(false); // Target is not stream
+        basicOutputTest(properties, resources + "/ref_test_output_delimited.csv");
+        properties.targetIsStream.setValue(true); // Target is stream
+        basicOutputTest(properties, resources + "/ref_test_output_delimited.csv");
+        // CSV mode
+        properties = createOutputProperties(outputFile, true);
+        properties.rowMode.setValue(true);
+        properties.targetIsStream.setValue(false); // Target is not stream
+        basicOutputTest(properties, resources + "/ref_test_output_csv.csv");
+        properties.targetIsStream.setValue(true); // Target is stream
+        basicOutputTest(properties, resources + "/ref_test_output_csv.csv");
 
     }
 

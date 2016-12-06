@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.jdbc.runtime;
 
 import java.io.IOException;
@@ -20,24 +32,42 @@ import org.apache.avro.Schema;
 import org.talend.components.api.component.runtime.DependenciesReader;
 import org.talend.components.api.exception.ComponentException;
 import org.talend.components.api.exception.error.ComponentsApiErrorCode;
-import org.talend.components.jdbc.JDBCConnectionInfoProperties;
-import org.talend.components.jdbc.module.JDBCConnectionModule;
+import org.talend.components.jdbc.RuntimeSettingProvider;
 import org.talend.components.jdbc.module.PreparedStatementTable;
+import org.talend.components.jdbc.runtime.setting.AllSetting;
 import org.talend.daikon.avro.SchemaConstants;
 import org.talend.daikon.exception.ExceptionContext;
 import org.talend.daikon.exception.error.CommonErrorCodes;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.runtime.RuntimeInfo;
 
+/**
+ * provide some tools for JDBC runtime
+ *
+ */
 public class JDBCTemplate {
 
-    public static Connection createConnection(JDBCConnectionModule properties) throws ClassNotFoundException, SQLException {
-        java.lang.Class.forName(properties.driverClass.getValue());
-        Connection conn = java.sql.DriverManager.getConnection(properties.jdbcUrl.getValue(),
-                properties.userPassword.userId.getValue(), properties.userPassword.password.getValue());
+    /**
+     * get the JDBC connection object by the runtime setting
+     * 
+     * @param setting
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
+    public static Connection createConnection(AllSetting setting) throws ClassNotFoundException, SQLException {
+        java.lang.Class.forName(setting.getDriverClass());
+        Connection conn = java.sql.DriverManager.getConnection(setting.getJdbcUrl(), setting.getUsername(),
+                setting.getPassword());
         return conn;
     }
 
+    /**
+     * get key columns from the fields
+     * 
+     * @param allFields
+     * @return
+     */
     public static List<Schema.Field> getKeyColumns(List<Schema.Field> allFields) {
         List<Schema.Field> result = new ArrayList<Schema.Field>();
 
@@ -51,6 +81,12 @@ public class JDBCTemplate {
         return result;
     }
 
+    /**
+     * get value columns from the fields
+     * 
+     * @param allFields
+     * @return
+     */
     public static List<Schema.Field> getValueColumns(List<Schema.Field> allFields) {
         List<Schema.Field> result = new ArrayList<Schema.Field>();
 
@@ -65,6 +101,15 @@ public class JDBCTemplate {
         return result;
     }
 
+    /**
+     * create a common RuntimeInfo object which will provide runtime execution entrance class name and the MAVEN paths of the
+     * necessary dependencies, which will be callback in the execution platform.
+     * 
+     * @param classLoader
+     * @param properties
+     * @param runtimeClassName
+     * @return
+     */
     public static RuntimeInfo createCommonRuntime(final ClassLoader classLoader, final Properties properties,
             final String runtimeClassName) {
         return new RuntimeInfo() {
@@ -95,8 +140,8 @@ public class JDBCTemplate {
                     }
 
                     if (properties != null) {
-                        final JDBCConnectionInfoProperties props = (JDBCConnectionInfoProperties) properties;
-                        List<String> drivers = props.getJDBCConnectionModule().driverTable.drivers.getValue();
+                        final RuntimeSettingProvider props = (RuntimeSettingProvider) properties;
+                        List<String> drivers = props.getRuntimeSetting().getDriverPaths();
                         if (drivers != null) {
                             for (String driver : drivers) {
                                 result.add(new URL(removeQuote(driver)));
@@ -121,11 +166,17 @@ public class JDBCTemplate {
         return content;
     }
 
-    public static void setPreparedStatement(PreparedStatement pstmt, PreparedStatementTable table) throws SQLException {
-        List<Integer> indexs = table.indexs.getValue();
-        List<String> types = table.types.getValue();
-        List<Object> values = table.values.getValue();
-
+    /**
+     * fill the prepared statement object
+     * 
+     * @param pstmt
+     * @param indexs
+     * @param types
+     * @param values
+     * @throws SQLException
+     */
+    public static void setPreparedStatement(final PreparedStatement pstmt, final List<Integer> indexs, final List<String> types,
+            final List<Object> values) throws SQLException {
         // TODO : adjust it
         for (int i = 0; i < indexs.size(); i++) {
             Integer index = indexs.get(i);

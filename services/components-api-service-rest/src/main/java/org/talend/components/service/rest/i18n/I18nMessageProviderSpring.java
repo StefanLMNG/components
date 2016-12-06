@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -24,11 +24,12 @@ import org.talend.daikon.i18n.LocaleProvider;
 @Component
 public class I18nMessageProviderSpring extends I18nMessageProvider {
 
+    @Inject
+    LocaleProvider localeProvider;
+
     @Override
     protected LocaleProvider getLocaleProvider() {
         return localeProvider;
     }
 
-    @Inject
-    LocaleProvider localeProvider;
 }

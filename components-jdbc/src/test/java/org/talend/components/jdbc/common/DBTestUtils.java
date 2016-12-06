@@ -1,11 +1,25 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.jdbc.common;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +30,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.avro.Schema;
+import org.apache.avro.Schema.Field;
 import org.apache.avro.SchemaBuilder;
 import org.apache.avro.SchemaBuilder.FieldAssembler;
 import org.apache.avro.generic.GenericData;
@@ -24,18 +39,23 @@ import org.junit.Assert;
 import org.talend.components.api.component.runtime.Reader;
 import org.talend.components.api.component.runtime.WriteOperation;
 import org.talend.components.api.container.RuntimeContainer;
-import org.talend.components.jdbc.module.JDBCConnectionModule;
+import org.talend.components.api.properties.ComponentProperties;
+import org.talend.components.common.avro.JDBCAvroRegistry;
 import org.talend.components.jdbc.runtime.JDBCSink;
 import org.talend.components.jdbc.runtime.JDBCSource;
 import org.talend.components.jdbc.runtime.JDBCTemplate;
-import org.talend.components.jdbc.runtime.type.JDBCAvroRegistry;
+import org.talend.components.jdbc.runtime.setting.AllSetting;
 import org.talend.components.jdbc.runtime.writer.JDBCOutputWriter;
 import org.talend.components.jdbc.runtime.writer.JDBCRowWriter;
+import org.talend.components.jdbc.tjdbcconnection.TJDBCConnectionDefinition;
+import org.talend.components.jdbc.tjdbcconnection.TJDBCConnectionProperties;
 import org.talend.components.jdbc.tjdbcinput.TJDBCInputDefinition;
 import org.talend.components.jdbc.tjdbcinput.TJDBCInputProperties;
 import org.talend.components.jdbc.tjdbcoutput.TJDBCOutputDefinition;
 import org.talend.components.jdbc.tjdbcoutput.TJDBCOutputProperties;
 import org.talend.components.jdbc.tjdbcoutput.TJDBCOutputProperties.DataAction;
+import org.talend.components.jdbc.tjdbcrow.TJDBCRowDefinition;
+import org.talend.components.jdbc.tjdbcrow.TJDBCRowProperties;
 import org.talend.daikon.avro.AvroUtils;
 import org.talend.daikon.avro.SchemaConstants;
 import org.talend.daikon.avro.converter.IndexedRecordConverter;
@@ -64,53 +84,49 @@ public class DBTestUtils {
          */
     }
 
-    public static void releaseResource(JDBCConnectionModule connectionInfo) throws ClassNotFoundException, SQLException {
-        try {
-            Connection conn = JDBCTemplate.createConnection(connectionInfo);
-
-            try {
-                dropTestTable(conn);
-            } catch (Exception e) {
-                // do nothing
-            } finally {
-                conn.close();
-            }
+    public static void releaseResource(AllSetting allSetting) throws ClassNotFoundException, SQLException {
+        try (Connection conn = JDBCTemplate.createConnection(allSetting)) {
+            dropTestTable(conn);
         } finally {
             shutdownDBIfNecessary();
         }
     }
 
-    public static void createTestTable(Connection conn) throws Exception {
-        Statement statement = conn.createStatement();
-        statement.execute("create table TEST (ID int, NAME varchar(8))");
-        statement.close();
+    public static void createTestTable(Connection conn) throws SQLException {
+        try (Statement statement = conn.createStatement()) {
+            statement.execute("create table TEST (ID int, NAME varchar(8))");
+        }
     }
 
-    public static void dropTestTable(Connection conn) throws Exception {
-        Statement statement = conn.createStatement();
-        statement.execute("drop table TEST");
-        statement.close();
+    public static void dropTestTable(Connection conn) throws SQLException {
+        try (Statement statement = conn.createStatement()) {
+            statement.execute("drop table TEST");
+        }
     }
 
-    public static void loadTestData(Connection conn) throws Exception {
-        PreparedStatement statement = conn.prepareStatement("insert into TEST values(?,?)");
+    public static void truncateTable(Connection conn) throws SQLException {
+        try (Statement statement = conn.createStatement()) {
+            statement.execute("delete from TEST");
+        }
+    }
 
-        statement.setInt(1, 1);
-        statement.setString(2, "wangwei");
+    public static void loadTestData(Connection conn) throws SQLException {
+        try (PreparedStatement statement = conn.prepareStatement("insert into TEST values(?,?)")) {
+            statement.setInt(1, 1);
+            statement.setString(2, "wangwei");
 
-        statement.executeUpdate();
+            statement.executeUpdate();
 
-        statement.setInt(1, 2);
-        statement.setString(2, "gaoyan");
+            statement.setInt(1, 2);
+            statement.setString(2, "gaoyan");
 
-        statement.executeUpdate();
+            statement.executeUpdate();
 
-        statement.setInt(1, 3);
-        statement.setString(2, "dabao");
+            statement.setInt(1, 3);
+            statement.setString(2, "dabao");
 
-        statement.executeUpdate();
-
-        statement.close();
+            statement.executeUpdate();
+        }
 
         if (!conn.getAutoCommit()) {
             conn.commit();
@@ -131,19 +147,17 @@ public class DBTestUtils {
         return builder.endRecord();
     }
 
-    public static void prepareTableAndData(JDBCConnectionModule connectionInfo)
-            throws ClassNotFoundException, SQLException, Exception {
-        Connection conn = JDBCTemplate.createConnection(connectionInfo);
-
-        try {
-            dropTestTable(conn);
-        } catch (Exception e) {
-            // do nothing
+    public static void createTable(AllSetting allSetting) throws Exception {
+        try (Connection conn = JDBCTemplate.createConnection(allSetting)) {
+            createTestTable(conn);
         }
-        createTestTable(conn);
-        loadTestData(conn);
+    }
 
-        conn.close();
+    public static void truncateTableAndLoadData(AllSetting allSetting) throws ClassNotFoundException, SQLException {
+        try (Connection conn = JDBCTemplate.createConnection(allSetting)) {
+            truncateTable(conn);
+            loadTestData(conn);
+        }
     }
 
     public static Schema createTestSchema2() {
@@ -161,112 +175,108 @@ public class DBTestUtils {
         return builder.endRecord();
     }
 
-    public static void prepareTableAndDataForEveryType(JDBCConnectionModule connectionInfo)
-            throws ClassNotFoundException, SQLException, Exception {
-        Connection conn = JDBCTemplate.createConnection(connectionInfo);
-
-        try {
-            dropTestTable(conn);
-        } catch (Exception e) {
-            // do nothing
+    public static void createTableForEveryType(AllSetting allSetting) throws SQLException, ClassNotFoundException {
+        try (Connection conn = JDBCTemplate.createConnection(allSetting)) {
+            createTestTableForEveryType(conn);
         }
-        createTestTableForEveryType(conn);
-        loadTestDataForEveryType(conn);
+    }
 
-        conn.close();
+    public static void truncateTableAndLoadDataForEveryType(AllSetting allSetting) throws SQLException, ClassNotFoundException {
+        try (Connection conn = JDBCTemplate.createConnection(allSetting)) {
+            truncateTable(conn);
+            loadTestDataForEveryType(conn);
+        }
     }
 
     private static void loadTestDataForEveryType(Connection conn) throws SQLException {
-        PreparedStatement statement = conn.prepareStatement("insert into TEST values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        try (PreparedStatement statement = conn.prepareStatement("insert into TEST values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+            statement.setInt(1, 1);
+            statement.setShort(2, (short) 2);
+            statement.setLong(3, 3l);
+            statement.setFloat(4, 4f);
+            statement.setDouble(5, 5d);
+            statement.setFloat(6, 6f);
+            statement.setBigDecimal(7, new BigDecimal("7.01"));
+            statement.setBigDecimal(8, new BigDecimal("8.01"));
+            statement.setBoolean(9, true);
+            statement.setString(10, "the first char value");
+            long currentTimeMillis = System.currentTimeMillis();
+            statement.setTimestamp(11, new java.sql.Timestamp(currentTimeMillis));
+            statement.setTimestamp(12, new java.sql.Timestamp(currentTimeMillis));
+            statement.setTimestamp(13, new java.sql.Timestamp(currentTimeMillis));
+            statement.setString(14, "wangwei");
+            statement.setString(15, "a long one : 1");
+            statement.executeUpdate();
 
-        statement.setInt(1, 1);
-        statement.setShort(2, (short) 2);
-        statement.setLong(3, 3l);
-        statement.setFloat(4, 4f);
-        statement.setDouble(5, 5d);
-        statement.setFloat(6, 6f);
-        statement.setBigDecimal(7, new BigDecimal("7.01"));
-        statement.setBigDecimal(8, new BigDecimal("8.01"));
-        statement.setBoolean(9, true);
-        statement.setString(10, "the first char value");
-        long currentTimeMillis = System.currentTimeMillis();
-        statement.setTimestamp(11, new java.sql.Timestamp(currentTimeMillis));
-        statement.setTimestamp(12, new java.sql.Timestamp(currentTimeMillis));
-        statement.setTimestamp(13, new java.sql.Timestamp(currentTimeMillis));
-        statement.setString(14, "wangwei");
-        statement.setString(15, "a long one : 1");
-        statement.executeUpdate();
+            statement.setInt(1, 1);
+            statement.setShort(2, (short) 2);
+            statement.setLong(3, 3l);
+            statement.setFloat(4, 4f);
+            statement.setDouble(5, 5d);
+            statement.setFloat(6, 6f);
+            statement.setBigDecimal(7, new BigDecimal("7.01"));
+            statement.setBigDecimal(8, new BigDecimal("8.01"));
+            statement.setBoolean(9, true);
+            statement.setString(10, "the second char value");
+            statement.setTimestamp(11, new java.sql.Timestamp(currentTimeMillis));
+            statement.setTimestamp(12, new java.sql.Timestamp(currentTimeMillis));
+            statement.setTimestamp(13, new java.sql.Timestamp(currentTimeMillis));
+            statement.setString(14, "gaoyan");
+            statement.setString(15, "a long one : 2");
+            statement.executeUpdate();
 
-        statement.setInt(1, 1);
-        statement.setShort(2, (short) 2);
-        statement.setLong(3, 3l);
-        statement.setFloat(4, 4f);
-        statement.setDouble(5, 5d);
-        statement.setFloat(6, 6f);
-        statement.setBigDecimal(7, new BigDecimal("7.01"));
-        statement.setBigDecimal(8, new BigDecimal("8.01"));
-        statement.setBoolean(9, true);
-        statement.setString(10, "the second char value");
-        statement.setTimestamp(11, new java.sql.Timestamp(currentTimeMillis));
-        statement.setTimestamp(12, new java.sql.Timestamp(currentTimeMillis));
-        statement.setTimestamp(13, new java.sql.Timestamp(currentTimeMillis));
-        statement.setString(14, "gaoyan");
-        statement.setString(15, "a long one : 2");
-        statement.executeUpdate();
+            statement.setInt(1, 1);
+            statement.setShort(2, (short) 2);
+            statement.setLong(3, 3l);
+            statement.setFloat(4, 4f);
+            statement.setDouble(5, 5d);
+            statement.setFloat(6, 6f);
+            statement.setBigDecimal(7, new BigDecimal("7.01"));
+            statement.setBigDecimal(8, new BigDecimal("8.01"));
+            statement.setBoolean(9, true);
+            statement.setString(10, "the third char value");
+            statement.setTimestamp(11, new java.sql.Timestamp(currentTimeMillis));
+            statement.setTimestamp(12, new java.sql.Timestamp(currentTimeMillis));
+            statement.setTimestamp(13, new java.sql.Timestamp(currentTimeMillis));
+            statement.setString(14, "dabao");
+            statement.setString(15, "a long one : 3");
+            statement.executeUpdate();
 
-        statement.setInt(1, 1);
-        statement.setShort(2, (short) 2);
-        statement.setLong(3, 3l);
-        statement.setFloat(4, 4f);
-        statement.setDouble(5, 5d);
-        statement.setFloat(6, 6f);
-        statement.setBigDecimal(7, new BigDecimal("7.01"));
-        statement.setBigDecimal(8, new BigDecimal("8.01"));
-        statement.setBoolean(9, true);
-        statement.setString(10, "the third char value");
-        statement.setTimestamp(11, new java.sql.Timestamp(currentTimeMillis));
-        statement.setTimestamp(12, new java.sql.Timestamp(currentTimeMillis));
-        statement.setTimestamp(13, new java.sql.Timestamp(currentTimeMillis));
-        statement.setString(14, "dabao");
-        statement.setString(15, "a long one : 3");
-        statement.executeUpdate();
+            // used by testing the null value
+            statement.setInt(1, 1);
+            statement.setNull(2, java.sql.Types.SMALLINT);
+            statement.setNull(3, java.sql.Types.BIGINT);
+            statement.setNull(4, java.sql.Types.FLOAT);
+            statement.setNull(5, java.sql.Types.DOUBLE);
+            statement.setNull(6, java.sql.Types.FLOAT);
+            statement.setNull(7, java.sql.Types.DECIMAL);
+            statement.setNull(8, java.sql.Types.DECIMAL);
+            statement.setNull(9, java.sql.Types.BOOLEAN);
+            statement.setNull(10, java.sql.Types.CHAR);
+            statement.setNull(11, java.sql.Types.DATE);
+            statement.setNull(12, java.sql.Types.TIME);
+            statement.setNull(13, java.sql.Types.TIMESTAMP);
+            statement.setNull(14, java.sql.Types.VARCHAR);
+            statement.setNull(15, java.sql.Types.LONGVARCHAR);
+            statement.executeUpdate();
 
-        // used by testing the null value
-        statement.setInt(1, 1);
-        statement.setNull(2, java.sql.Types.SMALLINT);
-        statement.setNull(3, java.sql.Types.BIGINT);
-        statement.setNull(4, java.sql.Types.FLOAT);
-        statement.setNull(5, java.sql.Types.DOUBLE);
-        statement.setNull(6, java.sql.Types.FLOAT);
-        statement.setNull(7, java.sql.Types.DECIMAL);
-        statement.setNull(8, java.sql.Types.DECIMAL);
-        statement.setNull(9, java.sql.Types.BOOLEAN);
-        statement.setNull(10, java.sql.Types.CHAR);
-        statement.setNull(11, java.sql.Types.DATE);
-        statement.setNull(12, java.sql.Types.TIME);
-        statement.setNull(13, java.sql.Types.TIMESTAMP);
-        statement.setNull(14, java.sql.Types.VARCHAR);
-        statement.setNull(15, java.sql.Types.LONGVARCHAR);
-        statement.executeUpdate();
-
-        statement.setNull(1, java.sql.Types.INTEGER);
-        statement.setNull(2, java.sql.Types.SMALLINT);
-        statement.setNull(3, java.sql.Types.BIGINT);
-        statement.setNull(4, java.sql.Types.FLOAT);
-        statement.setNull(5, java.sql.Types.DOUBLE);
-        statement.setNull(6, java.sql.Types.FLOAT);
-        statement.setNull(7, java.sql.Types.DECIMAL);
-        statement.setNull(8, java.sql.Types.DECIMAL);
-        statement.setNull(9, java.sql.Types.BOOLEAN);
-        statement.setNull(10, java.sql.Types.CHAR);
-        statement.setNull(11, java.sql.Types.DATE);
-        statement.setNull(12, java.sql.Types.TIME);
-        statement.setNull(13, java.sql.Types.TIMESTAMP);
-        statement.setString(14, "good luck");
-        statement.setNull(15, java.sql.Types.LONGVARCHAR);
-        statement.executeUpdate();
-
-        statement.close();
+            statement.setNull(1, java.sql.Types.INTEGER);
+            statement.setNull(2, java.sql.Types.SMALLINT);
+            statement.setNull(3, java.sql.Types.BIGINT);
+            statement.setNull(4, java.sql.Types.FLOAT);
+            statement.setNull(5, java.sql.Types.DOUBLE);
+            statement.setNull(6, java.sql.Types.FLOAT);
+            statement.setNull(7, java.sql.Types.DECIMAL);
+            statement.setNull(8, java.sql.Types.DECIMAL);
+            statement.setNull(9, java.sql.Types.BOOLEAN);
+            statement.setNull(10, java.sql.Types.CHAR);
+            statement.setNull(11, java.sql.Types.DATE);
+            statement.setNull(12, java.sql.Types.TIME);
+            statement.setNull(13, java.sql.Types.TIMESTAMP);
+            statement.setString(14, "good luck");
+            statement.setNull(15, java.sql.Types.LONGVARCHAR);
+            statement.executeUpdate();
+        }
 
         if (!conn.getAutoCommit()) {
             conn.commit();
@@ -276,10 +286,10 @@ public class DBTestUtils {
     // TODO : now we have to use the type for derby to test, should use the common one for every database or write it for every
     // database
     private static void createTestTableForEveryType(Connection conn) throws SQLException {
-        Statement statement = conn.createStatement();
-        statement.execute(
-                "CREATE TABLE TEST (C1 INT, C2 SMALLINT, C3 BIGINT, C4 REAL,C5 DOUBLE, C6 FLOAT, C7 DECIMAL(10,2), C8 NUMERIC(10,2), C9 BOOLEAN, C10 CHAR(64), C11 DATE, C12 TIME, C13 TIMESTAMP, C14 VARCHAR(64), C15 LONG VARCHAR)");
-        statement.close();
+        try (Statement statement = conn.createStatement()) {
+            statement.execute(
+                    "CREATE TABLE TEST (C1 INT, C2 SMALLINT, C3 BIGINT, C4 REAL,C5 DOUBLE, C6 FLOAT, C7 DECIMAL(10,2), C8 NUMERIC(10,2), C9 BOOLEAN, C10 CHAR(64), C11 DATE, C12 TIME, C13 TIMESTAMP, C14 VARCHAR(64), C15 LONG VARCHAR)");
+        }
     }
 
     public static Schema createTestSchema3(boolean nullableForAnyColumn) {
@@ -529,23 +539,21 @@ public class DBTestUtils {
     }
 
     @SuppressWarnings("rawtypes")
-    public static Reader createCommonJDBCInputReader(TJDBCInputDefinition definition, TJDBCInputProperties properties) {
-        return createCommonJDBCInputReader(definition, properties, null);
+    public static Reader createCommonJDBCInputReader(ComponentProperties properties) {
+        return createCommonJDBCInputReader(properties, null);
     }
 
     @SuppressWarnings("rawtypes")
-    public static Reader createCommonJDBCInputReader(TJDBCInputDefinition definition, TJDBCInputProperties properties,
-            RuntimeContainer container) {
-        JDBCSource source = createCommonJDBCSource(definition, properties, container);
+    public static Reader createCommonJDBCInputReader(ComponentProperties properties, RuntimeContainer container) {
+        JDBCSource source = createCommonJDBCSource(properties, container);
         return source.createReader(container);
     }
 
-    public static JDBCSource createCommonJDBCSource(TJDBCInputDefinition definition, TJDBCInputProperties properties) {
-        return createCommonJDBCSource(definition, properties, null);
+    public static JDBCSource createCommonJDBCSource(ComponentProperties properties) {
+        return createCommonJDBCSource(properties, null);
     }
 
-    public static JDBCSource createCommonJDBCSource(TJDBCInputDefinition definition, TJDBCInputProperties properties,
-            RuntimeContainer container) {
+    public static JDBCSource createCommonJDBCSource(ComponentProperties properties, RuntimeContainer container) {
         JDBCSource source = new JDBCSource();
         source.initialize(container, properties);
         return source;
@@ -662,4 +670,113 @@ public class DBTestUtils {
         return builder.endRecord();
     }
 
+    public static TJDBCConnectionProperties createCommonJDBCConnectionProperties(AllSetting allSetting,
+            TJDBCConnectionDefinition connectionDefinition) {
+        TJDBCConnectionProperties connectionProperties = (TJDBCConnectionProperties) connectionDefinition
+                .createRuntimeProperties();
+
+        // TODO now framework doesn't support to load the JDBC jar by the setting
+        // properties.connection.driverJar.setValue(null);
+        connectionProperties.connection.driverClass.setValue(allSetting.getDriverClass());
+        connectionProperties.connection.jdbcUrl.setValue(allSetting.getJdbcUrl());
+        connectionProperties.connection.userPassword.userId.setValue(allSetting.getUsername());
+        connectionProperties.connection.userPassword.password.setValue(allSetting.getPassword());
+        return connectionProperties;
+    }
+
+    public static TJDBCOutputProperties createCommonJDBCOutputProperties(AllSetting allSetting,
+            TJDBCOutputDefinition definition) {
+        TJDBCOutputProperties properties = (TJDBCOutputProperties) definition.createRuntimeProperties();
+
+        // TODO now framework doesn't support to load the JDBC jar by the setting
+        // properties.connection.driverJar.setValue(null);
+        properties.connection.driverClass.setValue(allSetting.getDriverClass());
+        properties.connection.jdbcUrl.setValue(allSetting.getJdbcUrl());
+        properties.connection.userPassword.userId.setValue(allSetting.getUsername());
+        properties.connection.userPassword.password.setValue(allSetting.getPassword());
+        return properties;
+    }
+
+    public static TJDBCInputProperties createCommonJDBCInputProperties(AllSetting allSetting, TJDBCInputDefinition definition) {
+        TJDBCInputProperties properties = (TJDBCInputProperties) definition.createRuntimeProperties();
+
+        // TODO now framework doesn't support to load the JDBC jar by the setting
+        // properties.connection.driverJar.setValue(null);
+        properties.connection.driverClass.setValue(allSetting.getDriverClass());
+        properties.connection.jdbcUrl.setValue(allSetting.getJdbcUrl());
+        properties.connection.userPassword.userId.setValue(allSetting.getUsername());
+        properties.connection.userPassword.password.setValue(allSetting.getPassword());
+        return properties;
+    }
+
+    public static TJDBCRowProperties createCommonJDBCRowProperties(AllSetting allSetting, TJDBCRowDefinition definition) {
+        TJDBCRowProperties properties = (TJDBCRowProperties) definition.createRuntimeProperties();
+
+        // properties.connection.driverTable.drivers.setValue(Arrays.asList(driverPath));
+        properties.connection.driverClass.setValue(allSetting.getDriverClass());
+        properties.connection.jdbcUrl.setValue(allSetting.getJdbcUrl());
+        properties.connection.userPassword.userId.setValue(allSetting.getUsername());
+        properties.connection.userPassword.password.setValue(allSetting.getPassword());
+        return properties;
+    }
+
+    private static java.util.Properties props = null;
+
+    public static AllSetting createAllSetting() throws IOException {
+        if (props == null) {
+            try (InputStream is = DBTestUtils.class.getClassLoader().getResourceAsStream("connection.properties")) {
+                props = new java.util.Properties();
+                props.load(is);
+            }
+        }
+
+        String driverClass = props.getProperty("driverClass");
+
+        String jdbcUrl = props.getProperty("jdbcUrl");
+
+        String userId = props.getProperty("userId");
+
+        String password = props.getProperty("password");
+
+        AllSetting allSetting = new AllSetting();
+
+        allSetting.setDriverClass(driverClass);
+        allSetting.setJdbcUrl(jdbcUrl);
+        allSetting.setUsername(userId);
+        allSetting.setPassword(password);
+
+        return allSetting;
+    }
+
+    public static String getTablename() {
+        return "TEST";
+    }
+
+    public static String getSQL() {
+        return "select * from TEST";
+    }
+
+    public static void testMetadata(List<Field> columns) {
+        Schema.Field field = columns.get(0);
+
+        assertEquals("ID", field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_COLUMN_NAME));
+        assertEquals(Schema.Type.INT, AvroUtils.unwrapIfNullable(field.schema()).getType());
+        assertEquals(java.sql.Types.INTEGER, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_TYPE));
+        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_LENGTH));
+        assertEquals(10, field.getObjectProp(SchemaConstants.TALEND_COLUMN_PRECISION));
+        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_SCALE));
+        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_PATTERN));
+        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DEFAULT));
+
+        field = columns.get(1);
+
+        assertEquals("NAME", field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_COLUMN_NAME));
+        assertEquals(Schema.Type.STRING, AvroUtils.unwrapIfNullable(field.schema()).getType());
+        assertEquals(java.sql.Types.VARCHAR, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_TYPE));
+        assertEquals(8, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DB_LENGTH));
+        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_PRECISION));
+        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_SCALE));
+        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_PATTERN));
+        assertEquals(null, field.getObjectProp(SchemaConstants.TALEND_COLUMN_DEFAULT));
+    }
 }

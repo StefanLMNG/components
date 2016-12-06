@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -16,26 +16,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.talend.components.api.ComponentFamilyDefinition;
-import org.talend.components.api.RuntimableDefinition;
 import org.talend.components.api.component.ComponentDefinition;
-import org.talend.components.api.wizard.ComponentWizardDefinition;
+import org.talend.daikon.definition.Definition;
 import org.talend.daikon.i18n.I18nMessages;
 
 public class TestComponentFamilyDefinition implements ComponentFamilyDefinition {
 
-    private final List<ComponentDefinition> components = Arrays.asList((ComponentDefinition) new TestComponentDefinition());
-
-    private final List<ComponentWizardDefinition> componentWizards = Arrays
-            .asList((ComponentWizardDefinition) new TestComponentWizardDefinition());
+    private final List<Definition> defs = Arrays.asList((ComponentDefinition) new TestComponentDefinition(),
+            new TestComponentWizardDefinition());
 
     @Override
-    public Iterable<? extends RuntimableDefinition<?, ?>> getDefinitions() {
-        return components;
-    }
-
-    @Override
-    public Iterable<ComponentWizardDefinition> getComponentWizards() {
-        return componentWizards;
+    public Iterable<? extends Definition> getDefinitions() {
+        return defs;
     }
 
     @Override

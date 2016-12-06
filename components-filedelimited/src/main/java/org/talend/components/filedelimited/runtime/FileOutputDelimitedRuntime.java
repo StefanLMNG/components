@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.filedelimited.runtime;
 
 import java.io.BufferedOutputStream;
@@ -17,6 +29,7 @@ import org.apache.avro.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.components.filedelimited.tfileoutputdelimited.TFileOutputDelimitedProperties;
+import org.talend.daikon.runtime.BufferedLineWriter;
 
 import com.talend.csv.CSVWriter;
 
@@ -148,7 +161,7 @@ public class FileOutputDelimitedRuntime {
                 splitedFileNo++;
             }
             if (props.rowMode.getValue()) {
-                this.writer = new BufferedOutput(streamWriter);
+                this.writer = new BufferedLineWriter(streamWriter);
                 this.strWriter = new StringWriter();
                 csvWriter = new CSVWriter(strWriter);
             } else {
@@ -165,8 +178,8 @@ public class FileOutputDelimitedRuntime {
                 streamWriter = new OutputStreamWriter((OutputStream) props.fileName.getValue(), encoding);
             }
             if (props.rowMode.getValue()) {
-                this.writer = new BufferedOutput(streamWriter);
-                StringWriter strWriter = new StringWriter();
+                this.writer = new BufferedLineWriter(streamWriter);
+                this.strWriter = new StringWriter();
                 csvWriter = new com.talend.csv.CSVWriter(strWriter);
             } else {
                 BufferedWriter bufferWriter = new BufferedWriter(streamWriter);
@@ -237,7 +250,7 @@ public class FileOutputDelimitedRuntime {
             }
         }
         if (props.rowMode.getValue()) {
-            writer = new BufferedOutput(streamWriter);
+            writer = new BufferedLineWriter(streamWriter);
         } else {
             writer = new BufferedWriter(streamWriter);
         }
