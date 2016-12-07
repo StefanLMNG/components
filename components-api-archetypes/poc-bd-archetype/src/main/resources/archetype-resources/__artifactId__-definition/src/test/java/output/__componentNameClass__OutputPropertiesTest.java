@@ -11,7 +11,7 @@
 //
 // ============================================================================
 
-package ${package};
+package ${package}.output;
 
 import org.junit.Test;
 import org.talend.daikon.properties.presentation.Form;
@@ -22,27 +22,28 @@ import java.util.Collection;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class ${componentClass}DatastorePropertiesTest {
+public class JmsOutputPropertiesTest {
     /**
-     * Checks {@link ${componentClass}DatastoreProperties} sets correctly initial schema
+     * Checks {@link ${componentNameClass}OutputProperties} sets correctly initial schema
      * property
      */
     @Test
     public void testDefaultProperties() {
-        ${componentClass}DatastoreProperties properties = new ${componentClass}DatastoreProperties("test");
+        JmsOutputProperties properties = new JmsOutputProperties("test");
         assertNull(properties.main.schema.getValue());
         // FIXME add asserts to test all properties
     }
 
     /**
-     * Checks {@link ${componentClass}DatastoreProperties} sets correctly initial layout
+     * Checks {@link ${componentNameClass}OutputProperties} sets correctly initial layout
      * properties
      */
     @Test
     public void testSetupLayout() {
-        ${componentClass}DatastoreProperties properties = new ${componentClass}DatastoreProperties("test");
+        JmsOutputProperties properties = new JmsOutputProperties("test");
         properties.main.init();
 
         properties.setupLayout();
@@ -57,12 +58,12 @@ public class ${componentClass}DatastorePropertiesTest {
     }
 
     /**
-     * Checks {@link ${componentClass}DatastoreProperties} sets correctly layout after refresh
+     * Checks {@link ${componentNameClass}OutputProperties} sets correctly layout after refresh
      * properties
      */
     @Test
     public void testRefreshLayout() {
-        ${componentClass}DatastoreProperties properties = new ${componentClass}DatastoreProperties("test");
+        ${componentNameClass}OutputProperties properties = new ${componentNameClass}OutputProperties("test");
         properties.init();
         properties.refreshLayout(properties.getForm(Form.MAIN));
         // FIXME add asserts for the layout

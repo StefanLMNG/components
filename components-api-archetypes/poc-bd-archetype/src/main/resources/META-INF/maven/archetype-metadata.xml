@@ -5,8 +5,11 @@
         <requiredProperty key="componentName">
             <defaultValue>${artifactId}</defaultValue>
         </requiredProperty>
-        <requiredProperty key="componentClass">
-            <defaultValue>${componentName.substring(0,1).toUpperCase()}${componentName.substring(1)}</defaultValue>
+        <requiredProperty key="componentNameLowerCase">
+            <defaultValue>${componentName.toLowerCase()}</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="componentNameClass">
+            <defaultValue>${artifactId}</defaultValue>
         </requiredProperty>
         <requiredProperty key="package">
             <defaultValue>${groupId}</defaultValue>
@@ -14,6 +17,10 @@
         <requiredProperty key="packageTalend">
             <defaultValue>org.talend.components</defaultValue>
         </requiredProperty>
+        <requiredProperty key="packageDaikon">
+            <defaultValue>org.talend.daikon</defaultValue>
+        </requiredProperty>
+
         <requiredProperty key="runtimeVersion"/>
     </requiredProperties>
 

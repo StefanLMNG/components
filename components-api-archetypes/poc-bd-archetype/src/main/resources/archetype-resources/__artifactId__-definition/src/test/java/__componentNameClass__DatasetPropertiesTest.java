@@ -24,26 +24,26 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNull;
 
-public class ${componentClass}DatasetPropertiesTest {
+public class ${componentNameClass}DatasetPropertiesTest {
     /**
-     * Checks {@link ${componentClass}DatasetProperties} sets correctly initial schema
+     * Checks {@link ${componentNameClass}DatasetProperties} sets correctly initial schema
      * property
      */
     @Test
     public void testDefaultProperties() {
-        ${componentClass}DatasetProperties properties = new ${componentClass}DatasetProperties("test");
+        ${componentNameClass}DatasetProperties properties = new ${componentNameClass}DatasetProperties("test");
         assertNull(properties.main.schema.getValue());
         // FIXME add asserts to test all properties
 
     }
 
     /**
-     * Checks {@link ${componentClass}DatasetProperties} sets correctly initial layout
+     * Checks {@link ${componentNameClass}DatasetProperties} sets correctly initial layout
      * properties
      */
     @Test
     public void testSetupLayout() {
-        ${componentClass}DatasetProperties properties = new ${componentClass}DatasetProperties("test");
+        ${componentNameClass}DatasetProperties properties = new ${componentNameClass}DatasetProperties("test");
         properties.main.init();
 
         properties.setupLayout();
@@ -58,12 +58,12 @@ public class ${componentClass}DatasetPropertiesTest {
     }
 
     /**
-     * Checks {@link ${componentClass}DatasetProperties} sets correctly layout after refresh
+     * Checks {@link ${componentNameClass}DatasetProperties} sets correctly layout after refresh
      * properties
      */
     @Test
     public void testRefreshLayout() {
-        ${componentClass}DatasetProperties properties = new ${componentClass}DatasetProperties("test");
+        ${componentNameClass}DatasetProperties properties = new ${componentNameClass}DatasetProperties("test");
         properties.init();
         properties.refreshLayout(properties.getForm(Form.MAIN));
         // FIXME add asserts for the layout

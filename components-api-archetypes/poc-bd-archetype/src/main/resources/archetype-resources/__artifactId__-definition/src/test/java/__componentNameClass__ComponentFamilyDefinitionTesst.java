@@ -28,14 +28,14 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 
-public class ${componentClass}ComponentFamilyDefinitionTest{
+public class ${componentNameClass}ComponentFamilyDefinitionTest{
 
-    private final ${componentClass}ComponentFamilyDefinition componentFamilyDefinition = new ${componentClass}ComponentFamilyDefinition();
+    private final ${componentNameClass}ComponentFamilyDefinition componentFamilyDefinition = new ${componentNameClass}ComponentFamilyDefinition();
 
     ComponentInstaller.ComponentFrameworkContext ctx = Mockito.mock(ComponentInstaller.ComponentFrameworkContext.class);
 
     /**
-     * Check {@link ${componentClass}ComponentFamilyDefinitionTest#getName()} returns "${componentName}"
+     * Check {@link ${componentNameClass}ComponentFamilyDefinitionTest#getName()} returns "${componentName}"
      */
     @Test
     public void testGetName() {
@@ -44,7 +44,7 @@ public class ${componentClass}ComponentFamilyDefinitionTest{
     }
 
     /**
-     * Check {@link ${componentClass}ComponentFamilyDefinition#install(ComponentInstaller.ComponentFrameworkContext ctx)} which call once the method "registerComponentFamilyDefinition"
+     * Check {@link ${componentNameClass}ComponentFamilyDefinition#install(ComponentInstaller.ComponentFrameworkContext ctx)} which call once the method "registerComponentFamilyDefinition"
      */
     @Test
     public void testInstall(){

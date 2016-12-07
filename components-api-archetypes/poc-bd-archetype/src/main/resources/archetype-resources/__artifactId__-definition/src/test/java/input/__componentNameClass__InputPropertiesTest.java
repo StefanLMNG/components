@@ -26,26 +26,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 
-public class ${componentClass}InputPropertiesTest {
+public class ${componentNameClass}InputPropertiesTest {
 
     /**
-     * Checks {@link ${componentClass}InputProperties} sets correctly initial schema
+     * Checks {@link ${componentNameClass}InputProperties} sets correctly initial schema
      * property
      */
     @Test
     public void testDefaultProperties() {
-        ${componentClass}InputProperties properties = new ${componentClass}InputProperties("test");
+        ${componentNameClass}InputProperties properties = new ${componentNameClass}InputProperties("test");
         assertNull(properties.main.schema.getValue());
         // FIXME add asserts to test all properties
     }
 
     /**
-     * Checks {@link ${componentClass}InputProperties} sets correctly initial layout
+     * Checks {@link ${componentNameClass}InputProperties} sets correctly initial layout
      * properties
      */
     @Test
     public void testSetupLayout() {
-        ${componentClass}InputProperties properties = new ${componentClass}InputProperties("test");
+        ${componentNameClass}InputProperties properties = new ${componentNameClass}InputProperties("test");
         properties.main.init();
 
         properties.setupLayout();
@@ -60,12 +60,12 @@ public class ${componentClass}InputPropertiesTest {
     }
 
     /**
-     * Checks {@link ${componentClass}InputProperties} sets correctly layout after refresh
+     * Checks {@link ${componentNameClass}InputProperties} sets correctly layout after refresh
      * properties
      */
     @Test
     public void testRefreshLayout() {
-        ${componentClass}InputProperties properties = new ${componentClass}InputProperties("test");
+        ${componentNameClass}InputProperties properties = new ${componentNameClass}InputProperties("test");
         properties.init();
         properties.refreshLayout(properties.getForm(Form.MAIN));
         // FIXME add asserts for the layout

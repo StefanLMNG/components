@@ -16,8 +16,8 @@ package ${package};
 import ${packageTalend}.api.AbstractComponentFamilyDefinition;
 import ${packageTalend}.api.ComponentInstaller;
 import ${packageTalend}.api.Constants;
-import ${package}.input.${componentClass}InputDefinition;
-import ${package}.output.${componentClass}OutputDefinition;
+import ${package}.input.${componentNameClass}InputDefinition;
+import ${package}.output.${componentNameClass}OutputDefinition;
 
 import aQute.bnd.annotation.component.Component;
 
@@ -25,14 +25,14 @@ import aQute.bnd.annotation.component.Component;
  * Install all of the definitions provided for the ${componentName} family of components.
  */
 @Component(name = Constants.COMPONENT_INSTALLER_PREFIX
-        + ${componentClass}ComponentFamilyDefinition.NAME, provide = ComponentInstaller.class)
-public class ${componentClass}ComponentFamilyDefinition extends AbstractComponentFamilyDefinition implements ComponentInstaller {
+        + ${componentNameClass}ComponentFamilyDefinition.NAME, provide = ComponentInstaller.class)
+public class ${componentNameClass}ComponentFamilyDefinition extends AbstractComponentFamilyDefinition implements ComponentInstaller {
 
     public static final String NAME = "${componentName}";
 
-    public ${componentClass}ComponentFamilyDefinition() {
-        super(NAME, new ${componentClass}DatastoreDefinition(), new ${componentClass}DatasetDefinition(), new ${componentClass}InputDefinition(),
-                new ${componentClass}OutputDefinition());
+    public ${componentNameClass}ComponentFamilyDefinition() {
+        super(NAME, new ${componentNameClass}DatastoreDefinition(), new ${componentNameClass}DatasetDefinition(), new ${componentNameClass}InputDefinition(),
+                new ${componentNameClass}OutputDefinition());
     }
 
     public void install(ComponentFrameworkContext ctx) {

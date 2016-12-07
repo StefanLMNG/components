@@ -19,27 +19,27 @@ import ${packageTalend}.api.component.runtime.RuntimeInfo;
 
 import static org.junit.Assert.assertEquals;
 
-public class ${componentClass}DatastoreDefinitionTest {
+public class ${componentNameClass}DatasetDefinitionTest {
 
-    private final ${componentClass}DatastoreDefinition datastoreDefinition = new ${componentClass}DatastoreDefinition();
+    private final ${componentNameClass}DatasetDefinition datasetDefinition = new ${componentNameClass}DatasetDefinition();
 
     /**
-    * Check {@link ${componentClass}DatastoreDefinition#getRuntimeInfo(JmsDatasetProperties properties, Object ctx)} returns RuntimeInfo,
-    * which runtime class name is "${package}.runtime_${runtimeVersion}.DatastoreRuntime"
-    */
+     * Check {@link ${componentNameClass}DatasetDefinition#getRuntimeInfo(JmsDatasetProperties properties, Object ctx)} returns RuntimeInfo,
+     * which runtime class name is "${package}.runtime_${runtimeVersion}.DatasetRuntime"
+     */
     @Test
     public void testGetRuntimeInfo(){
-        RuntimeInfo runtimeInfo = datastoreDefinition.getRuntimeInfo(null, null);
+        RuntimeInfo runtimeInfo = datasetDefinition.getRuntimeInfo(null, null);
         assertEquals("${package}.runtime_${runtimeVersion}.DatasetRuntime", runtimeInfo.getRuntimeClassName());
     }
 
     /**
-    * Check {@link ${componentClass}DatastoreDefinition#createProperties()} returns ${componentClass}DatastoreProperties, which canonical name is
-    * "${componentName}"
-    */
+     * Check {@link ${componentNameClass}DatasetDefinition#createProperties()} returns ${componentNameClass}DatasetProperties, which canonical name is
+     * "${componentName}"
+     */
     @Test
     public void testCreateProperties(){
-        ${componentClass}DatastoreProperties props = datastoreDefinition.createProperties();
+        ${componentNameClass}DatasetProperties props = datasetDefinition.createProperties();
         assertEquals("${componentName}", props.getName());
     }
 }

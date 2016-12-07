@@ -8,7 +8,7 @@
         <relativePath>../components-parent/pom.xml</relativePath>
     </parent>
 
-    <name>Components-${componentClass}</name>
+    <name>Components-${componentNameClass}</name>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>components-${componentName}}</artifactId>
     <packaging>pom</packaging>

@@ -24,39 +24,39 @@ package ${package}.output;
     import static org.junit.Assert.assertEquals;
     import static org.junit.Assert.assertTrue;
 
-    public class ${componentClass}InputDefinitionTest {
-    private final ${componentClass}InputDefinition outputDefinition = new ${componentClass}InputDefinition();
+    public class ${componentNameClass}InputDefinitionTest {
+    private final ${componentNameClass}InputDefinition outputDefinition = new ${componentNameClass}InputDefinition();
 
     /**
-     * Check {@link ${componentClass}OutputDefinition#getSupportedConnectorTopologies()} returns ConnectorTopology.INCOMING
+     * Check {@link ${componentNameClass}OutputDefinition#getSupportedConnectorTopologies()} returns ConnectorTopology.INCOMING
      */
     @Test
     public void testGetRuntimeInfo(){
             RuntimeInfo runtimeInfo = outputDefinition.getRuntimeInfo(null, null);
-            assertEquals("${package}.runtime_${runtimeVersion}.${componentClass}Source", runtimeInfo.getRuntimeClassName());
+            assertEquals("${package}.runtime_${runtimeVersion}.${componentNameClass}Source", runtimeInfo.getRuntimeClassName());
             }
 
     /**
-     * Check {@link ${componentClass}OutputDefinition#getPropertyClass()} returns class, which canonical name is
-     * "${package}.output.${componentClass}OutputProperties"
+     * Check {@link ${componentNameClass}OutputDefinition#getPropertyClass()} returns class, which canonical name is
+     * "${package}.output.${componentNameClass}OutputProperties"
      */
     @Test
     public void testGetPropertyClass() {
             Class<?> propertyClass = outputDefinition.getPropertyClass();
             String canonicalName = propertyClass.getCanonicalName();
-            assertThat(canonicalName, equalTo("${package}.${componentName}.output.${componentClass}OutputProperties"));
+            assertThat(canonicalName, equalTo("${package}.${componentName}.output.${componentNameClass}OutputProperties"));
             }
     /**
-     * Check {@link ${componentClass}OutputDefinition#getName()} returns "t${componentClass}Output"
+     * Check {@link ${componentNameClass}OutputDefinition#getName()} returns "t${componentNameClass}Output"
      */
     @Test
     public void testGetName() {
             String componentName = outputDefinition.getName();
-            assertEquals(componentName, "t${componentClass}Output");
+            assertEquals(componentName, "t${componentNameClass}Output");
             }
 
     /**
-     * Check {@link ${componentClass}OutputDefinition#getSupportedConnectorTopologies()} returns ConnectorTopology.INCOMING
+     * Check {@link ${componentNameClass}OutputDefinition#getSupportedConnectorTopologies()} returns ConnectorTopology.INCOMING
      */
     @Test
     public void testGetSupportedConnectorTopologies(){

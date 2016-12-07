@@ -24,40 +24,40 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ${componentClass}InputDefinitionTest {
-    private final ${componentClass}InputDefinition inputDefinition = new ${componentClass}InputDefinition();
+public class ${componentNameClass}InputDefinitionTest {
+    private final ${componentNameClass}InputDefinition inputDefinition = new ${componentNameClass}InputDefinition();
 
     /**
-     * Check {@link ${componentClass}InputDefinition#getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology)} returns RuntimeInfo,
+     * Check {@link ${componentNameClass}InputDefinition#getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology)} returns RuntimeInfo,
      * which runtime class name is "${package}.runtime_${runtimeVersion}.JmsSink"
      */
     @Test
     public void testGetRuntimeInfo(){
         RuntimeInfo runtimeInfo = inputDefinition.getRuntimeInfo(null, null);
-        assertEquals("${package}.runtime_${runtimeVersion}.${componentClass}Sink", runtimeInfo.getRuntimeClassName());
+        assertEquals("${package}.runtime_${runtimeVersion}.${componentNameClass}Sink", runtimeInfo.getRuntimeClassName());
     }
 
     /**
-     * Check {@link ${componentClass}InputDefinition#getPropertyClass()} returns class, which canonical name is
-     * "${package}.${componentName}.input.${componentClass}InputProperties"
+     * Check {@link ${componentNameClass}InputDefinition#getPropertyClass()} returns class, which canonical name is
+     * "${package}.${componentName}.input.${componentNameClass}InputProperties"
      */
     @Test
     public void testGetPropertyClass() {
         Class<?> propertyClass = inputDefinition.getPropertyClass();
         String canonicalName = propertyClass.getCanonicalName();
-        assertThat(canonicalName, equalTo("${package}.${componentName}.input.${componentClass}InputProperties"));
+        assertThat(canonicalName, equalTo("${package}.${componentName}.input.${componentNameClass}InputProperties"));
     }
     /**
-     * Check {@link ${componentClass}InputDefinition#getName()} returns "t${componentClass}Input"
+     * Check {@link ${componentNameClass}InputDefinition#getName()} returns "t${componentNameClass}Input"
      */
     @Test
     public void testGetName() {
         String componentName = inputDefinition.getName();
-        assertEquals(componentName, "t${componentClass}Input");
+        assertEquals(componentName, "t${componentNameClass}Input");
     }
 
     /**
-     * Check {@link ${componentClass}InputDefinition#getSupportedConnectorTopologies()} returns ConnectorTopology.OUTGOING
+     * Check {@link ${componentNameClass}InputDefinition#getSupportedConnectorTopologies()} returns ConnectorTopology.OUTGOING
      */
     @Test
     public void testGetSupportedConnectorTopologies(){
