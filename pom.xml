@@ -27,7 +27,6 @@
 		<module>examples</module>
 		<module>components</module>
 		<module>components-api-archetypes</module>
-    <module>TestComponents</module>
   </modules>
 	<profiles>
 		<profile>

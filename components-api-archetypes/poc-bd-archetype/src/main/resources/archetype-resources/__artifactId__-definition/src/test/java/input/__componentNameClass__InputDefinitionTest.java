@@ -29,7 +29,7 @@ public class ${componentNameClass}InputDefinitionTest {
     private final ${componentNameClass}InputDefinition inputDefinition = new ${componentNameClass}InputDefinition();
 
     /**
-     * Check {@link TestCompoteInputDefinition#getRuntimeInfo(ComponentProperties, ConnectorTopology)} returns RuntimeInfo,
+     * Check {@link ${componentNameClass}InputDefinition#getRuntimeInfo(ComponentProperties, ConnectorTopology)} returns RuntimeInfo,
      * which runtime class name is "${package}.runtime_${runtimeVersion}.JmsSink"
      */
     @Test
