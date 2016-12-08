@@ -32,7 +32,7 @@ import org.talend.daikon.properties.test.PropertiesTestUtils;
 public abstract class AbstractComponentTest {
 
     static {
-        //PropertiesTestUtils.setupPaxUrlFromMavenLaunch();
+        PropertiesTestUtils.setupPaxUrlFromMavenLaunch();
     }
 
     // for benchmarking the apis, one suggestion is to use http://openjdk.java.net/projects/code-tools/jmh/.
