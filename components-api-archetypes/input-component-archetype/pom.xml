@@ -9,7 +9,7 @@
 	</parent>
 
 	<name>Component Maven archetypes</name>
-	<artifactId>components-api-archetypes</artifactId>
+	<artifactId>input-component-archetypes</artifactId>
 	<version>0.16.0-SNAPSHOT</version>
 
     <!-- these dependencies allow the build to take place after the dependencies
