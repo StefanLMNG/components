@@ -34,9 +34,6 @@ public class ${componentNameClass}InputPropertiesTest {
      */
     @Test
     public void testDefaultProperties() {
-        ${componentNameClass}InputProperties properties = new ${componentNameClass}InputProperties("test");
-        assertNull(properties.main.schema.getValue());
-        // FIXME add asserts to test all properties
     }
 
     /**
@@ -46,17 +43,12 @@ public class ${componentNameClass}InputPropertiesTest {
     @Test
     public void testSetupLayout() {
         ${componentNameClass}InputProperties properties = new ${componentNameClass}InputProperties("test");
-        properties.main.init();
 
         properties.setupLayout();
 
         Form main = properties.getForm(Form.MAIN);
-        assertThat(main, notNullValue());
 
         Collection<Widget> mainWidgets = main.getWidgets();
-        // FIXME add correct value for the size
-        //assertThat(mainWidgets, hasSize(5));
-        // FIXME add component widgets and asserts associated
     }
 
     /**
@@ -68,7 +60,5 @@ public class ${componentNameClass}InputPropertiesTest {
         ${componentNameClass}InputProperties properties = new ${componentNameClass}InputProperties("test");
         properties.init();
         properties.refreshLayout(properties.getForm(Form.MAIN));
-        // FIXME add asserts for the layout
-        // assertFalse(properties.getForm(Form.MAIN).getWidget("msgType").isHidden());
     }
 }

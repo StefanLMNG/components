@@ -13,9 +13,10 @@
 
 package ${package};
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-import ${packageTalend}.api.component.runtime.RuntimeInfo;
+import ${packageDaikon}.runtime.RuntimeInfo;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,22 +25,13 @@ public class ${componentNameClass}DatastoreDefinitionTest {
     private final ${componentNameClass}DatastoreDefinition datastoreDefinition = new ${componentNameClass}DatastoreDefinition();
 
     /**
-    * Check {@link ${componentNameClass}DatastoreDefinition#getRuntimeInfo(JmsDatasetProperties properties, Object ctx)} returns RuntimeInfo,
+    * Check {@link ${componentNameClass}DatastoreDefinition#getRuntimeInfo(${componentNameClass}DatastoreProperties, Object) returns RuntimeInfo,
     * which runtime class name is "${package}.runtime_${runtimeVersion}.DatastoreRuntime"
     */
     @Test
-    public void testGetRuntimeInfo(){
+    @Ignore("This can't work unless the runtime jar is already installed in maven!")
+    public void testRuntimeInfo() {
         RuntimeInfo runtimeInfo = datastoreDefinition.getRuntimeInfo(null, null);
-        assertEquals("${package}.runtime_${runtimeVersion}.DatasetRuntime", runtimeInfo.getRuntimeClassName());
-    }
-
-    /**
-    * Check {@link ${componentNameClass}DatastoreDefinition#createProperties()} returns ${componentNameClass}DatastoreProperties, which canonical name is
-    * "${componentName}"
-    */
-    @Test
-    public void testCreateProperties(){
-        ${componentNameClass}DatastoreProperties props = datastoreDefinition.createProperties();
-        assertEquals("${componentName}", props.getName());
+        assertEquals("org.talend.components.${componentLowerCase}.runtime.${componentNameClass}DatasetRuntime", runtimeInfo.getRuntimeClassName());
     }
 }

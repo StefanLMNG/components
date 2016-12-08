@@ -31,9 +31,6 @@ public class ${componentNameClass}DatastorePropertiesTest {
      */
     @Test
     public void testDefaultProperties() {
-        ${componentNameClass}DatastoreProperties properties = new ${componentNameClass}DatastoreProperties("test");
-        assertNull(properties.main.schema.getValue());
-        // FIXME add asserts to test all properties
     }
 
     /**
@@ -43,17 +40,12 @@ public class ${componentNameClass}DatastorePropertiesTest {
     @Test
     public void testSetupLayout() {
         ${componentNameClass}DatastoreProperties properties = new ${componentNameClass}DatastoreProperties("test");
-        properties.main.init();
 
         properties.setupLayout();
 
         Form main = properties.getForm(Form.MAIN);
-        assertThat(main, notNullValue());
 
         Collection<Widget> mainWidgets = main.getWidgets();
-        // FIXME add correct value for the size
-        //assertThat(mainWidgets, hasSize(5));
-        // FIXME add component widgets and asserts associated
     }
 
     /**
@@ -65,7 +57,5 @@ public class ${componentNameClass}DatastorePropertiesTest {
         ${componentNameClass}DatastoreProperties properties = new ${componentNameClass}DatastoreProperties("test");
         properties.init();
         properties.refreshLayout(properties.getForm(Form.MAIN));
-        // FIXME add asserts for the layout
-        // assertFalse(properties.getForm(Form.MAIN).getWidget("msgType").isHidden());
     }
 }

@@ -32,7 +32,7 @@ public class ${componentNameClass}OutputDefinition extends AbstractComponentDefi
 
     public static final String NAME = ${componentNameClass}ComponentFamilyDefinition.NAME + "Output";
 
-    public static final String RUNTIME_${runtimeVersion} = "org.talend.components.${componentNameLowerCase}.runtime_${runtimeVersion}.${componentNameClass}OutputRuntime";
+    public static final String RUNTIME${runtimeVersion} = "org.talend.components.${componentNameLowerCase}.runtime_${runtimeVersion}.${componentNameClass}OutputRuntime";
 
     public ${componentNameClass}OutputDefinition() {
         super(NAME);
@@ -46,8 +46,9 @@ public class ${componentNameClass}OutputDefinition extends AbstractComponentDefi
     @Override
     public RuntimeInfo getRuntimeInfo(ComponentProperties properties, ConnectorTopology ctx){
         try{
+
             return new JarRuntimeInfo(new URL("mvn:org.talend.components/${componentNameLowerCase}-runtime"),
-                    DependenciesReader.computeDependenciesFilePath("org.talend.components","${componentNameLowerCase}-runtime"),RUNTIME_${runtimeVersion});
+                    DependenciesReader.computeDependenciesFilePath("org.talend.components","${componentNameLowerCase}-runtime"),RUNTIME${runtimeVersion});
         }catch(MalformedURLException e){
             throw new ComponentException(e);
         }

@@ -13,28 +13,31 @@
 
 package ${package}.output;
 
-    import org.junit.Test;
-    import ${packageTalend}.api.component.ConnectorTopology;
-    import ${packageTalend}.api.component.runtime.RuntimeInfo;
+import org.junit.Ignore;
+import org.junit.Test;
+import ${packageTalend}.api.component.ConnectorTopology;
+import ${packageDaikon}.runtime.RuntimeInfo;
 
-    import java.util.Set;
+import java.util.Set;
 
-    import static org.hamcrest.MatcherAssert.assertThat;
-    import static org.hamcrest.Matchers.equalTo;
-    import static org.junit.Assert.assertEquals;
-    import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-    public class ${componentNameClass}InputDefinitionTest {
-    private final ${componentNameClass}InputDefinition outputDefinition = new ${componentNameClass}InputDefinition();
+public class ${componentNameClass}OutputDefinitionTest {
+    private final ${componentNameClass}OutputDefinition outputDefinition = new ${componentNameClass}OutputDefinition();
 
     /**
      * Check {@link ${componentNameClass}OutputDefinition#getSupportedConnectorTopologies()} returns ConnectorTopology.INCOMING
      */
     @Test
-    public void testGetRuntimeInfo(){
-            RuntimeInfo runtimeInfo = outputDefinition.getRuntimeInfo(null, null);
-            assertEquals("${package}.runtime_${runtimeVersion}.${componentNameClass}Source", runtimeInfo.getRuntimeClassName());
-            }
+    @Ignore("This can't work unless the runtime jar is already installed in maven!")
+    public void testRuntimeInfo() {
+        RuntimeInfo runtimeInfo = outputDefinition.getRuntimeInfo(null, null);
+        assertEquals("org.talend.components.${componentLowerCase}.runtime.${componentNameClass}DatasetRuntime", runtimeInfo.getRuntimeClassName());
+
+    }
 
     /**
      * Check {@link ${componentNameClass}OutputDefinition#getPropertyClass()} returns class, which canonical name is
@@ -42,25 +45,26 @@ package ${package}.output;
      */
     @Test
     public void testGetPropertyClass() {
-            Class<?> propertyClass = outputDefinition.getPropertyClass();
-            String canonicalName = propertyClass.getCanonicalName();
-            assertThat(canonicalName, equalTo("${package}.${componentName}.output.${componentNameClass}OutputProperties"));
-            }
+        Class<?> propertyClass = outputDefinition.getPropertyClass();
+        String canonicalName = propertyClass.getCanonicalName();
+        assertThat(canonicalName, equalTo("${package}.output.${componentNameClass}OutputProperties"));
+    }
+
     /**
      * Check {@link ${componentNameClass}OutputDefinition#getName()} returns "t${componentNameClass}Output"
      */
     @Test
     public void testGetName() {
-            String componentName = outputDefinition.getName();
-            assertEquals(componentName, "t${componentNameClass}Output");
-            }
+         String componentName = outputDefinition.getName();
+         assertEquals(componentName, "${componentNameClass}Output");
+    }
 
     /**
      * Check {@link ${componentNameClass}OutputDefinition#getSupportedConnectorTopologies()} returns ConnectorTopology.INCOMING
      */
     @Test
     public void testGetSupportedConnectorTopologies(){
-            Set<ConnectorTopology> test = outputDefinition.getSupportedConnectorTopologies();
-            assertTrue(test.contains(ConnectorTopology.INCOMING));
-            }
+         Set<ConnectorTopology> test = outputDefinition.getSupportedConnectorTopologies();
+         assertTrue(test.contains(ConnectorTopology.INCOMING));
     }
+}

@@ -27,7 +27,8 @@
 		<module>examples</module>
 		<module>components</module>
 		<module>components-api-archetypes</module>
-	</modules>
+    <module>TestComponents</module>
+  </modules>
 	<profiles>
 		<profile>
 			<id>eclipse</id>

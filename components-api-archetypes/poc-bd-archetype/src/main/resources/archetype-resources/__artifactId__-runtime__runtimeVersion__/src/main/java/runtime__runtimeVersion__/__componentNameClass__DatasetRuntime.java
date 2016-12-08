@@ -11,7 +11,7 @@
 //
 // ============================================================================
 
-package ${package}.runtime_${runtimeVersion};
+package ${package}.runtime${runtimeVersion};
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.IndexedRecord;

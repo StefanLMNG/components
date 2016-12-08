@@ -27,16 +27,16 @@
     <fileSets>
         <!-- Metadata for runtime module -->
         <fileSet filtered="true" packaged="true">
-            <directory>__artifactId__-runtime___runtimeVersion__/src/main/java/</directory>
+            <directory>__artifactId__-runtime__runtimeVersion__/src/main/java/</directory>
             <includes>
                 <include>**/*.java</include>
             </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true">
-                <directory>__artifactId__-runtime___runtimeVersion__/src/main/resources/</directory>
+                <directory>__artifactId__-runtime__runtimeVersion__/src/main/resources/</directory>
         </fileSet>
         <fileSet filtered="true">
-            <directory>__artifactId__-runtime___runtimeVersion__</directory>
+            <directory>__artifactId__-runtime__runtimeVersion__</directory>
             <includes>
                 <include>pom.xml</include>
             </includes>

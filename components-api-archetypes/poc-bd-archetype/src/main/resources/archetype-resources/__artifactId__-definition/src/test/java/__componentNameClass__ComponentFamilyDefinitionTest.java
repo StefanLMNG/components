@@ -35,7 +35,7 @@ public class ${componentNameClass}ComponentFamilyDefinitionTest{
     ComponentInstaller.ComponentFrameworkContext ctx = Mockito.mock(ComponentInstaller.ComponentFrameworkContext.class);
 
     /**
-     * Check {@link ${componentNameClass}ComponentFamilyDefinitionTest#getName()} returns "${componentName}"
+     * Check {@link ${componentNameClass}ComponentFamilyDefinitionTest} returns "${componentName}"
      */
     @Test
     public void testGetName() {

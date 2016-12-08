@@ -25,16 +25,13 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class JmsOutputPropertiesTest {
+public class ${componentNameClass}OutputPropertiesTest {
     /**
      * Checks {@link ${componentNameClass}OutputProperties} sets correctly initial schema
      * property
      */
     @Test
     public void testDefaultProperties() {
-        JmsOutputProperties properties = new JmsOutputProperties("test");
-        assertNull(properties.main.schema.getValue());
-        // FIXME add asserts to test all properties
     }
 
     /**
@@ -43,30 +40,12 @@ public class JmsOutputPropertiesTest {
      */
     @Test
     public void testSetupLayout() {
-        JmsOutputProperties properties = new JmsOutputProperties("test");
-        properties.main.init();
+        ${componentNameClass}OutputProperties properties = new ${componentNameClass}OutputProperties("test");
 
         properties.setupLayout();
 
         Form main = properties.getForm(Form.MAIN);
-        assertThat(main, notNullValue());
 
         Collection<Widget> mainWidgets = main.getWidgets();
-        // FIXME add correct value for the size
-        //assertThat(mainWidgets, hasSize(5));
-        // FIXME add component widgets and asserts associated
-    }
-
-    /**
-     * Checks {@link ${componentNameClass}OutputProperties} sets correctly layout after refresh
-     * properties
-     */
-    @Test
-    public void testRefreshLayout() {
-        ${componentNameClass}OutputProperties properties = new ${componentNameClass}OutputProperties("test");
-        properties.init();
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        // FIXME add asserts for the layout
-        // assertFalse(properties.getForm(Form.MAIN).getWidget("msgType").isHidden());
     }
 }

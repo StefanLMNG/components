@@ -24,7 +24,7 @@ import ${packageDaikon}.properties.property.PropertyFactory;
 
 public class ${componentNameClass}DatastoreProperties extends PropertiesImpl implements DatastoreProperties{
 
-    public enum $ {componentNameClass}Version{
+    public enum ${componentNameClass}Version{
             V_${runtimeVersion}
     }
 

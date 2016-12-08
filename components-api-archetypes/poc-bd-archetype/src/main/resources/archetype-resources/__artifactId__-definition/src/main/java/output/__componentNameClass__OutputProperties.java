@@ -37,7 +37,7 @@ public class ${componentNameClass}OutputProperties extends ComponentPropertiesIm
     }
 
     @Override
-    public SimpleFileIoDatasetProperties getDatasetProperties() {
+    public ${componentNameClass}DatasetProperties getDatasetProperties() {
             return datasetRef.getReference();
     }
 

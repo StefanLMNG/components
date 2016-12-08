@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package ${package}.runtime_${runtimeVersion};
+package ${package}.runtime${runtimeVersion};
 
 import java.io.DataOutputStream;
 import java.io.IOException;

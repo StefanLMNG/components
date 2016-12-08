@@ -13,6 +13,9 @@
 
 package ${package};
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import ${packageTalend}.api.component.runtime.DependenciesReader;
 import ${packageTalend}.api.component.runtime.JarRuntimeInfo;
 import ${packageTalend}.api.exception.ComponentException;
@@ -21,7 +24,7 @@ import ${packageTalend}.common.datastore.DatastoreDefinition;
 import ${packageTalend}.${componentNameLowerCase}.input.${componentName}InputDefinition;
 import ${packageTalend}.${componentNameLowerCase}.output.${componentName}OutputDefinition;
 import ${packageDaikon}.SimpleNamedThing;
-import ${packageDaikon}.api.component.runtime.RuntimeInfo;
+import ${packageDaikon}.runtime.RuntimeInfo;
 
 
 public class ${componentNameClass}DatastoreDefinition extends SimpleNamedThing implements DatastoreDefinition<${componentNameClass}DatastoreProperties> {

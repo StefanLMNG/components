@@ -37,12 +37,10 @@ public class ${componentNameClass}InputProperties extends ComponentPropertiesImp
         Form mainForm = new Form(this, Form.MAIN);
     }
 
-    @Override
     public ${componentNameClass}DatasetProperties getDatasetProperties() {
         return datasetRef.getReference();
     }
 
-    @Override
     public void setDatasetProperties(DatasetProperties datasetProperties) {
         datasetRef.setReference(datasetProperties);
     }

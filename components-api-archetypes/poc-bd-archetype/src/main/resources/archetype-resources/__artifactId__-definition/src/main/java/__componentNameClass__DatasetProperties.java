@@ -34,8 +34,7 @@ public class ${componentNameClass}DatasetProperties extends PropertiesImpl imple
         return datastoreRef.getReference();
     }
 
-    @Override
-    public void setDatastoreProperties(${componentNameClass}DatastoreProperties datastoreProperties) {
+    @Override public void setDatastoreProperties(DatastoreProperties datastoreProperties) {
         datastoreRef.setReference(datastoreProperties);
     }
 

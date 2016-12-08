@@ -13,9 +13,10 @@
 
 package ${package}.input;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import ${packageTalend}.api.component.ConnectorTopology;
-import ${packageTalend}.api.component.runtime.RuntimeInfo;
+import ${packageDaikon}.runtime.RuntimeInfo;
 
 import java.util.Set;
 
@@ -28,13 +29,15 @@ public class ${componentNameClass}InputDefinitionTest {
     private final ${componentNameClass}InputDefinition inputDefinition = new ${componentNameClass}InputDefinition();
 
     /**
-     * Check {@link ${componentNameClass}InputDefinition#getRuntimeInfo(Properties properties, ConnectorTopology connectorTopology)} returns RuntimeInfo,
+     * Check {@link TestCompoteInputDefinition#getRuntimeInfo(ComponentProperties, ConnectorTopology)} returns RuntimeInfo,
      * which runtime class name is "${package}.runtime_${runtimeVersion}.JmsSink"
      */
     @Test
-    public void testGetRuntimeInfo(){
+    @Ignore("This can't work unless the runtime jar is already installed in maven!")
+    public void testRuntimeInfo() {
         RuntimeInfo runtimeInfo = inputDefinition.getRuntimeInfo(null, null);
-        assertEquals("${package}.runtime_${runtimeVersion}.${componentNameClass}Sink", runtimeInfo.getRuntimeClassName());
+        assertEquals("org.talend.components.${componentLowerCase}.runtime.${componentNameClass}DatasetRuntime", runtimeInfo.getRuntimeClassName());
+
     }
 
     /**
@@ -45,15 +48,16 @@ public class ${componentNameClass}InputDefinitionTest {
     public void testGetPropertyClass() {
         Class<?> propertyClass = inputDefinition.getPropertyClass();
         String canonicalName = propertyClass.getCanonicalName();
-        assertThat(canonicalName, equalTo("${package}.${componentName}.input.${componentNameClass}InputProperties"));
+        assertThat(canonicalName, equalTo("${package}.input.${componentNameClass}InputProperties"));
     }
+
     /**
-     * Check {@link ${componentNameClass}InputDefinition#getName()} returns "t${componentNameClass}Input"
+     * Check {@link ${componentNameClass}InputDefinition} returns "${componentNameClass}Input"
      */
     @Test
-    public void testGetName() {
+    public void testGetName(){
         String componentName = inputDefinition.getName();
-        assertEquals(componentName, "t${componentNameClass}Input");
+        assertEquals(componentName, "${componentNameClass}Input");
     }
 
     /**
