@@ -15,7 +15,7 @@ package ${package}.runtime${runtimeVersion};
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.IndexedRecord;
-import org.apache.beam.runners.direct.DirectRunner;
+//import org.apache.beam.runners.direct.DirectRunner;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
@@ -68,7 +68,7 @@ public class ${componentNameClass}DatasetRuntime implements DatasetRuntime<${com
 
         // Create a pipeline using the input component to get records.
         PipelineOptions options = PipelineOptionsFactory.create();
-        options.setRunner(DirectRunner.class);
+//        options.setRunner(DirectRunner.class);
         final Pipeline p = Pipeline.create(options);
         LazyAvroCoder.registerAsFallback(p);
 

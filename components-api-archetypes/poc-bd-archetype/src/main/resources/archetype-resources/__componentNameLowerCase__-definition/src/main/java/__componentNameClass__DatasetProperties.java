@@ -20,7 +20,7 @@ import ${packageTalend}.common.SchemaProperties;
 import ${packageDaikon}.properties.presentation.Form;
 import ${packageDaikon}.properties.property.Property;
 
-public class ${componentNameClass}DatasetProperties extends PropertiesImpl implements DatasetProperties {
+public class ${componentNameClass}DatasetProperties extends PropertiesImpl implements DatasetProperties<${componentNameClass}DatastoreProperties> {
 
     public final transient ReferenceProperties<${componentNameClass}DatastoreProperties> datastoreRef = new ReferenceProperties<>("datastoreRef",
         ${componentNameClass}DatastoreDefinition.NAME);
@@ -34,7 +34,7 @@ public class ${componentNameClass}DatasetProperties extends PropertiesImpl imple
         return datastoreRef.getReference();
     }
 
-    @Override public void setDatastoreProperties(DatastoreProperties datastoreProperties) {
+    @Override public void setDatastoreProperties(${componentNameClass}DatastoreProperties datastoreProperties) {
         datastoreRef.setReference(datastoreProperties);
     }
 

@@ -27,48 +27,48 @@
     <fileSets>
         <!-- Metadata for runtime module -->
         <fileSet filtered="true" packaged="true">
-            <directory>__artifactId__-runtime__runtimeVersion__/src/main/java/</directory>
+            <directory>__componentNameLowerCase__-runtime__runtimeVersion__/src/main/java/</directory>
             <includes>
                 <include>**/*.java</include>
             </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true">
-                <directory>__artifactId__-runtime__runtimeVersion__/src/main/resources/</directory>
+                <directory>__componentNameLowerCase__-runtime__runtimeVersion__/src/main/resources/</directory>
         </fileSet>
         <fileSet filtered="true">
-            <directory>__artifactId__-runtime__runtimeVersion__</directory>
+            <directory>__componentNameLowerCase__-runtime__runtimeVersion__</directory>
             <includes>
                 <include>pom.xml</include>
             </includes>
         </fileSet>
         <!-- Metadata for definition module - main -->
         <fileSet filtered="true" packaged="true">
-            <directory>__artifactId__-definition/src/main/java/</directory>
+            <directory>__componentNameLowerCase__-definition/src/main/java/</directory>
             <includes>
                 <include>**/*.java</include>
             </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true">
-                <directory>__artifactId__-definition/src/main/resources/</directory>
+                <directory>__componentNameLowerCase__-definition/src/main/resources/</directory>
         </fileSet>
         <fileSet filtered="true">
-            <directory>__artifactId__-definition</directory>
+            <directory>__componentNameLowerCase__-definition</directory>
             <includes>
                 <include>pom.xml</include>
             </includes>
         </fileSet>
         <!-- Metadata for definition module - test -->
         <fileSet filtered="true" packaged="true">
-            <directory>__artifactId__-definition/src/test/java/</directory>
+            <directory>__componentNameLowerCase__-definition/src/test/java/</directory>
             <includes>
                 <include>**/*.java</include>
             </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true">
-            <directory>__artifactId__-definition/src/test/resources/</directory>
+            <directory>__componentNameLowerCase__-definition/src/test/resources/</directory>
         </fileSet>
         <fileSet filtered="true">
-            <directory>__artifactId__-definition</directory>
+            <directory>__componentNameLowerCase__-definition</directory>
             <includes>
                 <include>pom.xml</include>
             </includes>
