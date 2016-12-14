@@ -26,7 +26,6 @@
 		<module>services</module>
 		<module>examples</module>
 		<module>components</module>
-		<module>components-api-archetypes</module>
   </modules>
 	<profiles>
 		<profile>
