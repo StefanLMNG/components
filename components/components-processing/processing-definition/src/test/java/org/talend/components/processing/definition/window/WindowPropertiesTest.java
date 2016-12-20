@@ -1,5 +1,6 @@
 package org.talend.components.processing.definition.window;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.presentation.Widget;
@@ -21,8 +22,8 @@ public class WindowPropertiesTest {
     @Test
     public void testDefaultProperties() {
         WindowProperties properties = new WindowProperties("test");
-        assertNull(properties.windowLength.getValue());
-        assertNull(properties.windowSlideLength.getValue());
+        assertThat(properties.windowLength.getValue(), notNullValue());
+        assertThat(properties.windowSlideLength.getValue(), notNullValue());
         assertFalse(properties.windowSession.getValue());
     }
 

@@ -41,18 +41,18 @@ public class WindowRuntime extends PTransform<PCollection<IndexedRecord>, PColle
     public PCollection<IndexedRecord> apply(PCollection<IndexedRecord> indexedRecordPCollection) {
         PCollection<IndexedRecord> windowed_items;
 
-        if (properties.windowLength.getValue() == -1) {
+        if (properties.windowLength.getValue() < 1) {
             throw new TalendRuntimeException(CommonErrorCodes.UNEXPECTED_ARGUMENT);
         }
 
         // Session Window
         if (properties.windowSession.getValue()) {
-                windowed_items = indexedRecordPCollection.apply(Window.<IndexedRecord> into(
-                        Sessions.withGapDuration(Duration.millis(properties.windowLength.getValue().intValue()))));
-                return windowed_items;
+            windowed_items = indexedRecordPCollection.apply(Window.<IndexedRecord> into(
+                    Sessions.withGapDuration(Duration.millis(properties.windowLength.getValue().intValue()))));
+            return windowed_items;
         }
 
-        if (properties.windowSlideLength.getValue() == -1) {
+        if (properties.windowSlideLength.getValue() < 1) {
             // Fixed Window
             windowed_items = indexedRecordPCollection.apply(
                     Window.<IndexedRecord> into(FixedWindows.of(new Duration(properties.windowLength.getValue().intValue()))));
