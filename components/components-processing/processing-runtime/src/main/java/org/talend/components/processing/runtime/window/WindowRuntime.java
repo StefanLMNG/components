@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.components.processing.runtime.window;
 
 import org.apache.avro.generic.IndexedRecord;
@@ -29,25 +41,25 @@ public class WindowRuntime extends PTransform<PCollection<IndexedRecord>, PColle
     public PCollection<IndexedRecord> apply(PCollection<IndexedRecord> indexedRecordPCollection) {
         PCollection<IndexedRecord> windowed_items;
 
-        if (properties.windowDurationLength.getValue() == -1) {
+        if (properties.windowLength.getValue() == -1) {
             throw new TalendRuntimeException(CommonErrorCodes.UNEXPECTED_ARGUMENT);
         }
 
         // Session Window
         if (properties.windowSession.getValue()) {
                 windowed_items = indexedRecordPCollection.apply(Window.<IndexedRecord> into(
-                        Sessions.withGapDuration(Duration.millis(properties.windowDurationLength.getValue().intValue()))));
+                        Sessions.withGapDuration(Duration.millis(properties.windowLength.getValue().intValue()))));
                 return windowed_items;
         }
 
         if (properties.windowSlideLength.getValue() == -1) {
             // Fixed Window
             windowed_items = indexedRecordPCollection.apply(
-                    Window.<IndexedRecord> into(FixedWindows.of(new Duration(properties.windowDurationLength.getValue().intValue()))));
+                    Window.<IndexedRecord> into(FixedWindows.of(new Duration(properties.windowLength.getValue().intValue()))));
         } else {
             // Sliding Window
             windowed_items = indexedRecordPCollection.apply(
-                    Window.<IndexedRecord> into(SlidingWindows.of(new Duration(properties.windowDurationLength.getValue().intValue()))
+                    Window.<IndexedRecord> into(SlidingWindows.of(new Duration(properties.windowLength.getValue().intValue()))
                             .every(new Duration(properties.windowSlideLength.getValue().intValue()))));
         }
         return windowed_items;

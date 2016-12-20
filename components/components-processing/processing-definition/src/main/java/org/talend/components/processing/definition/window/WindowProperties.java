@@ -25,11 +25,11 @@ import org.talend.daikon.properties.property.PropertyFactory;
 
 public class WindowProperties extends FixedConnectorsComponentProperties implements Serializable {
 
-    public Property<Integer> windowLength = PropertyFactory.newInteger("windowLength").setRequired();
+    public Property<Integer> windowLength = PropertyFactory.newInteger("windowLength").setRequired().setValue(-1);
 
-    public Property<Integer> windowSlideLength = PropertyFactory.newInteger("windowSlideLength");
+    public Property<Integer> windowSlideLength = PropertyFactory.newInteger("windowSlideLength").setValue(-1);
 
-    public Property<Boolean> windowSession = PropertyFactory.newBoolean("windowSession");
+    public Property<Boolean> windowSession = PropertyFactory.newBoolean("windowSession").setValue(false);
 
     // main
     public transient PropertyPathConnector MAIN_CONNECTOR = new PropertyPathConnector(Connector.MAIN_NAME, "main");
