@@ -21,7 +21,7 @@ public class WindowPropertiesTest {
     @Test
     public void testDefaultProperties() {
         WindowProperties properties = new WindowProperties("test");
-        assertNull(properties.windowDurationLength.getValue());
+        assertNull(properties.windowLength.getValue());
         assertNull(properties.windowSlideLength.getValue());
         assertFalse(properties.windowSession.getValue());
     }
@@ -40,7 +40,7 @@ public class WindowPropertiesTest {
 
         Collection<Widget> mainWidgets = main.getWidgets();
         assertThat(mainWidgets, hasSize(3));
-        Widget windowDuration = main.getWidget("windowDurationLength");
+        Widget windowDuration = main.getWidget("windowLength");
         assertThat(windowDuration, notNullValue());
         Widget slideWindow = main.getWidget("windowSlideLength");
         assertThat(slideWindow, notNullValue());
@@ -55,10 +55,17 @@ public class WindowPropertiesTest {
     public void testRefreshLayout() {
         WindowProperties properties = new WindowProperties("test");
         properties.init();
-        properties.refreshLayout(properties.getForm(Form.MAIN));
 
-        assertTrue(properties.getForm(Form.MAIN).getWidget("windowDurationLength").isVisible());
+        properties.windowSession.setValue(false);
+        properties.refreshLayout(properties.getForm(Form.MAIN));
+        assertTrue(properties.getForm(Form.MAIN).getWidget("windowLength").isVisible());
         assertTrue(properties.getForm(Form.MAIN).getWidget("windowSlideLength").isVisible());
+        assertTrue(properties.getForm(Form.MAIN).getWidget("windowSession").isVisible());
+
+        properties.windowSession.setValue(true);
+        properties.refreshLayout(properties.getForm(Form.MAIN));
+        assertTrue(properties.getForm(Form.MAIN).getWidget("windowLength").isVisible());
+        assertTrue(properties.getForm(Form.MAIN).getWidget("windowSlideLength").isHidden());
         assertTrue(properties.getForm(Form.MAIN).getWidget("windowSession").isVisible());
     }
 }
