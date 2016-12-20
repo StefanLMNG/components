@@ -25,7 +25,7 @@ import org.talend.daikon.properties.property.PropertyFactory;
 
 public class WindowProperties extends FixedConnectorsComponentProperties implements Serializable {
 
-    public Property<Integer> windowDurationLength = PropertyFactory.newInteger("windowDurationLength").setRequired();
+    public Property<Integer> windowLength = PropertyFactory.newInteger("windowLength").setRequired();
 
     public Property<Integer> windowSlideLength = PropertyFactory.newInteger("windowSlideLength");
 
@@ -57,7 +57,7 @@ public class WindowProperties extends FixedConnectorsComponentProperties impleme
     public void setupLayout() {
         super.setupLayout();
         Form mainForm = new Form(this, Form.MAIN);
-        mainForm.addRow(windowDurationLength);
+        mainForm.addRow(windowLength);
         mainForm.addRow(windowSlideLength);
         mainForm.addRow(windowSession);
     }
@@ -65,7 +65,7 @@ public class WindowProperties extends FixedConnectorsComponentProperties impleme
     @Override
     public void setupProperties() {
         super.setupProperties();
-        windowDurationLength.setValue(-1);
+        windowLength.setValue(-1);
         windowSlideLength.setValue(-1);
         windowSession.setValue(false);
     }
@@ -74,5 +74,13 @@ public class WindowProperties extends FixedConnectorsComponentProperties impleme
     public void refreshLayout(Form form) {
         super.refreshLayout(form);
         // everything is always visible
+        // Main properties
+        if (form.getName().equals(Form.MAIN)) {
+            form.getWidget(windowSlideLength.getName()).setHidden(windowSession);
+        }
+    }
+
+    public void afterWindowSession() {
+        refreshLayout(getForm(Form.MAIN));
     }
 }
