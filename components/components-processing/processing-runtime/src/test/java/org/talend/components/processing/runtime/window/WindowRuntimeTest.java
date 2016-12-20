@@ -27,6 +27,14 @@ import java.util.List;
 
 public class WindowRuntimeTest {
 
+    Schema schema = GenericDataRecordHelper.createSchemaFromObject("schema", new Object[] { "name" });
+
+    IndexedRecord irA = GenericDataRecordHelper.createRecord(schema, new Object[] { "a" });
+
+    IndexedRecord irB = GenericDataRecordHelper.createRecord(schema, new Object[] { "b" });
+
+    IndexedRecord irC = GenericDataRecordHelper.createRecord(schema, new Object[] { "c" });
+
     @Test
     public void testFixedWindow() {
 
@@ -34,25 +42,7 @@ public class WindowRuntimeTest {
         options.setRunner(DirectRunner.class);
         final Pipeline p = Pipeline.create(options);
 
-        Object[] oA = new Object[] {"a"};
-        Schema a = GenericDataRecordHelper.createSchemaFromObject("a", oA);
-        System.out.println(a);
-        IndexedRecord irA = GenericDataRecordHelper.createRecord(oA);
-        System.out.println("a: " + irA);
-
-        Object[] oB = new Object[] {"b"};
-        IndexedRecord irB = GenericDataRecordHelper.createRecord(oA);
-
-        Object[] oC = new Object[] {"c"};
-        IndexedRecord irC = GenericDataRecordHelper.createRecord(oA);
-
-        /*
-        // creation of PCollection with different timestamp
-        PCollection<IndexedRecord> input = p.apply(Create.timestamped(
-                TimestampedValue.of(irA, new Instant(4)))
-                        .withCoder(AvroCoder.of(a))
-        );*/
-
+        // creation of PCollection with different timestamp PCollection<IndexedRecord>
 
         List<TimestampedValue<IndexedRecord>> data = Arrays.asList(
                 TimestampedValue.of(irA, new Instant(1L)),
@@ -62,10 +52,10 @@ public class WindowRuntimeTest {
         PCollection<IndexedRecord> input = p.apply(Create.timestamped(data)
         .withCoder());
 
-
-                WindowProperties windowProperties = new WindowProperties("window");
-        windowProperties.setValue("windowDurationLength", 2);
+        WindowProperties windowProperties = new WindowProperties("window");
+        windowProperties.setValue("windowLength", 2);
         windowProperties.setValue("windowSlideLength", -1);
+        windowProperties.setValue("windowSession", false);
 
         WindowRuntime windowRun = new WindowRuntime();
         windowRun.initialize(null, windowProperties);
@@ -87,84 +77,109 @@ public class WindowRuntimeTest {
 
         p.run();
     }
-    /*
-     * @Test
-     * public void testSlidingWindow() {
-     * 
-     * PipelineOptions options = PipelineOptionsFactory.create();
-     * options.setRunner(DirectRunner.class);
-     * final Pipeline p = Pipeline.create(options);
-     * 
-     * // creation of PCollection with different timestamp
-     * PCollection<String> input = p.apply(Create.timestamped(TimestampedValue.of("a", new Instant(0)),
-     * TimestampedValue.of("b", new Instant(0)), TimestampedValue.of("c", new Instant(1)),
-     * TimestampedValue.of("a", new Instant(2)), TimestampedValue.of("a", new Instant(2)),
-     * TimestampedValue.of("b", new Instant(2)), TimestampedValue.of("b", new Instant(3)),
-     * TimestampedValue.of("c", new Instant(3)), TimestampedValue.of("a", new Instant(4))));
-     * 
-     * WindowProperties windowProperties = new WindowProperties("window");
-     * windowProperties.setValue("windowDurationLength", 4);
-     * windowProperties.setValue("windowSlideLength", 2);
-     * 
-     * WindowRuntime windowRun = new WindowRuntime();
-     * windowRun.initialize(null, windowProperties);
-     * 
-     * PCollection<String> test = windowRun.apply(input);
-     * 
-     * PCollection<KV<String, Long>> windowed_counts = test.apply(Count.<String> perElement());
-     * 
-     * // window duration: 4 - sliding: 2
-     * PAssert.that(windowed_counts).containsInAnyOrder(KV.of("a", 1L), KV.of("a", 1L), KV.of("a", 3L), KV.of("a", 3L),
-     * KV.of("b", 1L), KV.of("b", 3L), KV.of("b", 2L), KV.of("c", 1L), KV.of("c", 1L), KV.of("c", 2L));
-     * 
-     * p.run();
-     * }
-     * 
-     * @Test
-     * public void testSessionWindow() {
-     * 
-     * PipelineOptions options = PipelineOptionsFactory.create();
-     * options.setRunner(DirectRunner.class);
-     * final Pipeline p = Pipeline.create(options);
-     * 
-     * // creation of PCollection with different timestamp
-     * PCollection<String> input = p.apply(Create.timestamped(
-     * TimestampedValue.of("a", new Instant(0)),
-     * TimestampedValue.of("b", new Instant(0)),
-     * TimestampedValue.of("c", new Instant(1)),
-     * TimestampedValue.of("a", new Instant(2)),
-     * TimestampedValue.of("a", new Instant(2)),
-     * TimestampedValue.of("b", new Instant(2)),
-     * TimestampedValue.of("b", new Instant(30)),
-     * TimestampedValue.of("a", new Instant(30)),
-     * TimestampedValue.of("a", new Instant(50)),
-     * TimestampedValue.of("c", new Instant(55)),
-     * TimestampedValue.of("a", new Instant(59))));
-     * 
-     * WindowProperties windowProperties = new WindowProperties("window");
-     * windowProperties.setValue("windowDurationLength", 10);
-     * windowProperties.setValue("windowSession", true);
-     * windowProperties.setValue("windowSlideLength", -1);
-     * 
-     * WindowRuntime windowRun = new WindowRuntime();
-     * windowRun.initialize(null, windowProperties);
-     * 
-     * PCollection<String> test = windowRun.apply(input);
-     * 
-     * PCollection<KV<String, Long>> windowed_counts = test.apply(Count.<String> perElement());
-     * 
-     * PAssert.that(windowed_counts).containsInAnyOrder(
-     * // window 1
-     * KV.of("a", 3L),
-     * KV.of("b", 2L),
-     * KV.of("c", 1L),
-     * // window 2
-     * KV.of("b", 1L),
-     * KV.of("a", 1L),
-     * // window 3
-     * KV.of("a", 2L),
-     * KV.of("c", 1L));
-     * p.run();
-     * }
-     */
+
+    @Test
+    public void testSlidingWindow() {
+
+        PipelineOptions options = PipelineOptionsFactory.create();
+        options.setRunner(DirectRunner.class);
+        final Pipeline p = Pipeline.create(options);
+
+        /*
+         * // creation of PCollection with different timestamp PCollection<IndexedRecord>
+         */
+        List<TimestampedValue<IndexedRecord>> data = Arrays.asList( //
+                TimestampedValue.of(irA, new Instant(0L)), //
+                TimestampedValue.of(irB, new Instant(0L)), //
+                TimestampedValue.of(irC, new Instant(1L)), //
+                TimestampedValue.of(irA, new Instant(2L)), //
+                TimestampedValue.of(irA, new Instant(2L)), //
+                TimestampedValue.of(irB, new Instant(2L)), //
+                TimestampedValue.of(irB, new Instant(3L)), //
+                TimestampedValue.of(irC, new Instant(3L)), //
+                TimestampedValue.of(irA, new Instant(4L)));
+
+        Create.TimestampedValues<IndexedRecord> pt = Create.timestamped(data);
+        pt = (Create.TimestampedValues<IndexedRecord>) pt.withCoder(LazyAvroCoder.of());
+        PCollection<IndexedRecord> input = p.apply(pt);
+
+        WindowProperties windowProperties = new WindowProperties("window");
+        windowProperties.setValue("windowLength", 4);
+        windowProperties.setValue("windowSlideLength", 2);
+        windowProperties.setValue("windowSession", false);
+
+        WindowRuntime windowRun = new WindowRuntime();
+        windowRun.initialize(null, windowProperties);
+
+        PCollection<IndexedRecord> test = windowRun.apply(input);
+
+        PCollection<KV<IndexedRecord, Long>> windowed_counts = test.apply(Count.<IndexedRecord> perElement());
+
+        // window duration: 4 - sliding: 2
+        PAssert.that(windowed_counts).containsInAnyOrder( //
+                KV.of(irA, 1L), //
+                KV.of(irA, 1L), //
+                KV.of(irA, 3L), //
+                KV.of(irA, 3L), //
+                KV.of(irB, 1L), //
+                KV.of(irB, 3L), //
+                KV.of(irB, 2L), //
+                KV.of(irC, 1L), //
+                KV.of(irC, 1L), //
+                KV.of(irC, 2L));
+        p.run();
+    }
+
+    @Test
+    public void testSessionWindow() {
+        PipelineOptions options = PipelineOptionsFactory.create();
+        options.setRunner(DirectRunner.class);
+        final Pipeline p = Pipeline.create(options);
+
+        /*
+         * // creation of PCollection with different timestamp PCollection<IndexedRecord>
+         */
+        List<TimestampedValue<IndexedRecord>> data = Arrays.asList( //
+                TimestampedValue.of(irA, new Instant(0L)), //
+                TimestampedValue.of(irB, new Instant(0L)), //
+                TimestampedValue.of(irC, new Instant(1L)), //
+                TimestampedValue.of(irA, new Instant(2L)), //
+                TimestampedValue.of(irA, new Instant(2L)), //
+                TimestampedValue.of(irB, new Instant(2L)), //
+                TimestampedValue.of(irB, new Instant(30L)), //
+                TimestampedValue.of(irA, new Instant(30L)), //
+                TimestampedValue.of(irA, new Instant(50L)), //
+                TimestampedValue.of(irC, new Instant(55L)), //
+                TimestampedValue.of(irA, new Instant(59L)));
+
+        Create.TimestampedValues<IndexedRecord> pt = Create.timestamped(data);
+        pt = (Create.TimestampedValues<IndexedRecord>) pt.withCoder(LazyAvroCoder.of());
+        PCollection<IndexedRecord> input = p.apply(pt);
+
+        WindowProperties windowProperties = new WindowProperties("window");
+        windowProperties.setValue("windowLength", 10);
+        windowProperties.setValue("windowSlideLength", -1);
+        windowProperties.setValue("windowSession", true);
+
+        WindowRuntime windowRun = new WindowRuntime();
+        windowRun.initialize(null, windowProperties);
+
+        PCollection<IndexedRecord> test = windowRun.apply(input);
+
+        PCollection<KV<IndexedRecord, Long>> windowed_counts = test.apply(Count.<IndexedRecord> perElement());
+
+        // window duration: 4 - sliding: 2
+        PAssert.that(windowed_counts).containsInAnyOrder( //
+                KV.of(irA, 3L), //
+                KV.of(irB, 2L), //
+                KV.of(irC, 1L), //
+
+                KV.of(irB, 1L), //
+                KV.of(irA, 1L), //
+
+                KV.of(irA, 2L), //
+                KV.of(irC, 1L));
+
+        p.run();
+    }
 }
