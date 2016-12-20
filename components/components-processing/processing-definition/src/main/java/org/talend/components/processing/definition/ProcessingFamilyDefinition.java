@@ -16,6 +16,7 @@ import org.talend.components.api.AbstractComponentFamilyDefinition;
 import org.talend.components.api.ComponentInstaller;
 import org.talend.components.api.Constants;
 import org.talend.components.api.component.runtime.DependenciesReader;
+import org.talend.components.processing.definition.replicate.ReplicateDefinition;
 
 import aQute.bnd.annotation.component.Component;
 
@@ -34,9 +35,9 @@ public class ProcessingFamilyDefinition extends AbstractComponentFamilyDefinitio
     public static final String MAVEN_ARTIFACT_ID = "components-processing";
 
     public ProcessingFamilyDefinition() {
-        super(NAME
+        super(NAME,
                 // Components
-
+                new ReplicateDefinition()
                 // Component wizards
         );
     }
