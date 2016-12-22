@@ -1,10 +1,7 @@
 package org.talend.components.processing.runtime;
 
-import org.apache.avro.generic.IndexedRecord;
-import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.values.PCollection;
-import org.apache.beam.sdk.values.PCollectionTuple;
-import org.apache.beam.sdk.values.TupleTag;
+
 import org.talend.components.adapter.beam.BeamJobBuilder;
 import org.talend.components.adapter.beam.BeamJobContext;
 import org.talend.components.api.component.runtime.RuntimableRuntime;
@@ -14,40 +11,38 @@ import org.talend.daikon.properties.ValidationResult;
 
 import io.netty.util.internal.StringUtil;
 
-public class ReplicateRuntime extends PTransform<PCollection<IndexedRecord>, PCollectionTuple>
-        implements BeamJobBuilder, RuntimableRuntime<ReplicateProperties> {
-
-    final static TupleTag<IndexedRecord> flowOutput = new TupleTag<IndexedRecord>() {
-    };
+public class ReplicateRuntime implements BeamJobBuilder, RuntimableRuntime<ReplicateProperties> {
 
     private ReplicateProperties properties;
 
     private boolean hasFlow;
 
-    @Override public PCollectionTuple apply(PCollection<IndexedRecord> indexedRecordPCollection) {
+    private boolean hasSecondFlow;
 
-        return null;
-    }
-
-    @Override public void build(BeamJobContext ctx) {
+    @Override
+    public void build(BeamJobContext ctx) {
         String mainLink = ctx.getLinkNameByPortName("input_" + properties.MAIN_CONNECTOR.getName());
         if (!StringUtil.isNullOrEmpty(mainLink)) {
-            PCollection<IndexedRecord> mainPCollection = ctx.getPCollectionByLinkName(mainLink);
+            PCollection<Object> mainPCollection = ctx.getPCollectionByLinkName(mainLink);
             if (mainPCollection != null) {
                 String flowLink = ctx.getLinkNameByPortName("output_" + properties.FLOW_CONNECTOR.getName());
+                String secondFlowLink = ctx.getLinkNameByPortName("output_" + properties.SECOND_FLOW_CONNECTOR.getName());
 
                 hasFlow = !StringUtil.isNullOrEmpty(flowLink);
-
-                PCollectionTuple outputTuples = apply(mainPCollection);
+                hasSecondFlow = !StringUtil.isNullOrEmpty(secondFlowLink);
 
                 if (hasFlow) {
-                    ctx.putPCollectionByLinkName(flowLink, outputTuples.get(flowOutput));
+                    ctx.putPCollectionByLinkName(flowLink, mainPCollection);
+                }
+                if (hasSecondFlow) {
+                    ctx.putPCollectionByLinkName(secondFlowLink, mainPCollection);
                 }
             }
         }
     }
 
-    @Override public ValidationResult initialize(RuntimeContainer container, ReplicateProperties componentProperties) {
+    @Override
+    public ValidationResult initialize(RuntimeContainer container, ReplicateProperties componentProperties) {
         this.properties = componentProperties;
         return ValidationResult.OK;
     }

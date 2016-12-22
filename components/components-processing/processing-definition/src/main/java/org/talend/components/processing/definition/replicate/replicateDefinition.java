@@ -12,14 +12,18 @@
 // ============================================================================
 package org.talend.components.processing.definition.replicate;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.EnumSet;
 import java.util.Set;
 
 import org.talend.components.api.component.AbstractComponentDefinition;
 import org.talend.components.api.component.ComponentImageType;
 import org.talend.components.api.component.ConnectorTopology;
+import org.talend.components.api.component.runtime.DependenciesReader;
 import org.talend.components.api.component.runtime.ExecutionEngine;
-import org.talend.components.api.component.runtime.SimpleRuntimeInfo;
+import org.talend.components.api.component.runtime.JarRuntimeInfo;
+import org.talend.components.api.exception.ComponentException;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.processing.definition.ProcessingFamilyDefinition;
 import org.talend.daikon.properties.property.Property;
@@ -38,7 +42,8 @@ public class ReplicateDefinition extends AbstractComponentDefinition {
         return new String[] { ProcessingFamilyDefinition.NAME };
     }
 
-    @Override public Class getPropertyClass() {
+    @Override
+    public Class getPropertyClass() {
         return ReplicateProperties.class;
     }
 
@@ -59,12 +64,13 @@ public class ReplicateDefinition extends AbstractComponentDefinition {
     @Override
     public RuntimeInfo getRuntimeInfo(ExecutionEngine engine, ComponentProperties properties,
             ConnectorTopology connectorTopology) {
-        if (ExecutionEngine.BEAM.equals(engine) && ConnectorTopology.INCOMING_AND_OUTGOING.equals(connectorTopology)) {
-            return new SimpleRuntimeInfo(this.getClass().getClassLoader(),
-                    ProcessingFamilyDefinition.computeDependenciesFilepath(),
+        try {
+            return new JarRuntimeInfo(new URL("mvn:org.talend.components/components-processing"),
+                    DependenciesReader.computeDependenciesFilePath(ProcessingFamilyDefinition.MAVEN_GROUP_ID,
+                            ProcessingFamilyDefinition.MAVEN_ARTIFACT_ID),
                     "org.talend.components.processing.runtime.replicate.ReplicateRuntime");
-        } else {
-            return null;
+        } catch (MalformedURLException e) {
+            throw new ComponentException(e);
         }
     }
 

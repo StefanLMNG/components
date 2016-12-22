@@ -33,22 +33,6 @@ public class ReplicatePropertiesTest {
     @Test
     public void testDefaultProperties() {
         ReplicateProperties properties = new ReplicateProperties("test");
-        // check value
-        assertTrue(properties.cacheOutput.getValue());
-        assertNull(properties.storageLevel.getValue());
-        assertNull(properties.tachyonStoreBaseDir.getValue());
-        assertNull(properties.tachyonStoreUrl.getValue());
-        assertFalse(properties.compressRDD.getValue());
-        assertNull(properties.compressCodec.getValue());
-
-        // check value
-        properties.setupProperties();
-        assertFalse(properties.cacheOutput.getValue());
-        assertEquals(properties.storageLevel.getValue(), StorageLevel.MEMORY_ONLY);
-        assertEquals(properties.tachyonStoreBaseDir.getValue(), "/tmp/");
-        assertEquals(properties.tachyonStoreUrl.getValue(), "tachyon://localhost:19998");
-        assertFalse(properties.compressRDD.getValue());
-        assertEquals(properties.compressCodec.getValue(), CompressCodec.SNAPPY);
     }
 
 
@@ -63,21 +47,6 @@ public class ReplicatePropertiesTest {
 
         Form main = properties.getForm(Form.MAIN);
         assertThat(main, Matchers.notNullValue());
-
-        Collection<Widget> mainWidgets = main.getWidgets();
-        assertThat(mainWidgets, Matchers.hasSize(6));
-        Widget cacheOutput = main.getWidget("cacheOutput");
-        assertThat(cacheOutput, Matchers.notNullValue());
-        Widget storageLevel = main.getWidget("storageLevel");
-        assertThat(storageLevel, Matchers.notNullValue());
-        Widget tachyonStoreBaseDir = main.getWidget("tachyonStoreBaseDir");
-        assertThat(tachyonStoreBaseDir, Matchers.notNullValue());
-        Widget tachyonStoreUrl = main.getWidget("tachyonStoreUrl");
-        assertThat(tachyonStoreUrl, Matchers.notNullValue());
-        Widget compressRDD = main.getWidget("compressRDD");
-        assertThat(compressRDD, Matchers.notNullValue());
-        Widget compressCodec = main.getWidget("compressCodec");
-        assertThat(compressCodec, Matchers.notNullValue());
     }
 
     /**
@@ -88,107 +57,5 @@ public class ReplicatePropertiesTest {
         ReplicateProperties properties = new ReplicateProperties("test");
         properties.init();
         properties.refreshLayout(properties.getForm(Form.MAIN));
-
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isHidden());
-
-        properties.cacheOutput.setValue(true);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isHidden());
-
-        properties.storageLevel.setValue(StorageLevel.MEMORY_ONLY_SER);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isHidden());
-
-        properties.storageLevel.setValue(StorageLevel.MEMORY_AND_DISK_SER);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isHidden());
-
-        properties.storageLevel.setValue(StorageLevel.MEMORY_ONLY_SER_2);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isHidden());
-
-        properties.storageLevel.setValue(StorageLevel.MEMORY_AND_DISK_SER_2);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isHidden());
-
-        properties.compressRDD.setValue(true);
-        properties.storageLevel.setValue(StorageLevel.MEMORY_AND_DISK_SER_2);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isVisible());
-
-        properties.compressRDD.setValue(true);
-        properties.storageLevel.setValue(StorageLevel.MEMORY_ONLY_SER_2);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isVisible());
-
-        properties.compressRDD.setValue(true);
-        properties.storageLevel.setValue(StorageLevel.MEMORY_AND_DISK_SER);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isVisible());
-
-        properties.compressRDD.setValue(true);
-        properties.storageLevel.setValue(StorageLevel.MEMORY_ONLY_SER);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isVisible());
-
-        properties.compressRDD.setValue(false);
-        properties.storageLevel.setValue(StorageLevel.OFF_HEAP);
-        properties.refreshLayout(properties.getForm(Form.MAIN));
-        assertTrue(properties.getForm(Form.MAIN).getWidget("cacheOutput").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("storageLevel").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreBaseDir").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("tachyonStoreUrl").isVisible());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressRDD").isHidden());
-        assertTrue(properties.getForm(Form.MAIN).getWidget("compressCodec").isHidden());
     }
 }

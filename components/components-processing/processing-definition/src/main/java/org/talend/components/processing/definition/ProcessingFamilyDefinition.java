@@ -24,8 +24,7 @@ import aQute.bnd.annotation.component.Component;
  * Install all of the definitions provided for the processing family of
  * components.
  */
-@Component(name = Constants.COMPONENT_INSTALLER_PREFIX
-        + ProcessingFamilyDefinition.NAME, provide = ComponentInstaller.class)
+@Component(name = Constants.COMPONENT_INSTALLER_PREFIX + ProcessingFamilyDefinition.NAME, provide = ComponentInstaller.class)
 public class ProcessingFamilyDefinition extends AbstractComponentFamilyDefinition implements ComponentInstaller {
 
     public static final String NAME = "Processing";
@@ -38,7 +37,7 @@ public class ProcessingFamilyDefinition extends AbstractComponentFamilyDefinitio
         super(NAME,
                 // Components
                 new ReplicateDefinition()
-                // Component wizards
+        // Component wizards
         );
     }
 
