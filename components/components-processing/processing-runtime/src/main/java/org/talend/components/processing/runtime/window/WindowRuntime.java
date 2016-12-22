@@ -38,7 +38,7 @@ public class WindowRuntime extends PTransform<PCollection<IndexedRecord>, PColle
     transient private WindowProperties properties;
 
     @Override
-    public PCollection<IndexedRecord> apply(PCollection<IndexedRecord> indexedRecordPCollection) {
+    public PCollection<IndexedRecord> expand(PCollection<IndexedRecord> indexedRecordPCollection) {
         PCollection<IndexedRecord> windowed_items;
 
         if (properties.windowLength.getValue() < 1) {
@@ -78,7 +78,7 @@ public class WindowRuntime extends PTransform<PCollection<IndexedRecord>, PColle
             PCollection<IndexedRecord> mainPCollection = ctx.getPCollectionByLinkName(mainLink);
             String flowLink = ctx.getLinkNameByPortName("output_" + properties.FLOW_CONNECTOR.getName());
             if ((mainPCollection != null) && (!StringUtil.isNullOrEmpty(flowLink))) {
-                ctx.putPCollectionByLinkName(flowLink, apply(mainPCollection));
+                ctx.putPCollectionByLinkName(flowLink, expand(mainPCollection));
             }
         }
     }
