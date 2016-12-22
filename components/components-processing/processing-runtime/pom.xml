@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
 
     <name>processing-runtime</name>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.talend.components</groupId>
