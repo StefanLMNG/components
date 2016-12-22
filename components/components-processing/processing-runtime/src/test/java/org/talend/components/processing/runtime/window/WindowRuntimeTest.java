@@ -65,7 +65,7 @@ public class WindowRuntimeTest {
         WindowRuntime windowRun = new WindowRuntime();
         windowRun.initialize(null, windowProperties);
 
-        PCollection<IndexedRecord> test = windowRun.apply(input);
+        PCollection<IndexedRecord> test = windowRun.expand(input);
 
         PCollection<KV<IndexedRecord, Long>> windowed_counts = test.apply(Count.<IndexedRecord> perElement());
 
@@ -116,7 +116,7 @@ public class WindowRuntimeTest {
         WindowRuntime windowRun = new WindowRuntime();
         windowRun.initialize(null, windowProperties);
 
-        PCollection<IndexedRecord> test = windowRun.apply(input);
+        PCollection<IndexedRecord> test = windowRun.expand(input);
 
         PCollection<KV<IndexedRecord, Long>> windowed_counts = test.apply(Count.<IndexedRecord> perElement());
 
@@ -169,7 +169,7 @@ public class WindowRuntimeTest {
         WindowRuntime windowRun = new WindowRuntime();
         windowRun.initialize(null, windowProperties);
 
-        PCollection<IndexedRecord> test = windowRun.apply(input);
+        PCollection<IndexedRecord> test = windowRun.expand(input);
 
         PCollection<KV<IndexedRecord, Long>> windowed_counts = test.apply(Count.<IndexedRecord> perElement());
 
