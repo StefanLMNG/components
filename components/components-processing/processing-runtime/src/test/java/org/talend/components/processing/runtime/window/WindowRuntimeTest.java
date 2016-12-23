@@ -1,9 +1,7 @@
 package org.talend.components.processing.runtime.window;
 
 import org.apache.avro.Schema;
-import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.IndexedRecord;
-import org.apache.beam.sdk.coders.AvroCoder;
 import org.apache.beam.sdk.testing.PAssert;
 import org.apache.beam.sdk.transforms.Count;
 import org.apache.beam.sdk.transforms.Create;
@@ -18,7 +16,7 @@ import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.values.PCollection;
-import org.talend.components.adapter.beam.LazyAvroCoder;
+import org.talend.components.adapter.beam.coders.LazyAvroCoder;
 import org.talend.components.processing.definition.window.WindowProperties;
 import org.talend.daikon.avro.GenericDataRecordHelper;
 
@@ -44,19 +42,16 @@ public class WindowRuntimeTest {
 
         // creation of PCollection with different timestamp PCollection<IndexedRecord>
 
-        List<TimestampedValue<IndexedRecord>> data = Arrays.asList(
-                TimestampedValue.of(irA, new Instant(1L)),
-                TimestampedValue.of(irB, new Instant(2L)),
-                TimestampedValue.of(irC, new Instant(3L)));
+        List<TimestampedValue<IndexedRecord>> data = Arrays.asList(TimestampedValue.of(irA, new Instant(1L)),
+                TimestampedValue.of(irB, new Instant(2L)), TimestampedValue.of(irC, new Instant(3L)));
 
-        PCollection<IndexedRecord> input = p.apply(Create.timestamped(data)
-        .withCoder());
+        PCollection<IndexedRecord> input = (PCollection<IndexedRecord>) p
+                .apply(Create.timestamped(data).withCoder(LazyAvroCoder.of()));
 
         WindowProperties windowProperties = new WindowProperties("window");
         windowProperties.windowLength.setValue(2);
         windowProperties.windowSlideLength.setValue(-1);
         windowProperties.windowSession.setValue(false);
-
 
         windowProperties.setValue("windowLength", 2);
         windowProperties.setValue("windowSlideLength", -1);
@@ -72,13 +67,7 @@ public class WindowRuntimeTest {
         /////////
         // Fixed duration: 2
 
-        PAssert.that(windowed_counts).containsInAnyOrder(
-        /*
-         * KV.of(irA, 1L),
-         * KV.of(irB, 1L),
-         * KV.of(irC, 1L)
-         */
-        );
+        PAssert.that(windowed_counts).containsInAnyOrder(KV.of(irA, 1L), KV.of(irB, 1L), KV.of(irC, 1L));
 
         p.run();
     }
