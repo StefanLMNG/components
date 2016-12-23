@@ -52,18 +52,10 @@ public class ReplicateDefinition extends AbstractComponentDefinition {
     }
 
     @Override
-    public String getPngImagePath(ComponentImageType imageType) {
-        switch (imageType) {
-        case PALLETE_ICON_32X32:
-            return "Replicate_icon32.png"; //$NON-NLS-1$
-        default:
-            return "Replicate_icon32.png"; //$NON-NLS-1$
-        }
-    }
-
-    @Override
     public RuntimeInfo getRuntimeInfo(ExecutionEngine engine, ComponentProperties properties,
             ConnectorTopology connectorTopology) {
+        assertEngineCompatibility(engine);
+        assertConnectorTopologyCompatibility(connectorTopology);
         try {
             return new JarRuntimeInfo(new URL("mvn:org.talend.components/components-processing"),
                     DependenciesReader.computeDependenciesFilePath(ProcessingFamilyDefinition.MAVEN_GROUP_ID,

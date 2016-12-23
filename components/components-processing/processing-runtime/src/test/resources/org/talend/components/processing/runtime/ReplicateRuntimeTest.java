@@ -23,6 +23,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ReplicateRuntimeTest {
@@ -70,10 +72,16 @@ public class ReplicateRuntimeTest {
 
         ReplicateProperties replicateProperties = new ReplicateProperties("test");
         replicateRuntime.initialize(null, replicateProperties);
+        BeamJobContext context = Mockito.mock(BeamJobContext.class);
+        replicateRuntime.build(context);
+        verify(context, times(1)).getLinkNameByPortName(anyString());
+        verify(context, times(0)).getPCollectionByLinkName(anyString());
+
         BeamJobContext ctx = Mockito.mock(BeamJobContext.class);
         when(ctx.getLinkNameByPortName(anyString())).thenReturn("test");
         when(ctx.getPCollectionByLinkName(anyString())).thenReturn(input);
         replicateRuntime.build(ctx);
+        verify(ctx, times(3)).getLinkNameByPortName(anyString());
+        verify(ctx, times(1)).getPCollectionByLinkName(anyString());
     }
-
 }

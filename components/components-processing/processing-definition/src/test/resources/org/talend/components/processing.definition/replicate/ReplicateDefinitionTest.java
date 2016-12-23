@@ -75,8 +75,23 @@ public class ReplicateDefinitionTest {
     @Test
     @Ignore("This can't work unless the runtime jar is already installed in maven!")
     public void testGetRuntimeInfo() {
-        RuntimeInfo runtimeInfo = definition.getRuntimeInfo(null, null, null);
+        RuntimeInfo runtimeInfo = definition.getRuntimeInfo(ExecutionEngine.BEAM, null, ConnectorTopology.INCOMING_AND_OUTGOING);
         assertEquals("org.talend.components.processing.runtime.replicate.ReplicateRuntime", runtimeInfo.getRuntimeClassName());
+    }
+
+    @Test(expected = org.talend.daikon.exception.TalendRuntimeException.class)
+    public void testGetRuntimeInfoNone() {
+        assertNull(definition.getRuntimeInfo(ExecutionEngine.BEAM, null, ConnectorTopology.NONE));
+    }
+
+    @Test(expected = org.talend.daikon.exception.TalendRuntimeException.class)
+    public void testGetRuntimeInfoIncoming() {
+        assertNull(definition.getRuntimeInfo(ExecutionEngine.BEAM, null, ConnectorTopology.INCOMING));
+    }
+
+    @Test(expected = org.talend.daikon.exception.TalendRuntimeException.class)
+    public void testGetRuntimeInfoOutgoing() {
+        assertNull(definition.getRuntimeInfo(ExecutionEngine.BEAM, null, ConnectorTopology.OUTGOING));
     }
 
     @Test
