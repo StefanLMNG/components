@@ -17,11 +17,15 @@ import org.apache.avro.mapred.AvroKey;
 import org.apache.beam.sdk.coders.KvCoder;
 import org.apache.beam.sdk.coders.VoidCoder;
 import org.apache.beam.sdk.io.Read;
-import org.apache.beam.sdk.io.hdfs.AvroHdfsFileSource;
+import org.apache.beam.sdk.io.hdfs.TalendAvroHdfsFileSource;
 import org.apache.beam.sdk.io.hdfs.CsvHdfsFileSource;
 import org.apache.beam.sdk.io.hdfs.ParquetHdfsFileSource;
 import org.apache.beam.sdk.io.hdfs.WritableCoder;
-import org.apache.beam.sdk.transforms.*;
+import org.apache.beam.sdk.transforms.DoFn;
+import org.apache.beam.sdk.transforms.Keys;
+import org.apache.beam.sdk.transforms.PTransform;
+import org.apache.beam.sdk.transforms.ParDo;
+import org.apache.beam.sdk.transforms.Values;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PBegin;
 import org.apache.beam.sdk.values.PCollection;
@@ -38,11 +42,6 @@ import org.talend.daikon.properties.ValidationResult;
 public class SimpleFileIoInputRuntime extends PTransform<PBegin, PCollection<IndexedRecord>> implements
         RuntimableRuntime<SimpleFileIoInputProperties> {
 
-    static {
-        // Ensure that the singleton for the SimpleFileIoAvroRegistry is created.
-        SimpleFileIoAvroRegistry.get();
-    }
-
     /**
      * The component instance that this runtime is configured for.
      */
@@ -55,14 +54,14 @@ public class SimpleFileIoInputRuntime extends PTransform<PBegin, PCollection<Ind
     }
 
     @Override
-    public PCollection<IndexedRecord> apply(PBegin in) {
+    public PCollection<IndexedRecord> expand(PBegin in) {
         switch (properties.getDatasetProperties().format.getValue()) {
 
         case AVRO: {
             // Reuseable coder.
             LazyAvroCoder<Object> lac = LazyAvroCoder.of();
 
-            AvroHdfsFileSource source = AvroHdfsFileSource.from(properties.getDatasetProperties().path.getValue(),
+            TalendAvroHdfsFileSource source = TalendAvroHdfsFileSource.from(properties.getDatasetProperties().path.getValue(),
                     KvCoder.of(LazyAvroKeyWrapper.of(lac), WritableCoder.of(NullWritable.class))); //
             PCollection<KV<AvroKey, NullWritable>> read = in.apply(Read.from(source)) //
                     .setCoder(source.getDefaultOutputCoder());
@@ -80,18 +79,22 @@ public class SimpleFileIoInputRuntime extends PTransform<PBegin, PCollection<Ind
         case CSV: {
             CsvHdfsFileSource source = CsvHdfsFileSource.from(properties.getDatasetProperties().path.getValue(),
                     properties.getDatasetProperties().recordDelimiter.getValue());
-            // TODO(rskraba): unhappy generics and casts
-            return (PCollection) in.apply(Read.from(source)) //
-                    .apply(Values.<Text> create()) //
-                    .apply(ParDo.of(new ExtractCsvSplit(properties.datasetRef.getReference().fieldDelimiter.getValue()))) //
-                    // TODO(rskraba): unhappy generics and casts
-                    .apply((PTransform) ConvertToIndexedRecord.of());
+
+            PCollection<KV<org.apache.hadoop.io.LongWritable, Text>> pc1 = in.apply(Read.from(source));
+
+            PCollection<Text> pc2 = pc1.apply(Values.<Text> create());
+
+            PCollection<String[]> pc3 = pc2.apply(ParDo.of(new ExtractCsvSplit(
+                    properties.datasetRef.getReference().fieldDelimiter.getValue())));
+
+            PCollection pc4 = pc3.apply(ConvertToIndexedRecord.<String[], IndexedRecord> of());
+
+            return pc4;
         }
 
         case PARQUET: {
             LazyAvroCoder<IndexedRecord> lac = LazyAvroCoder.of();
 
-            // TODO: generics fix for cast
             ParquetHdfsFileSource source = ParquetHdfsFileSource.from(properties.getDatasetProperties().path.getValue(),
                     (KvCoder) KvCoder.of(VoidCoder.of(), lac));
 
