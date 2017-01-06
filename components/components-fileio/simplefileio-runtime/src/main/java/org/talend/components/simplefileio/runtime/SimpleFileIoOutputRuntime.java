@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2017 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -15,7 +15,9 @@ package org.talend.components.simplefileio.runtime;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
+import org.apache.avro.Schema;
 import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapreduce.AvroKeyOutputFormat;
@@ -49,15 +51,11 @@ import org.talend.components.api.component.runtime.RuntimableRuntime;
 import org.talend.components.api.container.RuntimeContainer;
 import org.talend.components.simplefileio.output.SimpleFileIoOutputProperties;
 import org.talend.components.simplefileio.runtime.coders.LazyAvroKeyWrapper;
+import org.talend.daikon.avro.AvroUtils;
 import org.talend.daikon.properties.ValidationResult;
 
 public class SimpleFileIoOutputRuntime extends PTransform<PCollection<IndexedRecord>, PDone> implements
         RuntimableRuntime<SimpleFileIoOutputProperties> {
-
-    static {
-        // Ensure that the singleton for the SimpleFileIoAvroRegistry is created.
-        SimpleFileIoAvroRegistry.get();
-    }
 
     /**
      * The component instance that this runtime is configured for.
@@ -190,7 +188,11 @@ public class SimpleFileIoOutputRuntime extends PTransform<PCollection<IndexedRec
             for (int i = 0; i < size; i++) {
                 if (sb.length() != 0)
                     sb.append(fieldDelimiter);
-                sb.append(in.get(i));
+                if (Schema.Type.BYTES.equals(AvroUtils.unwrapIfNullable(in.getSchema()).getFields().get(i).schema().getType())) {
+                    sb.append(new String(((ByteBuffer)in.get(i)).array()));
+                } else {
+                    sb.append(in.get(i));
+                }
             }
             c.output(KV.of(NullWritable.get(), new Text(sb.toString())));
             sb.setLength(0);

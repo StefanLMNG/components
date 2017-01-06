@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2017 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -27,6 +27,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.talend.components.simplefileio.runtime.SimpleFileIoAvroRegistry;
 
 /**
  * CSV implementation of HDFSFileSource.
@@ -34,6 +35,11 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
  * This implementation allows the recordDelimiter to be injected into the TextInputFormat.
  */
 public class CsvHdfsFileSource extends HDFSFileSource<LongWritable, Text> {
+
+    static {
+        // Ensure that the singleton for the SimpleFileIoAvroRegistry is created.
+        SimpleFileIoAvroRegistry.get();
+    }
 
     private final String recordDelimiter;
 

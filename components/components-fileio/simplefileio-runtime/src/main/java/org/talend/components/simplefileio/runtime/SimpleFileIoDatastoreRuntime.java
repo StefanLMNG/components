@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2017 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -17,6 +17,8 @@ import org.talend.components.common.datastore.runtime.DatastoreRuntime;
 import org.talend.components.simplefileio.SimpleFileIoDatastoreProperties;
 import org.talend.daikon.properties.ValidationResult;
 
+import static java.util.Collections.emptyList;
+
 public class SimpleFileIoDatastoreRuntime implements DatastoreRuntime<SimpleFileIoDatastoreProperties> {
 
     /**
@@ -32,6 +34,6 @@ public class SimpleFileIoDatastoreRuntime implements DatastoreRuntime<SimpleFile
 
     @Override
     public Iterable<ValidationResult> doHealthChecks(RuntimeContainer container) {
-        return null;
+        return emptyList();
     }
 }
