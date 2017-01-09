@@ -18,7 +18,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import org.talend.components.api.component.AbstractComponentDefinition;
-import org.talend.components.api.component.ComponentImageType;
 import org.talend.components.api.component.ConnectorTopology;
 import org.talend.components.api.component.runtime.DependenciesReader;
 import org.talend.components.api.component.runtime.ExecutionEngine;

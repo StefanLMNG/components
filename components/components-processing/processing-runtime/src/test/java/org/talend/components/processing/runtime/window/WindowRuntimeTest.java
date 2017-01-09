@@ -18,6 +18,7 @@ import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.values.PCollection;
 import org.talend.components.adapter.beam.coders.LazyAvroCoder;
 import org.talend.components.processing.definition.window.WindowProperties;
+import org.talend.components.processing.runtime.WindowRuntime;
 import org.talend.daikon.avro.GenericDataRecordHelper;
 
 import java.util.Arrays;

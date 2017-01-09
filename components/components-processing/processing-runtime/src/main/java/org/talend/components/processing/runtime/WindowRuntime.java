@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.components.processing.runtime.window;
+package org.talend.components.processing.runtime;
 
 import org.apache.avro.generic.IndexedRecord;
 import org.apache.beam.sdk.transforms.PTransform;
