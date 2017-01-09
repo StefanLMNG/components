@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2017 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -12,10 +12,6 @@
 //==============================================================================
 
 package org.talend.components.service.rest.impl;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.Integer.MAX_VALUE;
-import static org.apache.commons.lang3.Validate.notNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -47,6 +43,11 @@ import org.talend.daikon.properties.ValidationResult;
 import org.talend.daikon.runtime.RuntimeUtil;
 import org.talend.daikon.sandbox.SandboxedInstance;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.Integer.MAX_VALUE;
+import static java.util.Collections.emptyList;
+import static org.apache.commons.lang3.Validate.notNull;
+
 @ServiceImplementation
 @SuppressWarnings("unchecked")
 public class RuntimeControllerImpl implements RuntimesController {
@@ -70,7 +71,8 @@ public class RuntimeControllerImpl implements RuntimesController {
             datastoreRuntime.initialize(null, properties);
             Iterable<ValidationResult> healthChecks = datastoreRuntime.doHealthChecks(null);
 
-            ValidationResultsDto response = new ValidationResultsDto(newArrayList(healthChecks));
+            ValidationResultsDto response = new ValidationResultsDto(
+                    healthChecks == null ? emptyList() : newArrayList(healthChecks));
             HttpStatus httpStatus = response.getStatus() == ValidationResult.Result.OK ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
             return new ResponseEntity<>(response, httpStatus);

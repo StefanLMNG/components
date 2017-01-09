@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2017 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -17,6 +17,7 @@ import org.talend.components.api.ComponentInstaller;
 import org.talend.components.api.Constants;
 import org.talend.components.api.component.runtime.DependenciesReader;
 import org.talend.components.processing.definition.window.WindowDefinition;
+import org.talend.components.processing.definition.replicate.ReplicateDefinition;
 
 import aQute.bnd.annotation.component.Component;
 
@@ -31,12 +32,12 @@ public class ProcessingFamilyDefinition extends AbstractComponentFamilyDefinitio
 
     public static final String MAVEN_GROUP_ID = "org.talend.components";
 
-    public static final String MAVEN_ARTIFACT_ID = "components-processing";
+    public static final String MAVEN_ARTIFACT_ID = "processing-runtime";
 
     public ProcessingFamilyDefinition() {
         super(NAME,
                 // Components
-                new WindowDefinition()
+                new WindowDefinition(), new ReplicateDefinition()
         // Component wizards
         );
     }
