@@ -73,7 +73,6 @@ public class WindowProperties extends FixedConnectorsComponentProperties impleme
     @Override
     public void refreshLayout(Form form) {
         super.refreshLayout(form);
-        // everything is always visible
         // Main properties
         if (form.getName().equals(Form.MAIN)) {
             form.getWidget(windowSlideLength.getName()).setHidden(windowSession);

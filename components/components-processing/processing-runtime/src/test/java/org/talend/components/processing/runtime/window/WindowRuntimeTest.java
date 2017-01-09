@@ -56,7 +56,6 @@ public class WindowRuntimeTest {
         windowProperties.windowSlideLength.setValue(-1);
         windowProperties.windowSession.setValue(false);
 
-
         windowProperties.setValue("windowLength", 2);
         windowProperties.setValue("windowSlideLength", -1);
         windowProperties.setValue("windowSession", false);

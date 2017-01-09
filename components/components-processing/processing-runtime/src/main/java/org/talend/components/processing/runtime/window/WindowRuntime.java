@@ -20,8 +20,6 @@ import org.apache.beam.sdk.transforms.windowing.SlidingWindows;
 import org.apache.beam.sdk.transforms.windowing.Window;
 import org.apache.beam.sdk.values.PCollection;
 import org.joda.time.Duration;
-import org.talend.components.adapter.beam.BeamJobBuilder;
-import org.talend.components.adapter.beam.BeamJobContext;
 import org.talend.components.api.component.runtime.RuntimableRuntime;
 import org.talend.components.api.container.RuntimeContainer;
 import org.talend.components.processing.definition.window.WindowProperties;
@@ -30,10 +28,8 @@ import org.talend.daikon.exception.error.CommonErrorCodes;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.ValidationResult;
 
-import io.netty.util.internal.StringUtil;
-
 public class WindowRuntime extends PTransform<PCollection<IndexedRecord>, PCollection<IndexedRecord>>
-        implements RuntimableRuntime, BeamJobBuilder {
+        implements RuntimableRuntime {
 
     transient private WindowProperties properties;
 
@@ -69,17 +65,5 @@ public class WindowRuntime extends PTransform<PCollection<IndexedRecord>, PColle
     public ValidationResult initialize(RuntimeContainer container, Properties properties) {
         this.properties = (WindowProperties) properties;
         return ValidationResult.OK;
-    }
-
-    @Override
-    public void build(BeamJobContext ctx) {
-        String mainLink = ctx.getLinkNameByPortName("input_" + properties.MAIN_CONNECTOR.getName());
-        if (!StringUtil.isNullOrEmpty(mainLink)) {
-            PCollection<IndexedRecord> mainPCollection = ctx.getPCollectionByLinkName(mainLink);
-            String flowLink = ctx.getLinkNameByPortName("output_" + properties.FLOW_CONNECTOR.getName());
-            if ((mainPCollection != null) && (!StringUtil.isNullOrEmpty(flowLink))) {
-                ctx.putPCollectionByLinkName(flowLink, expand(mainPCollection));
-            }
-        }
     }
 }
