@@ -52,22 +52,14 @@ public class WindowDefinition extends AbstractComponentDefinition {
     }
 
     @Override
-    public String getPngImagePath(ComponentImageType imageType) {
-        switch (imageType) {
-        case PALLETE_ICON_32X32:
-            return "Window_icon32.png"; //$NON-NLS-1$
-        default:
-            return "Window_icon32.png"; //$NON-NLS-1$
-        }
-    }
-
-    @Override
     public RuntimeInfo getRuntimeInfo(ExecutionEngine engine, ComponentProperties properties,
             ConnectorTopology connectorTopology) {
+        assertEngineCompatibility(engine);
+        assertConnectorTopologyCompatibility(connectorTopology);
         try {
             return new JarRuntimeInfo(new URL("mvn:org.talend.components/window-runtime"),
                     DependenciesReader.computeDependenciesFilePath("org.talend.components", "window-runtime"),
-                    "package org.talend.components.processing.runtime.window.WindowRuntime");
+                    "org.talend.components.processing.runtime.window.WindowRuntime");
         } catch (MalformedURLException e) {
             throw new ComponentException(e);
         }
