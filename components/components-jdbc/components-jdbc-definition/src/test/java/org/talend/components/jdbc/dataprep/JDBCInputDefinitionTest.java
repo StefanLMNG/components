@@ -50,4 +50,12 @@ public class JDBCInputDefinitionTest {
         assertEquals(JDBCInputProperties.class, definition.getPropertyClass());
     }
 
+    /**
+     * Check {@link JDBCInputDefinition#getIconKey()} returns "DBInput"
+     */
+    @Test
+    public void testGetIconKey() {
+        String componentName = definition.getIconKey();
+        assertEquals(componentName, "DBInput");
+    }
 }
