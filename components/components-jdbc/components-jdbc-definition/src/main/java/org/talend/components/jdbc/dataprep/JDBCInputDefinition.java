@@ -51,7 +51,7 @@ public class JDBCInputDefinition extends AbstractComponentDefinition {
 
     @Override
     public String getIconKey() {
-        return "DBInput";
+        return "db-input";
     }
 
     @Override

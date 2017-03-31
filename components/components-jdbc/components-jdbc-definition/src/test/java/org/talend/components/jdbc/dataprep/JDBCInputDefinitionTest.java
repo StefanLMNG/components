@@ -51,11 +51,11 @@ public class JDBCInputDefinitionTest {
     }
 
     /**
-     * Check {@link JDBCInputDefinition#getIconKey()} returns "DBInput"
+     * Check {@link JDBCInputDefinition#getIconKey()} returns "db-input"
      */
     @Test
     public void testGetIconKey() {
         String componentName = definition.getIconKey();
-        assertEquals(componentName, "DBInput");
+        assertEquals(componentName, "db-input");
     }
 }
