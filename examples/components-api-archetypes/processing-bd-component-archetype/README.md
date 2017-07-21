@@ -1,6 +1,4 @@
-
-Maven archetype for BD processing components 
-=================
+# Maven archetype for BD processing components
 
 This document describes how to generate a new TCOMP processing component easily by using the maven archetype.
 
@@ -9,7 +7,7 @@ This document describes how to generate a new TCOMP processing component easily 
 1. Java
 2. Maven
 3. Java integrated development environment like Eclipse or IntelliJ
-4. Component project 
+4. Component project
 
 ------
 
@@ -19,7 +17,7 @@ In order to do it, you need to follow those steps :
 
 1. Go into the archetype folder `components/examples/components-api-archetypes/processing-bd-component-archetype`
 
-2. Use the command `mvn clean install` to install the archetype in local 
+2. Use the command `mvn clean install` to install the archetype in local
 
    ​
 
@@ -27,7 +25,7 @@ In order to do it, you need to follow those steps :
 
 Follow the instructions in the archetype processing to fill in the values for the parameters. Suggested values are provided. You should see something like this:
 
-1. Go into your folder `components/components/components-processing` 
+1. Go into your folder `components/components/components-processing`
 2. Use the command :
 
 ```
@@ -41,11 +39,13 @@ mvn archetype:generate
 -Dversion=<ComponentVersion>
 -Dpackage=org.talend.components.processing-components
 ```
+
 It will generate your processing-components.
 
 Example:
 
 Run:
+
 ```
 mvn archetype:generate \
 -DarchetypeGroupId=org.talend.components \
@@ -57,7 +57,9 @@ mvn archetype:generate \
 -Dversion=1.0-SNAPSHOT \
 -Dpackage=org.talend.components.processing
 ```
-It will ask you for some values, but you can left all by default values 
+
+It will ask you for some values, but you can left all by default values
+
 ```
 [INFO] Generating project in Interactive mode
 [WARNING] Archetype not found in any catalog. Falling back to central repository.
@@ -88,6 +90,25 @@ packageTalend: org.talend.components
 
 Your TCOMP processing is now created, you will find the different classes (definition and runtime) under the folder *processing-definition* and *processing-runtime*. You will also find the tests for your new component.
 
-
-
 You can now update those classes to fit with your own use case.
+
+
+
+#### Step 4 : Use a generic component
+
+In order to use and test a generic processing component which is basically just a pass-through (take some data in input, retrieve same data as output), some comments have been added in the different classes. You will almost just have to uncomment them to be able to use the component.
+
+You will just have to add few other line as follow : 
+
+- In the ProcessingFamilyDefinition file (java.org.talend.components.processing.definition), you have to add line 45:
+
+  ```
+  , new GenericDefinition()
+  ```
+
+- In the messages.properties file (resources.org.talend.components.processing.definition), you have to add those lines: 
+
+  ```
+  property.recordCount.displayName= Record Count
+  property.showCountRecord.displayName= Show Count Record
+  ```

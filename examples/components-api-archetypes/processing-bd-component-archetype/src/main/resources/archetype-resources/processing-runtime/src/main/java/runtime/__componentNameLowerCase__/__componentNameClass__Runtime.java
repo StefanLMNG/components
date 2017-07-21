@@ -34,12 +34,11 @@ public class ${componentNameClass}Runtime implements BeamJobBuilder, RuntimableR
         /*
         * Example of runtime action for a pass-through behaviour component
 
-        String mainLink = ctx.getLinkNameByPortName("input_" + properties.MAIN_CONNECTOR.getName());
+        String mainLink = ctx.getLinkNameByPortName("input_" + properties.INPUT_CONNECTOR.getName());
         if (!StringUtils.isEmpty(mainLink)) {
             PCollection<Object> mainPCollection = ctx.getPCollectionByLinkName(mainLink);
             if (mainPCollection != null) {
-                String flowLink = ctx.getLinkNameByPortName("output_" + properties.FLOW_CONNECTOR.getName());
-                String secondFlowLink = ctx.getLinkNameByPortName("output_" + properties.SECOND_FLOW_CONNECTOR.getName());
+                String flowLink = ctx.getLinkNameByPortName("output_" + properties.OUTPUT_CONNECTOR.getName());
                 hasFlow = !StringUtils.isEmpty(flowLink);
                 if (hasFlow) {
                     ctx.putPCollectionByLinkName(flowLink, mainPCollection);

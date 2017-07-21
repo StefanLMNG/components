@@ -16,8 +16,13 @@ package ${package}.definition.${componentNameLowerCase};
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.avro.Schema;import ${packageTalend}.api.component.Connector;import ${packageTalend}.api.component.PropertyPathConnector;import ${packageTalend}.common.FixedConnectorsComponentProperties;import ${packageTalend}.common.SchemaProperties;
+import org.apache.avro.Schema;import ${packageTalend}.api.component.Connector;
+import ${packageTalend}.api.component.PropertyPathConnector;
+import ${packageTalend}.common.FixedConnectorsComponentProperties;
+import ${packageTalend}.common.SchemaProperties;
 import org.talend.daikon.properties.presentation.Form;
+import org.talend.daikon.properties.property.Property;
+import org.talend.daikon.properties.property.PropertyFactory;
 
 public class ${componentNameClass}Properties extends FixedConnectorsComponentProperties{
 
